@@ -1,1 +1,1 @@
-LRESULT CALLBACK MainDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+LRESULT CALLBACK mainDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);

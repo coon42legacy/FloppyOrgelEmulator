@@ -77,10 +77,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Skinned Window\SkinnedWindow.cpp" />
+    <ClCompile Include="guicon.cpp" />
+    <ClCompile Include="hal_gui_emu.c" />
+    <ClCompile Include="floppyorgel_system.c" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Skinned Window\SkinnedWindow.h" />
+    <ClInclude Include="config.h" />
+    <ClInclude Include="guicon.h" />
+    <ClInclude Include="hal_gui.h" />
+    <ClInclude Include="floppyorgel_system.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>

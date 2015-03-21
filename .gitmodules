@@ -1,0 +1,3 @@
+[submodule "embedded-midilib"]
+	path = embedded-midilib
+	url = https://github.com/coon42/embedded-midilib.git

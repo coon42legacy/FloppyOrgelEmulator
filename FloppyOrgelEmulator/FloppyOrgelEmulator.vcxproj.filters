@@ -21,6 +21,15 @@
     <ClCompile Include="..\Skinned Window\SkinnedWindow.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="guicon.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="hal_gui_emu.c">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="floppyorgel_system.c">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -31,6 +40,18 @@
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Ressourcendateien</Filter>
+    </ClInclude>
+    <ClInclude Include="guicon.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="floppyorgel_system.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="hal_gui.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="config.h">
+      <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

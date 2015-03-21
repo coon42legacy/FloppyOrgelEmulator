@@ -1,22 +1,47 @@
 #include "resource.h"
 #include <windows.h>
 #include "../Skinned Window/SkinnedWindow.h"
+#include <stdio.h>
+#include <stdint.h>
+#include "guicon.h"
+#include "config.h"
+#include "floppyorgel_system.h"
 #include "main.h"
 
 SkinnedWindow sk;
+
+extern "C" {
+  void system_main();
+  void gui_clear(uint8_t red, uint8_t green, uint8_t blue);
+  void gui_setPixel(uint8_t xPos, uint8_t yPos, uint8_t red, uint8_t green, uint8_t blue);
+  HDC hDisplayDC;
+  HWND hEmuWnd;
+}
+
+DWORD WINAPI system_thread(LPVOID lpParam) {
+  system_main();
+  return 0;
+}
 
 int APIENTRY WinMain(HINSTANCE hInstance,
   HINSTANCE hPrevInstance,
   LPSTR     lpCmdLine,
   int       nCmdShow) {
 
-  //Fenster erstellen
-  if (!sk.MakeSkinnedWindow(640, 480, MainDlgProc, IDB_SKIN, IDR_SKINREGION)) {
+  // Fenster erstellen
+  if (!sk.makeSkinnedWindow("Floppyorgel Emulator", "Coonami Entertainment", 
+    640, 480, mainDlgProc, IDB_SKIN, IDR_SKINREGION,
+    "BINARY", 17, 13, DISPLAY_RESOLUTION_X, DISPLAY_RESOLUTION_Y)) {
     MessageBoxA(0, "Error Making Window. Exiting", "Fatal Error", 0);
     exit(0);
   }
-
-  AllocConsole();
+  hDisplayDC = sk.getUserContentHDC();
+  hEmuWnd = sk.getHWnd();
+    
+  // Start the system
+  HANDLE hSystemThread = CreateThread(NULL, 0, system_thread, NULL, 0, NULL);
+  if (hSystemThread == NULL)
+    ExitProcess(0); 
 
   // Event oriented message loop
   MSG msg;
@@ -27,12 +52,13 @@ int APIENTRY WinMain(HINSTANCE hInstance,
   return msg.wParam;
 }
 
-LRESULT CALLBACK MainDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
+LRESULT CALLBACK mainDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
   HDC hdc;
   PAINTSTRUCT ps;
 
   switch (message) {
     case WM_CREATE:
+      redirectIOToConsole();
       return (0);
 
   case WM_LBUTTONDOWN:{
@@ -64,7 +90,7 @@ LRESULT CALLBACK MainDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
   case WM_PAINT: {
     hdc = BeginPaint(hWnd, &ps);
-    sk.Draw();
+    sk.draw();
     EndPaint(hWnd, &ps);
     return (0);
   }
