@@ -76,6 +76,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\AsciiLib\AsciiLib.c" />
     <ClCompile Include="..\Skinned Window\SkinnedWindow.cpp" />
     <ClCompile Include="guicon.cpp" />
     <ClCompile Include="hal_gui_emu.c" />
@@ -83,6 +84,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\AsciiLib\AsciiLib.h" />
     <ClInclude Include="..\Skinned Window\SkinnedWindow.h" />
     <ClInclude Include="config.h" />
     <ClInclude Include="guicon.h" />

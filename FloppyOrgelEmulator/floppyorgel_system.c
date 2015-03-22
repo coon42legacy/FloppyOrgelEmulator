@@ -9,14 +9,14 @@ void debugPrintln(char* text) {
 }
 
 void drawMenu() {
-  gui_clear(0xFF, 0x00, 0x00);
-  printf("Red\n\r");
-  Sleep(1000);
-  gui_clear(0x00, 0xFF, 0x00);
-  printf("Green\n\r");
-  Sleep(1000);
-  gui_clear(0x00, 0x00, 0xFF);
-  printf("Blue\n\r");
+  static const uint32_t X_OFFSET = 65;
+  static const uint32_t Y_OFFSET = 240 - 18;
+
+  gui_clear(0x00, 0x00, 0x00);
+  gui_drawText(X_OFFSET - 30, 0, "Use the game pad to select a song", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
+  gui_drawText(X_OFFSET + 10, 18, "Press A button to start", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
+
+  gui_redraw();
   Sleep(1000);
 }
 

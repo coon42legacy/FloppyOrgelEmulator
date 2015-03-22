@@ -30,6 +30,9 @@
     <ClCompile Include="floppyorgel_system.c">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="..\AsciiLib\AsciiLib.c">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -51,6 +54,9 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="config.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="..\AsciiLib\AsciiLib.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>
