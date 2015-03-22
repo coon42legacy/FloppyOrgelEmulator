@@ -35,7 +35,7 @@ void SSD1289_PutCharFont(uint16_t x, uint16_t y, uint8_t ASCII,
   for (i = 0; i < len_y; i++) {
     tmp_char = buffer[i];
     for (j = 0; j<len_x; j++) {
-      if ((tmp_char >> 7 - j) & 0x01 == 0x01)
+      if (((tmp_char >> (7 - j)) & 0x01) == 0x01)
         gui_setPixel(x + j, y + i, txtRed, txtGreen, txtBlue);
       else
         gui_setPixel(x + j, y + i, bkRed, bkGreen, bkBlue);
