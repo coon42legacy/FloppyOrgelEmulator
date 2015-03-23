@@ -3,3 +3,4 @@
 #define FALSE 0
 
 // void system_main();
+void debugPrintNesGamePadState();
