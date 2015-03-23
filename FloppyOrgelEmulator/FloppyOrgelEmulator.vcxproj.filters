@@ -36,6 +36,9 @@
     <ClCompile Include="hal_gamepad_emu.c">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="hal_filesystem_emu.c">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -63,6 +66,9 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="hal_gamepad.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="hal_filesystem.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

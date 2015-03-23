@@ -1,3 +1,6 @@
+#ifndef __SKINNED_WINDOW_H
+#define __SKINNED_WINDOW_H
+
 #include <windows.h>
 #include <windowsx.h>
 #pragma comment(lib, "Msimg32.lib") // For TransparentBlt()
@@ -45,3 +48,5 @@ private:
   HBITMAP hBackBufferBitmap;
   RECT rcUserContent;
 };
+
+#endif

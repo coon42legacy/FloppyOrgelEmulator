@@ -1,2 +1,7 @@
+#ifndef __FO_CONFIG_H
+#define __FO_CONFIG_H
+
 #define DISPLAY_RESOLUTION_X 320
 #define DISPLAY_RESOLUTION_Y 240
+
+#endif

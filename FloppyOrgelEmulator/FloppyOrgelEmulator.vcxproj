@@ -79,6 +79,7 @@
     <ClCompile Include="..\AsciiLib\AsciiLib.c" />
     <ClCompile Include="..\Skinned Window\SkinnedWindow.cpp" />
     <ClCompile Include="guicon.cpp" />
+    <ClCompile Include="hal_filesystem_emu.c" />
     <ClCompile Include="hal_gamepad_emu.c" />
     <ClCompile Include="hal_gui_emu.c" />
     <ClCompile Include="floppyorgel_system.c" />
@@ -89,6 +90,7 @@
     <ClInclude Include="..\Skinned Window\SkinnedWindow.h" />
     <ClInclude Include="config.h" />
     <ClInclude Include="guicon.h" />
+    <ClInclude Include="hal_filesystem.h" />
     <ClInclude Include="hal_gamepad.h" />
     <ClInclude Include="hal_gui.h" />
     <ClInclude Include="floppyorgel_system.h" />
