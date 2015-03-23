@@ -9,13 +9,32 @@ void debugPrintln(char* text) {
   printf("%s\n\r", text);
 }
 
-void drawMenu() {
+void drawCursor(uint32_t cursorPos) {
+  const uint32_t X_OFFSET = 25;
+  const uint32_t Y_OFFSET = 45;
+
+  gui_drawRect(X_OFFSET, Y_OFFSET + 18 * cursorPos, 5, 5, 255, 255, 255);
+  const uint32_t LINE_OFFSET = 18;
+
+  uint32_t x[3] = { 
+    X_OFFSET,      // links oben
+    X_OFFSET + 50, // rechts mitte
+    X_OFFSET };    // links unten
+
+  uint32_t y[3] = { Y_OFFSET + 18 * cursorPos, // links oben
+    Y_OFFSET + 18 * cursorPos + 25,            // rechts mitte
+    Y_OFFSET + 18 * cursorPos + 50 };          // links unten
+}
+
+void drawMenu(int cursorPos) {
   static const uint32_t X_OFFSET = 65;
   static const uint32_t Y_OFFSET = 240 - 18;
 
   gui_clear(0x00, 0x00, 0x00);
   gui_drawText(X_OFFSET - 30, 0, "Use the game pad to select a song", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
   gui_drawText(X_OFFSET + 10, 18, "Press A button to start", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
+  drawTracks("C:\\Users\\Stephan\\Desktop\\tmp\\Command & Conquer\\*.mid");
+  drawCursor(cursorPos);
 
   gui_redraw();
 }
@@ -43,9 +62,18 @@ void system_main() {
   debugPrintln("Floppy Orgel v3.0 initialisiert.");
   debugPrintln("################################"); 
 
+  int cursorPos = 0;
+
   while (1) {
-    debugPrintNesGamePadState();
-    drawMenu();
-    Sleep(10);
+    //debugPrintNesGamePadState();
+
+    union NesGamePadStates_t state = getNesGamepadState();
+    if (state.states.South)
+      cursorPos = cursorPos < 10 ? cursorPos + 1 : cursorPos;
+    else if (state.states.North)
+      cursorPos = cursorPos > 0 ? cursorPos - 1 : cursorPos;
+
+    drawMenu(cursorPos);
+    Sleep(100);
   }
 }

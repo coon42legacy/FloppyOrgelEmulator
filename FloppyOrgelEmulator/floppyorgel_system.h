@@ -7,5 +7,6 @@
 
 // void system_main();
 void debugPrintNesGamePadState();
+int drawTracks(char* path);
 
 #endif

@@ -13,50 +13,50 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Headerdateien\hal_win32">
+      <UniqueIdentifier>{2be89680-1aa3-4ac5-939c-920581ff25dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\hal_win32">
+      <UniqueIdentifier>{fd8cb07e-6232-4595-b2d6-5811a7398b47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\emulator_win32">
+      <UniqueIdentifier>{675bd313-d41b-470b-b887-97499b3a4451}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\emulator_win32">
+      <UniqueIdentifier>{30757b1b-1c0c-4029-be33-1610540937e2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Skinned Window\SkinnedWindow.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="guicon.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="hal_gui_emu.c">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
     <ClCompile Include="floppyorgel_system.c">
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="..\AsciiLib\AsciiLib.c">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="hal_gamepad_emu.c">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
     <ClCompile Include="hal_filesystem_emu.c">
-      <Filter>Quelldateien</Filter>
+      <Filter>Quelldateien\hal_win32</Filter>
+    </ClCompile>
+    <ClCompile Include="hal_gamepad_emu.c">
+      <Filter>Quelldateien\hal_win32</Filter>
+    </ClCompile>
+    <ClCompile Include="hal_gui_emu.c">
+      <Filter>Quelldateien\hal_win32</Filter>
+    </ClCompile>
+    <ClCompile Include="guicon.cpp">
+      <Filter>Quelldateien\emulator_win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Skinned Window\SkinnedWindow.cpp">
+      <Filter>Quelldateien\emulator_win32</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Quelldateien\emulator_win32</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="main.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Skinned Window\SkinnedWindow.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Ressourcendateien</Filter>
     </ClInclude>
-    <ClInclude Include="guicon.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
     <ClInclude Include="floppyorgel_system.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="hal_gui.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="config.h">
@@ -65,11 +65,23 @@
     <ClInclude Include="..\AsciiLib\AsciiLib.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="hal_gamepad.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
     <ClInclude Include="hal_filesystem.h">
-      <Filter>Headerdateien</Filter>
+      <Filter>Headerdateien\hal_win32</Filter>
+    </ClInclude>
+    <ClInclude Include="hal_gamepad.h">
+      <Filter>Headerdateien\hal_win32</Filter>
+    </ClInclude>
+    <ClInclude Include="hal_gui.h">
+      <Filter>Headerdateien\hal_win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Skinned Window\SkinnedWindow.h">
+      <Filter>Headerdateien\emulator_win32</Filter>
+    </ClInclude>
+    <ClInclude Include="guicon.h">
+      <Filter>Headerdateien\emulator_win32</Filter>
+    </ClInclude>
+    <ClInclude Include="main.h">
+      <Filter>Headerdateien\emulator_win32</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

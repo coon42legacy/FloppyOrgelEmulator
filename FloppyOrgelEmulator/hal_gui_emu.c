@@ -154,3 +154,22 @@ void gui_drawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t re
     }
   }
 }
+
+void gui_drawRect(uint16_t x, uint16_t y, uint16_t w, uint16_t h, 
+                  uint8_t red, uint8_t green, uint8_t blue) {
+  if (x > DISPLAY_RESOLUTION_X)
+    x = DISPLAY_RESOLUTION_X;
+  if (y > DISPLAY_RESOLUTION_Y)
+    y = DISPLAY_RESOLUTION_Y;
+
+  if ((x + w) > DISPLAY_RESOLUTION_X)
+    w = DISPLAY_RESOLUTION_X - x;
+
+  if ((y + h) > DISPLAY_RESOLUTION_Y)
+    h = DISPLAY_RESOLUTION_Y - y;
+
+  gui_drawLine(x, y, x, y + h, red, green, blue);
+  gui_drawLine(x, y, x + w, y, red, green, blue);
+  gui_drawLine(x + w, y + h, x, y + h, red, green, blue);
+  gui_drawLine(x + w, y + h, x + w, y, red, green, blue);
+}
