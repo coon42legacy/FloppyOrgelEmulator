@@ -33,7 +33,7 @@ void drawMenu(int cursorPos) {
   gui_clear(0x00, 0x00, 0x00);
   gui_drawText(X_OFFSET - 30, 0, "Use the game pad to select a song", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
   gui_drawText(X_OFFSET + 10, 18, "Press A button to start", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
-  drawTracks("C:\\Users\\Stephan\\Desktop\\tmp\\Command & Conquer\\*.mid");
+  drawTracks("_sdcard\\*");
   drawCursor(cursorPos);
 
   gui_redraw();
