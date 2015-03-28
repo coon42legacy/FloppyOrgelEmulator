@@ -3,7 +3,12 @@
 #include <windows.h>
 #include "hal_gui.h"
 #include "hal_gamepad.h"
+#include "hal_filesystem.h"
 #include "floppyorgel_system.h"
+#include "embedded-midilib/midiplayer.h"
+#include "embedded-midilib/hal_midiplayer_windows.h"
+
+static MIDI_PLAYER mpl = { 0 };
 
 void debugPrintln(char* text) {
   printf("%s\n\r", text);
@@ -57,23 +62,36 @@ void debugPrintNesGamePadState() {
 }
 
 void system_main() {
+  hal_midiplayer_init();
+  
   debugPrintln("\n\r");
   debugPrintln("################################");
   debugPrintln("Floppy Orgel v3.0 initialisiert.");
   debugPrintln("################################"); 
 
+  BOOL playingMusic = FALSE;
   int cursorPos = 0;
-
   while (1) {
-    //debugPrintNesGamePadState();
-
     union NesGamePadStates_t state = getNesGamepadState();
     if (state.states.South)
       cursorPos = cursorPos < 10 ? cursorPos + 1 : cursorPos;
     else if (state.states.North)
       cursorPos = cursorPos > 0 ? cursorPos - 1 : cursorPos;
-
-    drawMenu(cursorPos);
-    Sleep(100);
+    else if (state.states.A) {
+      char filePath[256];
+      getFileNameFromCursorPos("_sdcard", filePath, cursorPos);
+      playMidiFile(&mpl, filePath);
+      playingMusic = TRUE;
+    }
+     
+    if (!midiPlayerTick(&mpl)) {
+      if (playingMusic) {
+        playingMusic = FALSE;
+        hal_printfSuccess("Playback finished!");
+      }
+      drawMenu(cursorPos);
+    }
   }
+
+  hal_midiplayer_free();
 }

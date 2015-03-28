@@ -25,6 +25,12 @@
     <Filter Include="Headerdateien\emulator_win32">
       <UniqueIdentifier>{30757b1b-1c0c-4029-be33-1610540937e2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Quelldateien\embedded-midilib">
+      <UniqueIdentifier>{72fb29ca-6168-4ca6-b65c-2c2f4d911126}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\embedded-midilib">
+      <UniqueIdentifier>{8a2944ac-5bab-4cbd-b9f1-c60760ebbdfc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="floppyorgel_system.c">
@@ -50,6 +56,18 @@
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Quelldateien\emulator_win32</Filter>
+    </ClCompile>
+    <ClCompile Include="embedded-midilib\midiplayer.c">
+      <Filter>Quelldateien\embedded-midilib</Filter>
+    </ClCompile>
+    <ClCompile Include="embedded-midilib\midifile.c">
+      <Filter>Quelldateien\embedded-midilib</Filter>
+    </ClCompile>
+    <ClCompile Include="embedded-midilib\midiutil.c">
+      <Filter>Quelldateien\embedded-midilib</Filter>
+    </ClCompile>
+    <ClCompile Include="embedded-midilib\hal_midiplayer_windows.c">
+      <Filter>Quelldateien\embedded-midilib</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -82,6 +100,18 @@
     </ClInclude>
     <ClInclude Include="main.h">
       <Filter>Headerdateien\emulator_win32</Filter>
+    </ClInclude>
+    <ClInclude Include="embedded-midilib\midiplayer.h">
+      <Filter>Headerdateien\embedded-midilib</Filter>
+    </ClInclude>
+    <ClInclude Include="embedded-midilib\hal_midiplayer_windows.h">
+      <Filter>Headerdateien\embedded-midilib</Filter>
+    </ClInclude>
+    <ClInclude Include="embedded-midilib\midifile.h">
+      <Filter>Headerdateien\embedded-midilib</Filter>
+    </ClInclude>
+    <ClInclude Include="embedded-midilib\midiutil.h">
+      <Filter>Headerdateien\embedded-midilib</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

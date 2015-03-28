@@ -78,6 +78,10 @@
   <ItemGroup>
     <ClCompile Include="..\AsciiLib\AsciiLib.c" />
     <ClCompile Include="..\Skinned Window\SkinnedWindow.cpp" />
+    <ClCompile Include="embedded-midilib\hal_midiplayer_windows.c" />
+    <ClCompile Include="embedded-midilib\midifile.c" />
+    <ClCompile Include="embedded-midilib\midiplayer.c" />
+    <ClCompile Include="embedded-midilib\midiutil.c" />
     <ClCompile Include="guicon.cpp" />
     <ClCompile Include="hal_filesystem_emu.c" />
     <ClCompile Include="hal_gamepad_emu.c" />
@@ -89,6 +93,10 @@
     <ClInclude Include="..\AsciiLib\AsciiLib.h" />
     <ClInclude Include="..\Skinned Window\SkinnedWindow.h" />
     <ClInclude Include="config.h" />
+    <ClInclude Include="embedded-midilib\hal_midiplayer_windows.h" />
+    <ClInclude Include="embedded-midilib\midifile.h" />
+    <ClInclude Include="embedded-midilib\midiplayer.h" />
+    <ClInclude Include="embedded-midilib\midiutil.h" />
     <ClInclude Include="guicon.h" />
     <ClInclude Include="hal_filesystem.h" />
     <ClInclude Include="hal_gamepad.h" />
