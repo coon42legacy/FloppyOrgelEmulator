@@ -1,21 +1,20 @@
-#include "resource.h"
+#include "ressources/resource.h"
 #include <windows.h>
-#include "../Skinned Window/SkinnedWindow.h"
+#include "Skinned Window/SkinnedWindow.h"
 #include <stdio.h>
 #include <stdint.h>
 #include "guicon.h"
-#include "config.h"
-#include "floppyorgel_system.h"
+#include "../common/config.h"
+#include "../common/floppyorgel_system.h"
 #include "main.h"
 
 SkinnedWindow sk;
 
+// Global variables for C-code.
 extern "C" {
   void system_main();
-  void gui_clear(uint8_t red, uint8_t green, uint8_t blue);
-  void gui_setPixel(uint8_t xPos, uint8_t yPos, uint8_t red, uint8_t green, uint8_t blue);
-  HDC hDisplayDC;
-  HWND hEmuWnd;
+  HDC g_hDisplayDC;
+  HWND g_hEmuWnd;
 }
 
 DWORD WINAPI system_thread(LPVOID lpParam) {
@@ -35,8 +34,8 @@ int APIENTRY WinMain(HINSTANCE hInstance,
     MessageBoxA(0, "Error Making Window. Exiting", "Fatal Error", 0);
     exit(0);
   }
-  hDisplayDC = sk.getUserContentHDC();
-  hEmuWnd = sk.getHWnd();
+  g_hDisplayDC = sk.getUserContentHDC();
+  g_hEmuWnd = sk.getHWnd();
     
   // Start the system
   HANDLE hSystemThread = CreateThread(NULL, 0, system_thread, NULL, 0, NULL);
@@ -70,20 +69,11 @@ LRESULT CALLBACK mainDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
     SendMessage(hWnd, WM_NCLBUTTONDOWN, HTCAPTION, NULL);
     break;
   }
-
-  case WM_TIMER:
-    return 0;
   
   case WM_KEYDOWN: {
     switch (wParam) {
       case VK_ESCAPE:
         SendMessage(hWnd, WM_DESTROY, 0, 0);
-        return 0;
-
-      case VK_INSERT:
-        return 0;
-
-      case VK_HOME:
         return 0;
       }
   }

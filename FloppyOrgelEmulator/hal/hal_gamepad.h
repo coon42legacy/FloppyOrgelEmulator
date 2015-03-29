@@ -23,6 +23,6 @@ union NesGamePadStates_t {
 void delayMs(uint32_t ms);
 void setupNesGamePad();
 union NesGamePadStates_t getNesGamepadState();
-//void latchShiftRegister_();
+// void latchShiftRegister_();
 
 #endif

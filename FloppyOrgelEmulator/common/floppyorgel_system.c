@@ -1,47 +1,19 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <windows.h>
-#include "hal_gui.h"
-#include "hal_gamepad.h"
-#include "hal_filesystem.h"
+#include "../hal/hal_display.h"
+#include "../hal/hal_gamepad.h"
+#include "../hal/hal_filesystem.h"
 #include "floppyorgel_system.h"
+#include "menu.h"
 #include "embedded-midilib/midiplayer.h"
-#include "embedded-midilib/hal_midiplayer_windows.h"
+#include "embedded-midilib/hal_midiplayer_win32.h"
 
-static MIDI_PLAYER mpl = { 0 };
+#define MIDI_PATH "_sdcard"
+static MIDI_PLAYER mpl;
 
 void debugPrintln(char* text) {
   printf("%s\n\r", text);
-}
-
-void drawCursor(uint32_t cursorPos) {
-  const uint32_t X_OFFSET = 25;
-  const uint32_t Y_OFFSET = 45;
-
-  gui_drawRect(X_OFFSET, Y_OFFSET + 18 * cursorPos, 5, 5, 255, 255, 255);
-  const uint32_t LINE_OFFSET = 18;
-
-  uint32_t x[3] = { 
-    X_OFFSET,      // links oben
-    X_OFFSET + 50, // rechts mitte
-    X_OFFSET };    // links unten
-
-  uint32_t y[3] = { Y_OFFSET + 18 * cursorPos, // links oben
-    Y_OFFSET + 18 * cursorPos + 25,            // rechts mitte
-    Y_OFFSET + 18 * cursorPos + 50 };          // links unten
-}
-
-void drawMenu(int cursorPos) {
-  static const uint32_t X_OFFSET = 65;
-  static const uint32_t Y_OFFSET = 240 - 18;
-
-  gui_clear(0x00, 0x00, 0x00);
-  gui_drawText(X_OFFSET - 30, 0, "Use the game pad to select a song", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
-  gui_drawText(X_OFFSET + 10, 18, "Press A button to start", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
-  drawTracks("_sdcard\\*");
-  drawCursor(cursorPos);
-
-  gui_redraw();
 }
 
 void debugPrintNesGamePadState() {
@@ -62,7 +34,7 @@ void debugPrintNesGamePadState() {
 }
 
 void system_main() {
-  hal_midiplayer_init();
+  hal_midiplayer_init(&mpl);
   
   debugPrintln("\n\r");
   debugPrintln("################################");
@@ -79,7 +51,7 @@ void system_main() {
       cursorPos = cursorPos > 0 ? cursorPos - 1 : cursorPos;
     else if (state.states.A) {
       char filePath[256];
-      getFileNameFromCursorPos("_sdcard", filePath, cursorPos);
+      getFileNameFromCursorPos(MIDI_PATH, filePath, cursorPos);
       playMidiFile(&mpl, filePath);
       playingMusic = TRUE;
     }
@@ -89,9 +61,9 @@ void system_main() {
         playingMusic = FALSE;
         hal_printfSuccess("Playback finished!");
       }
-      drawMenu(cursorPos);
+      drawMenu(MIDI_PATH, cursorPos);
     }
   }
 
-  hal_midiplayer_free();
+  hal_midiplayer_free(&mpl);
 }

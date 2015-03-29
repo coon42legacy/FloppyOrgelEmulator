@@ -1,10 +1,10 @@
 #include <windows.h>
-#include "config.h"
-#include "../AsciiLib/AsciiLib.h"
-#include "hal_gui.h"
+#include "../common/config.h"
+#include "../common/AsciiLib/AsciiLib.h"
+#include "hal_display.h"
 
-extern HDC hDisplayDC;
-extern HWND hEmuWnd;
+extern HDC g_hDisplayDC;
+extern HWND g_hEmuWnd;
 
 void SSD1289_PutCharFont(uint16_t x, uint16_t y, uint8_t ASCII, 
   uint8_t txtRed, uint8_t txtGreen, uint8_t txtBlue,
@@ -36,9 +36,9 @@ void SSD1289_PutCharFont(uint16_t x, uint16_t y, uint8_t ASCII,
     tmp_char = buffer[i];
     for (j = 0; j<len_x; j++) {
       if (((tmp_char >> (7 - j)) & 0x01) == 0x01)
-        gui_setPixel(x + j, y + i, txtRed, txtGreen, txtBlue);
+        display_setPixel(x + j, y + i, txtRed, txtGreen, txtBlue);
       else
-        gui_setPixel(x + j, y + i, bkRed, bkGreen, bkBlue);
+        display_setPixel(x + j, y + i, bkRed, bkGreen, bkBlue);
     }
   }
 }
@@ -86,29 +86,29 @@ void SSD1289_TextFont(uint16_t x, uint16_t y, uint8_t *str,
   } while (*str != 0);
 }
 
-void gui_drawText(uint16_t x, uint16_t y, uint8_t *str,
+void display_drawText(uint16_t x, uint16_t y, uint8_t *str,
   uint8_t txtRed, uint8_t txtGreen, uint8_t txtBlue, 
   uint8_t bkRed, uint8_t bkGreen, uint8_t bkBlue) {
   SSD1289_TextFont(x, y, str, txtRed, txtGreen, txtBlue, bkRed, bkGreen, bkBlue, SYSTEM_8x16);
 }
 
-void gui_redraw() {
-  RedrawWindow(hEmuWnd, NULL, NULL, RDW_INVALIDATE);
+void display_redraw() {
+  RedrawWindow(g_hEmuWnd, NULL, NULL, RDW_INVALIDATE);
 }
 
-void gui_setPixel(uint32_t x, uint32_t y, uint8_t red, uint8_t green, uint8_t blue) {
-  SetPixel(hDisplayDC, x, y, RGB(red, green, blue));
+void display_setPixel(uint32_t x, uint32_t y, uint8_t red, uint8_t green, uint8_t blue) {
+  SetPixel(g_hDisplayDC, x, y, RGB(red, green, blue));
 }
 
-void gui_clear(uint8_t red, uint8_t green, uint8_t blue) {
+void display_clear(uint8_t red, uint8_t green, uint8_t blue) {
   for (int y = 0; y < DISPLAY_RESOLUTION_Y; y++) {
     for (int x = 0; x < DISPLAY_RESOLUTION_X; x++) {
-      gui_setPixel(x, y, red, green, blue);
+      display_setPixel(x, y, red, green, blue);
     }
   }
 }
 
-void gui_drawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t red, uint8_t green, uint8_t blue) {
+void display_drawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t red, uint8_t green, uint8_t blue) {
   int delta_x = x2 - x1;
   // if x1 == x2, then it does not matter what we set here
   signed char const ix = (delta_x > 0) - (delta_x < 0);
@@ -118,7 +118,7 @@ void gui_drawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t re
   // if y1 == y2, then it does not matter what we set here
   signed char const iy = (delta_y > 0) - (delta_y < 0);
   delta_y = abs(delta_y) << 1;
-  gui_setPixel(x1, y1, red, green, blue);
+  display_setPixel(x1, y1, red, green, blue);
   
   if (delta_x >= delta_y) {
     // error may go below zero
@@ -133,7 +133,7 @@ void gui_drawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t re
 
       error += delta_y;
       x1 += ix;
-      gui_setPixel(x1, y1, red, green, blue);
+      display_setPixel(x1, y1, red, green, blue);
     }
   }
   else {
@@ -150,12 +150,12 @@ void gui_drawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t re
       error += delta_x;
       y1 += iy;
 
-      gui_setPixel(x1, y1, red, green, blue);
+      display_setPixel(x1, y1, red, green, blue);
     }
   }
 }
 
-void gui_drawRect(uint16_t x, uint16_t y, uint16_t w, uint16_t h, 
+void display_drawRect(uint16_t x, uint16_t y, uint16_t w, uint16_t h, 
                   uint8_t red, uint8_t green, uint8_t blue) {
   if (x > DISPLAY_RESOLUTION_X)
     x = DISPLAY_RESOLUTION_X;
@@ -168,8 +168,8 @@ void gui_drawRect(uint16_t x, uint16_t y, uint16_t w, uint16_t h,
   if ((y + h) > DISPLAY_RESOLUTION_Y)
     h = DISPLAY_RESOLUTION_Y - y;
 
-  gui_drawLine(x, y, x, y + h, red, green, blue);
-  gui_drawLine(x, y, x + w, y, red, green, blue);
-  gui_drawLine(x + w, y + h, x, y + h, red, green, blue);
-  gui_drawLine(x + w, y + h, x + w, y, red, green, blue);
+  display_drawLine(x, y, x, y + h, red, green, blue);
+  display_drawLine(x, y, x + w, y, red, green, blue);
+  display_drawLine(x + w, y + h, x, y + h, red, green, blue);
+  display_drawLine(x + w, y + h, x + w, y, red, green, blue);
 }

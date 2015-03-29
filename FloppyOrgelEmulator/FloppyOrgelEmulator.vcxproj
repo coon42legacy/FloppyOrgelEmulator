@@ -10,6 +10,47 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="common\AsciiLib\AsciiLib.c" />
+    <ClCompile Include="common\embedded-midilib\hal_midiplayer_win32.c" />
+    <ClCompile Include="common\embedded-midilib\midifile.c" />
+    <ClCompile Include="common\embedded-midilib\midiplayer.c" />
+    <ClCompile Include="common\embedded-midilib\midiutil.c" />
+    <ClCompile Include="common\floppyorgel_system.c" />
+    <ClCompile Include="common\menu.c" />
+    <ClCompile Include="emulator_win32\guicon.cpp" />
+    <ClCompile Include="emulator_win32\main.cpp" />
+    <ClCompile Include="emulator_win32\Skinned Window\SkinnedWindow.cpp" />
+    <ClCompile Include="hal\hal_display_win32.c" />
+    <ClCompile Include="hal\hal_filesystem_win32.c" />
+    <ClCompile Include="hal\hal_gamepad_win32.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="common\AsciiLib\AsciiLib.h" />
+    <ClInclude Include="common\config.h" />
+    <ClInclude Include="common\embedded-midilib\hal_midiplayer_win32.h" />
+    <ClInclude Include="common\embedded-midilib\midifile.h" />
+    <ClInclude Include="common\embedded-midilib\midiplayer.h" />
+    <ClInclude Include="common\embedded-midilib\midiutil.h" />
+    <ClInclude Include="common\floppyorgel_system.h" />
+    <ClInclude Include="common\menu.h" />
+    <ClInclude Include="emulator_win32\guicon.h" />
+    <ClInclude Include="emulator_win32\main.h" />
+    <ClInclude Include="emulator_win32\ressources\resource.h" />
+    <ClInclude Include="emulator_win32\Skinned Window\SkinnedWindow.h" />
+    <ClInclude Include="hal\hal_display.h" />
+    <ClInclude Include="hal\hal_filesystem.h" />
+    <ClInclude Include="hal\hal_gamepad.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="emulator_win32\ressources\Resource.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="emulator_win32\ressources\Skin.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="emulator_win32\ressources\Skin.rgn" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{15427FA3-E236-4822-8484-2B11A0EF4375}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
@@ -75,45 +116,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="..\AsciiLib\AsciiLib.c" />
-    <ClCompile Include="..\Skinned Window\SkinnedWindow.cpp" />
-    <ClCompile Include="embedded-midilib\hal_midiplayer_windows.c" />
-    <ClCompile Include="embedded-midilib\midifile.c" />
-    <ClCompile Include="embedded-midilib\midiplayer.c" />
-    <ClCompile Include="embedded-midilib\midiutil.c" />
-    <ClCompile Include="guicon.cpp" />
-    <ClCompile Include="hal_filesystem_emu.c" />
-    <ClCompile Include="hal_gamepad_emu.c" />
-    <ClCompile Include="hal_gui_emu.c" />
-    <ClCompile Include="floppyorgel_system.c" />
-    <ClCompile Include="main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\AsciiLib\AsciiLib.h" />
-    <ClInclude Include="..\Skinned Window\SkinnedWindow.h" />
-    <ClInclude Include="config.h" />
-    <ClInclude Include="embedded-midilib\hal_midiplayer_windows.h" />
-    <ClInclude Include="embedded-midilib\midifile.h" />
-    <ClInclude Include="embedded-midilib\midiplayer.h" />
-    <ClInclude Include="embedded-midilib\midiutil.h" />
-    <ClInclude Include="guicon.h" />
-    <ClInclude Include="hal_filesystem.h" />
-    <ClInclude Include="hal_gamepad.h" />
-    <ClInclude Include="hal_gui.h" />
-    <ClInclude Include="floppyorgel_system.h" />
-    <ClInclude Include="main.h" />
-    <ClInclude Include="resource.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Resource.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="..\ressources\Skin.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\ressources\Skin.rgn" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
