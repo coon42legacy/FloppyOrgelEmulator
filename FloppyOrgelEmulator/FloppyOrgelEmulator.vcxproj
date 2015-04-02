@@ -23,7 +23,7 @@
     <ClCompile Include="emulator_win32\Skinned Window\SkinnedWindow.cpp" />
     <ClCompile Include="hal\hal_display_win32.c" />
     <ClCompile Include="hal\hal_filesystem_win32.c" />
-    <ClCompile Include="hal\hal_gamepad_win32.c" />
+    <ClCompile Include="hal\hal_inputdevice_win32.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common\AsciiLib\AsciiLib.h" />
@@ -40,7 +40,7 @@
     <ClInclude Include="emulator_win32\Skinned Window\SkinnedWindow.h" />
     <ClInclude Include="hal\hal_display.h" />
     <ClInclude Include="hal\hal_filesystem.h" />
-    <ClInclude Include="hal\hal_gamepad.h" />
+    <ClInclude Include="hal\hal_inputdevice.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="emulator_win32\ressources\Resource.rc" />

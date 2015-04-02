@@ -54,9 +54,6 @@
     <ClCompile Include="hal\hal_filesystem_win32.c">
       <Filter>Quelldateien\hal</Filter>
     </ClCompile>
-    <ClCompile Include="hal\hal_gamepad_win32.c">
-      <Filter>Quelldateien\hal</Filter>
-    </ClCompile>
     <ClCompile Include="common\AsciiLib\AsciiLib.c">
       <Filter>Quelldateien\common</Filter>
     </ClCompile>
@@ -78,6 +75,9 @@
     <ClCompile Include="common\menu.c">
       <Filter>Quelldateien\common</Filter>
     </ClCompile>
+    <ClCompile Include="hal\hal_inputdevice_win32.c">
+      <Filter>Quelldateien\hal</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="emulator_win32\guicon.h">
@@ -93,9 +93,6 @@
       <Filter>Headerdateien\hal</Filter>
     </ClInclude>
     <ClInclude Include="hal\hal_filesystem.h">
-      <Filter>Headerdateien\hal</Filter>
-    </ClInclude>
-    <ClInclude Include="hal\hal_gamepad.h">
       <Filter>Headerdateien\hal</Filter>
     </ClInclude>
     <ClInclude Include="emulator_win32\ressources\resource.h">
@@ -124,6 +121,9 @@
     </ClInclude>
     <ClInclude Include="common\menu.h">
       <Filter>Headerdateien\common</Filter>
+    </ClInclude>
+    <ClInclude Include="hal\hal_inputdevice.h">
+      <Filter>Headerdateien\hal</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

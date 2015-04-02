@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include <windows.h>
 #include "../hal/hal_display.h"
-#include "../hal/hal_gamepad.h"
+#include "../hal/hal_inputdevice.h"
 #include "../hal/hal_filesystem.h"
 #include "floppyorgel_system.h"
 #include "menu.h"
@@ -10,27 +10,12 @@
 #include "embedded-midilib/hal_midiplayer_win32.h"
 
 #define MIDI_PATH "_sdcard"
+//#define MIDI_PATH "C:\\Users\\Stephan\\Desktop\\tmp\\Command & Conquer"
+
 static MIDI_PLAYER mpl;
 
 void debugPrintln(char* text) {
   printf("%s\n\r", text);
-}
-
-void debugPrintNesGamePadState() {
-  union NesGamePadStates_t state = getNesGamepadState();
-  if (state.code == 0xFF)
-    printf("Game pad is not plugged in\n\r");
-  else {
-    printf("A: ");      if (state.states.A)      printf(" ON"); else printf("OFF"); printf(" | ");
-    printf("B: ");      if (state.states.B)      printf(" ON"); else printf("OFF"); printf(" | ");
-    printf("UP: ");     if (state.states.North)  printf(" ON"); else printf("OFF"); printf(" | ");
-    printf("DOWN: ");   if (state.states.South)  printf(" ON"); else printf("OFF"); printf(" | ");
-    printf("LEFT: ");   if (state.states.West)   printf(" ON"); else printf("OFF"); printf(" | ");
-    printf("RIGHT: ");  if (state.states.East)   printf(" ON"); else printf("OFF"); printf(" | ");
-    printf("START: ");  if (state.states.Start)  printf(" ON"); else printf("OFF"); printf(" | ");
-    printf("SELECT: "); if (state.states.Select) printf(" ON"); else printf("OFF"); printf(" | ");
-  }
-  printf("\n\r");
 }
 
 void system_main() {
@@ -44,12 +29,12 @@ void system_main() {
   BOOL playingMusic = FALSE;
   int cursorPos = 0;
   while (1) {
-    union NesGamePadStates_t state = getNesGamepadState();
-    if (state.states.South)
+    InputDeviceStates_t state = getInputDeviceState();
+    if (state.South)
       cursorPos = cursorPos < 10 ? cursorPos + 1 : cursorPos;
-    else if (state.states.North)
+    else if (state.North)
       cursorPos = cursorPos > 0 ? cursorPos - 1 : cursorPos;
-    else if (state.states.A) {
+    else if (state.Action) {
       char filePath[256];
       getFileNameFromCursorPos(MIDI_PATH, filePath, cursorPos);
       playMidiFile(&mpl, filePath);
