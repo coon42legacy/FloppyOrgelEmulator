@@ -1,16 +1,13 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <windows.h>
-#include "../hal/hal_display.h"
 #include "../hal/hal_inputdevice.h"
-#include "../hal/hal_filesystem.h"
 #include "floppyorgel_system.h"
 #include "menu.h"
 #include "embedded-midilib/midiplayer.h"
 #include "embedded-midilib/hal_midiplayer_win32.h"
 
 #define MIDI_PATH "_sdcard"
-//#define MIDI_PATH "C:\\Users\\Stephan\\Desktop\\tmp\\Command & Conquer"
 
 static MIDI_PLAYER mpl;
 

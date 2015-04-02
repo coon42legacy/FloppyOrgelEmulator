@@ -2,14 +2,14 @@
 #include "AsciiLib.h"
 
 /*******************************************************************************
-* Function Name  : GetASCIICode
+* Function Name  : getASCIICode
 * Description    : 
 * Input          : 
 * Output         : 
 * Return         : None
 * Attention		   : None
 *******************************************************************************/
-void GetASCIICode(unsigned char* pBuffer, unsigned char ASCII, uint16_t FONTx)
+void getASCIICode(unsigned char* pBuffer, unsigned char ASCII, uint16_t FONTx)
 {  
   switch (FONTx) {
     case MS_GOTHIC_8x16:

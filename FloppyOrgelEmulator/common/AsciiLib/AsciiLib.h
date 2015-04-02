@@ -597,6 +597,6 @@ static unsigned char const SYSTEM_8x16_table[95][16] = {
 };
 
 /* Private function prototypes -----------------------------------------------*/
-void GetASCIICode(unsigned char* pBuffer, unsigned char ASCII, uint16_t FONTx);
+void getASCIICode(unsigned char* pBuffer, unsigned char ASCII, uint16_t FONTx);
 
 #endif 

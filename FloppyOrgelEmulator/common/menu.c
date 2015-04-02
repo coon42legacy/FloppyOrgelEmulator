@@ -1,6 +1,8 @@
 #include <stdint.h>
 #include "../hal/hal_filesystem.h"
 #include "../hal/hal_display.h"
+#include "canvas/canvas.h"
+#include "AsciiLib/AsciiLib.h"
 #include "menu.h"
 
 void getFileNameFromCursorPos(char* srcPath, char* dstFilePath, int cursorPos) {
@@ -41,7 +43,7 @@ int drawTracks(char* path) {
   while (!endOfDirectory) {
     if (findData.fileName[0] != '.')
       if (findData.fileName[1] != '.') {
-        display_drawText(X_OFFSET, Y_OFFSET + 18 * itemCount++, findData.fileName,
+        canvas_drawText(X_OFFSET, Y_OFFSET + 18 * itemCount++, findData.fileName,
           0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
       }
 
@@ -57,7 +59,7 @@ void drawCursor(uint32_t cursorPos) {
   const uint32_t X_OFFSET = 25;
   const uint32_t Y_OFFSET = 45;
 
-  display_drawRect(X_OFFSET, Y_OFFSET + 18 * cursorPos, 5, 5, 255, 255, 255);
+  canvas_drawRect(X_OFFSET, Y_OFFSET + 18 * cursorPos, 5, 5, 255, 255, 255);
   const uint32_t LINE_OFFSET = 18;
 
   uint32_t x[3] = {
@@ -75,9 +77,9 @@ void drawMenu(char* path, int16_t cursorPos) {
   static const uint32_t Y_OFFSET = 240 - 18;
   static char searchPath[256];
 
-  display_clear(0x00, 0x00, 0x00);
-  display_drawText(X_OFFSET - 30, 0, "Use the game pad to select a song", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
-  display_drawText(X_OFFSET + 10, 18, "Press A button to start", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
+  canvas_clear(0x00, 0x00, 0x00);
+  canvas_drawText(X_OFFSET - 30, 0, "Use the game pad to select a song", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
+  canvas_drawText(X_OFFSET + 10, 18, "Press A button to start", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
   strcpy_s(searchPath, sizeof(searchPath), path);
   strcat_s(searchPath, sizeof(searchPath), "\\*");
   drawTracks(searchPath);

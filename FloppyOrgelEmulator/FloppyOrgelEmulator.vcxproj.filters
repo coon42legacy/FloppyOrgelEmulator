@@ -37,6 +37,12 @@
     <Filter Include="Headerdateien\common\embedded-midilib">
       <UniqueIdentifier>{1a1df41e-a1b6-476e-be62-918e4cef8b30}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headerdateien\common\canvas">
+      <UniqueIdentifier>{72229204-0ba3-4a34-966b-51f27596c2e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\common\canvas">
+      <UniqueIdentifier>{ef6be2eb-b10c-49da-8e51-a11b290723d6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="emulator_win32\Skinned Window\SkinnedWindow.cpp">
@@ -53,9 +59,6 @@
     </ClCompile>
     <ClCompile Include="hal\hal_filesystem_win32.c">
       <Filter>Quelldateien\hal</Filter>
-    </ClCompile>
-    <ClCompile Include="common\AsciiLib\AsciiLib.c">
-      <Filter>Quelldateien\common</Filter>
     </ClCompile>
     <ClCompile Include="common\floppyorgel_system.c">
       <Filter>Quelldateien\common</Filter>
@@ -77,6 +80,12 @@
     </ClCompile>
     <ClCompile Include="hal\hal_inputdevice_win32.c">
       <Filter>Quelldateien\hal</Filter>
+    </ClCompile>
+    <ClCompile Include="common\AsciiLib\AsciiLib.c">
+      <Filter>Quelldateien\common\canvas</Filter>
+    </ClCompile>
+    <ClCompile Include="common\canvas\canvas.c">
+      <Filter>Quelldateien\common\canvas</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -104,9 +113,6 @@
     <ClInclude Include="common\floppyorgel_system.h">
       <Filter>Headerdateien\common</Filter>
     </ClInclude>
-    <ClInclude Include="common\AsciiLib\AsciiLib.h">
-      <Filter>Headerdateien\common</Filter>
-    </ClInclude>
     <ClInclude Include="common\embedded-midilib\hal_midiplayer_win32.h">
       <Filter>Headerdateien\common\embedded-midilib</Filter>
     </ClInclude>
@@ -124,6 +130,12 @@
     </ClInclude>
     <ClInclude Include="hal\hal_inputdevice.h">
       <Filter>Headerdateien\hal</Filter>
+    </ClInclude>
+    <ClInclude Include="common\AsciiLib\AsciiLib.h">
+      <Filter>Headerdateien\common\canvas</Filter>
+    </ClInclude>
+    <ClInclude Include="common\canvas\canvas.h">
+      <Filter>Headerdateien\common\canvas</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

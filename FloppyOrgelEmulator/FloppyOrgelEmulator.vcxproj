@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="common\AsciiLib\AsciiLib.c" />
+    <ClCompile Include="common\canvas\canvas.c" />
     <ClCompile Include="common\embedded-midilib\hal_midiplayer_win32.c" />
     <ClCompile Include="common\embedded-midilib\midifile.c" />
     <ClCompile Include="common\embedded-midilib\midiplayer.c" />
@@ -27,6 +28,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="common\AsciiLib\AsciiLib.h" />
+    <ClInclude Include="common\canvas\canvas.h" />
     <ClInclude Include="common\config.h" />
     <ClInclude Include="common\embedded-midilib\hal_midiplayer_win32.h" />
     <ClInclude Include="common\embedded-midilib\midifile.h" />
