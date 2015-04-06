@@ -3,6 +3,7 @@
 
 #ifdef _WIN32
   #define DONT_DEFINE_SYSTEM_MAIN
+  #define MIDI_PATH "_sdcard"
 #endif
 
 #define DISPLAY_RESOLUTION_X 320
