@@ -2,8 +2,8 @@
 #include "../hal/hal_inputdevice.h"
 #include "../hal/hal_filesystem.h"
 #include "../hal/hal_display.h"
-#include "embedded-midilib/midiplayer.h"
-#include "embedded-midilib/hal_midiplayer_win32.h"
+// #include "embedded-midilib/midiplayer.h"
+// #include "embedded-midilib/hal_midiplayer_win32.h"
 #include "canvas/canvas.h"
 #include "AsciiLib/AsciiLib.h"
 #include "config.h"
@@ -13,7 +13,7 @@
 #define FSM_STACK_SIZE 16
 void* stack[FSM_STACK_SIZE];
 int _stackSize;
-static MIDI_PLAYER mpl;
+//static MIDI_PLAYER mpl;
 static char filePathOfSongToPlay[256];
 
 // States
@@ -21,7 +21,7 @@ void fsmStateMainMenu() {
   InputDeviceStates_t buttonPressed = getInputDeviceState();
 
   static const uint32_t X_OFFSET = 65;
-  static const uint32_t Y_OFFSET = 240 - 18;
+  //static const uint32_t Y_OFFSET = 240 - 18;
   static uint8_t cursorPos = 0;
 
   canvas_clear(0x00, 0x00, 0x00);
@@ -55,7 +55,7 @@ void fsmStateMainMenu() {
 void fsmStateButtonTest() {
   InputDeviceStates_t buttonPressed = getInputDeviceState();
   static const uint32_t X_OFFSET = 65;
-  static const uint32_t Y_OFFSET = 240 - 18;
+  // static const uint32_t Y_OFFSET = 240 - 18;
 
   canvas_clear(0x00, 0x00, 0x00);
   canvas_drawText(X_OFFSET - 30, 0, "Button Test", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
@@ -85,6 +85,7 @@ void fsmStatePlaylist() {
 }
 
 void fsmStartPlayBack() {
+/*
   hal_midiplayer_init(&mpl);
   playMidiFile(&mpl, filePathOfSongToPlay);
   static const uint32_t X_OFFSET = 65;
@@ -97,9 +98,11 @@ void fsmStartPlayBack() {
 
   fsmPop();
   fsmPush(fsmStatePlaying);
+  */
 }
 
 void fsmStatePlaying() {
+	/*
   InputDeviceStates_t buttonPressed = getInputDeviceState();
 
   if (buttonPressed.Back) {
@@ -111,19 +114,20 @@ void fsmStatePlaying() {
     fsmPop();
     fsmPush(fsmStatePlaybackFinished);
   }
+  */
 }
 
 void fsmStatePlaybackFinished() {
-  hal_printfSuccess("Playback finished!");
-  hal_midiplayer_free(&mpl);
+  // hal_printfSuccess("Playback finished!");
+  // hal_midiplayer_free(&mpl);
 
   fsmPop();
   fsmPush(fsmStatePlaylist);
 }
 
 void fsmStatePlaybackAborted() {
-  hal_printfSuccess("Playback aborted by user.");
-  hal_midiplayer_free(&mpl);
+  // hal_printfSuccess("Playback aborted by user.");
+  // hal_midiplayer_free(&mpl);
 
   fsmPop();
   fsmPush(fsmStatePlaylist);
@@ -134,22 +138,22 @@ void fsmInit() {
   _stackSize = 0;
 }
 
-BOOL fsmPush(void* state) {
+bool fsmPush(void* state) {
   if (_stackSize < FSM_STACK_SIZE) {
     stack[_stackSize++] = state;
-    return TRUE;
+    return true;
   }
   else
-    return FALSE;
+    return false;
 }
 
-BOOL fsmPop() {
+bool fsmPop() {
   if (_stackSize > 0) {
     _stackSize--;
-    return TRUE;
+    return true;
   }
   else
-    return FALSE;
+    return false;
 }
 
 void* fsmGetCurrentState() {
@@ -170,12 +174,12 @@ void fsmTick() {
 void getFileNameFromCursorPos(char* srcPath, char* dstFilePath, int cursorPos) {
   FO_FIND_DATA findData;
 
-  strcpy_s(dstFilePath, 256, srcPath);
-  strcat_s(dstFilePath, 256, "\\*");
+  strcpy(dstFilePath, srcPath);
+  strcat(dstFilePath, "\\*");
 
-  BOOL endOfDirectory = !fo_findInit(dstFilePath, &findData);
-  static const uint32_t X_OFFSET = 35;
-  static const uint32_t Y_OFFSET = 40;
+  bool endOfDirectory = !fo_findInit(dstFilePath, &findData);
+  // static const uint32_t X_OFFSET = 35;
+  // static const uint32_t Y_OFFSET = 40;
   int itemCount = 0;
 
   while (!endOfDirectory) {
@@ -183,12 +187,12 @@ void getFileNameFromCursorPos(char* srcPath, char* dstFilePath, int cursorPos) {
       if (findData.fileName[1] != '.')
         if (itemCount++ == cursorPos) {
           dstFilePath[strlen(dstFilePath) - 1] = '\0'; // remove trailing start
-          strcat_s(dstFilePath, 256, findData.fileName);
+          strcat(dstFilePath, findData.fileName);
           break;
         }
 
         if (!fo_findNext(&findData))
-          endOfDirectory = TRUE;
+          endOfDirectory = true;
   }
 
   fo_findFree();
@@ -200,7 +204,7 @@ int drawTracks(char* path) {
   static const uint32_t X_OFFSET = 35;
   static const uint32_t Y_OFFSET = 40;
   int itemCount = 0;
-  BOOL endOfDirectory = !fo_findInit(path, &findData);
+  bool endOfDirectory = !fo_findInit(path, &findData);
 
   while (!endOfDirectory) {
     if (findData.fileName[0] != '.')
@@ -210,7 +214,7 @@ int drawTracks(char* path) {
       }
 
       if (!fo_findNext(&findData))
-        endOfDirectory = TRUE;
+        endOfDirectory = true;
   }
   fo_findFree();
 
@@ -222,28 +226,18 @@ void drawCursor(uint32_t cursorPos) {
   const uint32_t Y_OFFSET = 45;
 
   canvas_drawRect(X_OFFSET, Y_OFFSET + 18 * cursorPos, 5, 5, 255, 255, 255);
-  const uint32_t LINE_OFFSET = 18;
-
-  uint32_t x[3] = {
-    X_OFFSET,      // links oben
-    X_OFFSET + 50, // rechts mitte
-    X_OFFSET };    // links unten
-
-  uint32_t y[3] = { Y_OFFSET + 18 * cursorPos, // links oben
-    Y_OFFSET + 18 * cursorPos + 25,            // rechts mitte
-    Y_OFFSET + 18 * cursorPos + 50 };          // links unten
 }
 
 void drawMenu(char* path, int16_t cursorPos) {
   static const uint32_t X_OFFSET = 65;
-  static const uint32_t Y_OFFSET = 240 - 18;
+  // static const uint32_t Y_OFFSET = 240 - 18;
   static char searchPath[256];
 
   canvas_clear(0x00, 0x00, 0x00);
   canvas_drawText(X_OFFSET - 30, 0, "Use the game pad to select a song", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
   canvas_drawText(X_OFFSET + 10, 18, "Press A button to start", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
-  strcpy_s(searchPath, sizeof(searchPath), path);
-  strcat_s(searchPath, sizeof(searchPath), "\\*");
+  strcpy(searchPath, path);
+  strcat(searchPath, "\\*");
   drawTracks(searchPath);
   drawCursor(cursorPos);
 

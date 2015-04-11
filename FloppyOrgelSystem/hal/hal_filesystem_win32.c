@@ -5,7 +5,7 @@
 
 static HANDLE fo_findHandle;
 
-BOOL fo_findInit(char* path, FO_FIND_DATA* findData) {
+bool fo_findInit(char* path, FO_FIND_DATA* findData) {
   WIN32_FIND_DATA search_data;
   memset(&search_data, 0, sizeof(WIN32_FIND_DATA));
   fo_findHandle = FindFirstFile(path, &search_data);
@@ -13,7 +13,7 @@ BOOL fo_findInit(char* path, FO_FIND_DATA* findData) {
   return fo_findHandle != INVALID_HANDLE_VALUE ? TRUE : FALSE;
 }
 
-BOOL fo_findNext(FO_FIND_DATA* findData) {
+bool fo_findNext(FO_FIND_DATA* findData) {
   WIN32_FIND_DATA search_data;
   memset(&search_data, 0, sizeof(WIN32_FIND_DATA));
   BOOL fileHasFound = FindNextFile(fo_findHandle, &search_data);

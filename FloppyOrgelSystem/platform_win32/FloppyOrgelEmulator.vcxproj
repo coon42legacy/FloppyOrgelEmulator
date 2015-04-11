@@ -11,47 +11,47 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="common\AsciiLib\AsciiLib.c" />
-    <ClCompile Include="common\canvas\canvas.c" />
-    <ClCompile Include="common\embedded-midilib\hal_midiplayer_win32.c" />
-    <ClCompile Include="common\embedded-midilib\midifile.c" />
-    <ClCompile Include="common\embedded-midilib\midiplayer.c" />
-    <ClCompile Include="common\embedded-midilib\midiutil.c" />
-    <ClCompile Include="common\floppyorgel_system.c" />
-    <ClCompile Include="common\menu.c" />
-    <ClCompile Include="emulator_win32\guicon.cpp" />
-    <ClCompile Include="emulator_win32\main.cpp" />
-    <ClCompile Include="emulator_win32\Skinned Window\SkinnedWindow.cpp" />
-    <ClCompile Include="hal\hal_display_win32.c" />
-    <ClCompile Include="hal\hal_filesystem_win32.c" />
-    <ClCompile Include="hal\hal_inputdevice_win32.c" />
+    <ClCompile Include="..\common\AsciiLib\AsciiLib.c" />
+    <ClCompile Include="..\common\canvas\canvas.c" />
+    <ClCompile Include="..\common\embedded-midilib\hal_midiplayer_win32.c" />
+    <ClCompile Include="..\common\embedded-midilib\midifile.c" />
+    <ClCompile Include="..\common\embedded-midilib\midiplayer.c" />
+    <ClCompile Include="..\common\embedded-midilib\midiutil.c" />
+    <ClCompile Include="..\common\floppyorgel_system.c" />
+    <ClCompile Include="..\common\menu.c" />
+    <ClCompile Include="guicon.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Skinned Window\SkinnedWindow.cpp" />
+    <ClCompile Include="..\hal\hal_display_win32.c" />
+    <ClCompile Include="..\hal\hal_filesystem_win32.c" />
+    <ClCompile Include="..\hal\hal_inputdevice_win32.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="common\AsciiLib\AsciiLib.h" />
-    <ClInclude Include="common\canvas\canvas.h" />
-    <ClInclude Include="common\config.h" />
-    <ClInclude Include="common\embedded-midilib\hal_midiplayer_win32.h" />
-    <ClInclude Include="common\embedded-midilib\midifile.h" />
-    <ClInclude Include="common\embedded-midilib\midiplayer.h" />
-    <ClInclude Include="common\embedded-midilib\midiutil.h" />
-    <ClInclude Include="common\floppyorgel_system.h" />
-    <ClInclude Include="common\menu.h" />
-    <ClInclude Include="emulator_win32\guicon.h" />
-    <ClInclude Include="emulator_win32\main.h" />
-    <ClInclude Include="emulator_win32\ressources\resource.h" />
-    <ClInclude Include="emulator_win32\Skinned Window\SkinnedWindow.h" />
-    <ClInclude Include="hal\hal_display.h" />
-    <ClInclude Include="hal\hal_filesystem.h" />
-    <ClInclude Include="hal\hal_inputdevice.h" />
+    <ClInclude Include="..\common\AsciiLib\AsciiLib.h" />
+    <ClInclude Include="..\common\canvas\canvas.h" />
+    <ClInclude Include="..\common\config.h" />
+    <ClInclude Include="..\common\embedded-midilib\hal_midiplayer_win32.h" />
+    <ClInclude Include="..\common\embedded-midilib\midifile.h" />
+    <ClInclude Include="..\common\embedded-midilib\midiplayer.h" />
+    <ClInclude Include="..\common\embedded-midilib\midiutil.h" />
+    <ClInclude Include="..\common\floppyorgel_system.h" />
+    <ClInclude Include="..\common\menu.h" />
+    <ClInclude Include="guicon.h" />
+    <ClInclude Include="main.h" />
+    <ClInclude Include="ressources\resource.h" />
+    <ClInclude Include="Skinned Window\SkinnedWindow.h" />
+    <ClInclude Include="..\hal\hal_display.h" />
+    <ClInclude Include="..\hal\hal_filesystem.h" />
+    <ClInclude Include="..\hal\hal_inputdevice.h" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="emulator_win32\ressources\Resource.rc" />
+    <ResourceCompile Include="ressources\Resource.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="emulator_win32\ressources\Skin.bmp" />
+    <Image Include="ressources\Skin.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="emulator_win32\ressources\Skin.rgn" />
+    <None Include="ressources\Skin.rgn" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{15427FA3-E236-4822-8484-2B11A0EF4375}</ProjectGuid>
@@ -94,7 +94,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

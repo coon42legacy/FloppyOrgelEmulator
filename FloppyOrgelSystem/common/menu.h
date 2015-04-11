@@ -1,6 +1,8 @@
 #ifndef __FLOPPYORGEL_MENU_H
 #define __FLOPPYORGEL_MENU_H
 
+#include <stdbool.h>
+
 void fsmStateMainMenu();
 void fsmStateButtonTest();
 void fsmStatePlaylist();
@@ -10,8 +12,8 @@ void fsmStatePlaybackAborted();
 void fsmStatePlaybackFinished();
 
 void fsmInit();
-BOOL fsmPush(void* state);
-BOOL fsmPop();
+bool fsmPush(void* state);
+bool fsmPop();
 void* fsmGetCurrentState();
 void fsmTick();
 

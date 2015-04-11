@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdint.h>
-#include <windows.h>
 #include "../hal/hal_inputdevice.h"
 #include "floppyorgel_system.h"
 #include "menu.h"

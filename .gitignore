@@ -6,3 +6,5 @@ Debug
 /FloppyOrgelEmulator/*.user
 /FloppyOrgelEmulator/*.aps
 _sdcard
+desktop.ini
+*.sdf

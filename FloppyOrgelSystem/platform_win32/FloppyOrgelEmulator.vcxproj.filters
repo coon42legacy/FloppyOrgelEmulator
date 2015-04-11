@@ -13,12 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Quelldateien\emulator_win32">
-      <UniqueIdentifier>{675bd313-d41b-470b-b887-97499b3a4451}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Headerdateien\emulator_win32">
-      <UniqueIdentifier>{30757b1b-1c0c-4029-be33-1610540937e2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Headerdateien\hal">
       <UniqueIdentifier>{6da0b5ee-e27d-4e63-81fc-1800b5de4c6e}</UniqueIdentifier>
     </Filter>
@@ -43,113 +37,119 @@
     <Filter Include="Quelldateien\common\canvas">
       <UniqueIdentifier>{ef6be2eb-b10c-49da-8e51-a11b290723d6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Headerdateien\platform_win32">
+      <UniqueIdentifier>{30757b1b-1c0c-4029-be33-1610540937e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\platform_win32">
+      <UniqueIdentifier>{675bd313-d41b-470b-b887-97499b3a4451}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="emulator_win32\Skinned Window\SkinnedWindow.cpp">
-      <Filter>Quelldateien\emulator_win32</Filter>
-    </ClCompile>
-    <ClCompile Include="emulator_win32\guicon.cpp">
-      <Filter>Quelldateien\emulator_win32</Filter>
-    </ClCompile>
-    <ClCompile Include="emulator_win32\main.cpp">
-      <Filter>Quelldateien\emulator_win32</Filter>
-    </ClCompile>
-    <ClCompile Include="hal\hal_display_win32.c">
-      <Filter>Quelldateien\hal</Filter>
-    </ClCompile>
-    <ClCompile Include="hal\hal_filesystem_win32.c">
-      <Filter>Quelldateien\hal</Filter>
-    </ClCompile>
-    <ClCompile Include="common\floppyorgel_system.c">
-      <Filter>Quelldateien\common</Filter>
-    </ClCompile>
-    <ClCompile Include="common\embedded-midilib\hal_midiplayer_win32.c">
-      <Filter>Quelldateien\common\embedded-midilib</Filter>
-    </ClCompile>
-    <ClCompile Include="common\embedded-midilib\midifile.c">
-      <Filter>Quelldateien\common\embedded-midilib</Filter>
-    </ClCompile>
-    <ClCompile Include="common\embedded-midilib\midiplayer.c">
-      <Filter>Quelldateien\common\embedded-midilib</Filter>
-    </ClCompile>
-    <ClCompile Include="common\embedded-midilib\midiutil.c">
-      <Filter>Quelldateien\common\embedded-midilib</Filter>
-    </ClCompile>
-    <ClCompile Include="common\menu.c">
-      <Filter>Quelldateien\common</Filter>
-    </ClCompile>
-    <ClCompile Include="hal\hal_inputdevice_win32.c">
-      <Filter>Quelldateien\hal</Filter>
-    </ClCompile>
-    <ClCompile Include="common\AsciiLib\AsciiLib.c">
+    <ClCompile Include="..\common\canvas\canvas.c">
       <Filter>Quelldateien\common\canvas</Filter>
     </ClCompile>
-    <ClCompile Include="common\canvas\canvas.c">
+    <ClCompile Include="..\common\embedded-midilib\hal_midiplayer_win32.c">
+      <Filter>Quelldateien\common\embedded-midilib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\embedded-midilib\midifile.c">
+      <Filter>Quelldateien\common\embedded-midilib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\embedded-midilib\midiplayer.c">
+      <Filter>Quelldateien\common\embedded-midilib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\embedded-midilib\midiutil.c">
+      <Filter>Quelldateien\common\embedded-midilib</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Quelldateien\platform_win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\floppyorgel_system.c">
+      <Filter>Quelldateien\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\menu.c">
+      <Filter>Quelldateien\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\hal\hal_display_win32.c">
+      <Filter>Quelldateien\hal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\hal\hal_filesystem_win32.c">
+      <Filter>Quelldateien\hal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\hal\hal_inputdevice_win32.c">
+      <Filter>Quelldateien\hal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\AsciiLib\AsciiLib.c">
       <Filter>Quelldateien\common\canvas</Filter>
+    </ClCompile>
+    <ClCompile Include="Skinned Window\SkinnedWindow.cpp">
+      <Filter>Quelldateien\platform_win32</Filter>
+    </ClCompile>
+    <ClCompile Include="guicon.cpp">
+      <Filter>Quelldateien\platform_win32</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="emulator_win32\guicon.h">
-      <Filter>Headerdateien\emulator_win32</Filter>
+    <ClInclude Include="..\common\AsciiLib\AsciiLib.h">
+      <Filter>Headerdateien\common\canvas</Filter>
     </ClInclude>
-    <ClInclude Include="emulator_win32\main.h">
-      <Filter>Headerdateien\emulator_win32</Filter>
+    <ClInclude Include="..\common\canvas\canvas.h">
+      <Filter>Headerdateien\common\canvas</Filter>
     </ClInclude>
-    <ClInclude Include="emulator_win32\Skinned Window\SkinnedWindow.h">
-      <Filter>Headerdateien\emulator_win32</Filter>
+    <ClInclude Include="..\common\config.h">
+      <Filter>Headerdateien\common</Filter>
     </ClInclude>
-    <ClInclude Include="hal\hal_display.h">
+    <ClInclude Include="guicon.h">
+      <Filter>Headerdateien\platform_win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hal\hal_display.h">
       <Filter>Headerdateien\hal</Filter>
     </ClInclude>
-    <ClInclude Include="hal\hal_filesystem.h">
+    <ClInclude Include="..\hal\hal_filesystem.h">
       <Filter>Headerdateien\hal</Filter>
     </ClInclude>
-    <ClInclude Include="emulator_win32\ressources\resource.h">
+    <ClInclude Include="..\hal\hal_inputdevice.h">
+      <Filter>Headerdateien\hal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\embedded-midilib\hal_midiplayer_win32.h">
+      <Filter>Headerdateien\common\embedded-midilib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\floppyorgel_system.h">
+      <Filter>Headerdateien\common</Filter>
+    </ClInclude>
+    <ClInclude Include="main.h">
+      <Filter>Headerdateien\platform_win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\menu.h">
+      <Filter>Headerdateien\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\embedded-midilib\midifile.h">
+      <Filter>Headerdateien\common\embedded-midilib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\embedded-midilib\midiplayer.h">
+      <Filter>Headerdateien\common\embedded-midilib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\embedded-midilib\midiutil.h">
+      <Filter>Headerdateien\common\embedded-midilib</Filter>
+    </ClInclude>
+    <ClInclude Include="Skinned Window\SkinnedWindow.h">
+      <Filter>Headerdateien\platform_win32</Filter>
+    </ClInclude>
+    <ClInclude Include="ressources\resource.h">
       <Filter>Ressourcendateien</Filter>
     </ClInclude>
-    <ClInclude Include="common\config.h">
-      <Filter>Headerdateien\common</Filter>
-    </ClInclude>
-    <ClInclude Include="common\floppyorgel_system.h">
-      <Filter>Headerdateien\common</Filter>
-    </ClInclude>
-    <ClInclude Include="common\embedded-midilib\hal_midiplayer_win32.h">
-      <Filter>Headerdateien\common\embedded-midilib</Filter>
-    </ClInclude>
-    <ClInclude Include="common\embedded-midilib\midifile.h">
-      <Filter>Headerdateien\common\embedded-midilib</Filter>
-    </ClInclude>
-    <ClInclude Include="common\embedded-midilib\midiplayer.h">
-      <Filter>Headerdateien\common\embedded-midilib</Filter>
-    </ClInclude>
-    <ClInclude Include="common\embedded-midilib\midiutil.h">
-      <Filter>Headerdateien\common\embedded-midilib</Filter>
-    </ClInclude>
-    <ClInclude Include="common\menu.h">
-      <Filter>Headerdateien\common</Filter>
-    </ClInclude>
-    <ClInclude Include="hal\hal_inputdevice.h">
-      <Filter>Headerdateien\hal</Filter>
-    </ClInclude>
-    <ClInclude Include="common\AsciiLib\AsciiLib.h">
-      <Filter>Headerdateien\common\canvas</Filter>
-    </ClInclude>
-    <ClInclude Include="common\canvas\canvas.h">
-      <Filter>Headerdateien\common\canvas</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="emulator_win32\ressources\Resource.rc">
+    <ResourceCompile Include="ressources\Resource.rc">
       <Filter>Ressourcendateien</Filter>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="emulator_win32\ressources\Skin.bmp">
+    <Image Include="ressources\Skin.bmp">
       <Filter>Ressourcendateien</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <None Include="emulator_win32\ressources\Skin.rgn">
+    <None Include="ressources\Skin.rgn">
       <Filter>Ressourcendateien</Filter>
     </None>
   </ItemGroup>

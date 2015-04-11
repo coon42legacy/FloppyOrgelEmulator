@@ -1,6 +1,6 @@
-#include "../../hal/hal_display.h"
-#include "../AsciiLib/AsciiLib.h"
 #include "../config.h"
+#include "../../hal/hal_display.h"
+#include "../../common/AsciiLib/AsciiLib.h"
 #include "canvas.h"
 
 void canvas_putCharFont(uint16_t x, uint16_t y, uint8_t ASCII,
@@ -40,7 +40,7 @@ void canvas_putCharFont(uint16_t x, uint16_t y, uint8_t ASCII,
   }
 }
 
-void canvas_textFont(uint16_t x, uint16_t y, uint8_t *str,
+void canvas_textFont(uint16_t x, uint16_t y, char* str,
   uint8_t txtRed, uint8_t txtGreen, uint8_t txtBlue,
   uint8_t bkRed, uint8_t bkGreen, uint8_t bkBlue,
   uint16_t FONTx) {
@@ -83,7 +83,7 @@ void canvas_textFont(uint16_t x, uint16_t y, uint8_t *str,
   } while (*str != 0);
 }
 
-void canvas_drawText(uint16_t x, uint16_t y, uint8_t *str,
+void canvas_drawText(uint16_t x, uint16_t y, char* str,
   uint8_t txtRed, uint8_t txtGreen, uint8_t txtBlue,
   uint8_t bkRed, uint8_t bkGreen, uint8_t bkBlue) {
   canvas_textFont(x, y, str, txtRed, txtGreen, txtBlue, bkRed, bkGreen, bkBlue, SYSTEM_8x16);
