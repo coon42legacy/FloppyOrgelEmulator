@@ -93,8 +93,8 @@
     <File name="platform_coocox/cmsis_lib/source/stm32f4xx_usart.c" path="cmsis_lib/source/stm32f4xx_usart.c" type="1"/>
     <File name="platform_coocox/cmsis_lib/source/stm32f4xx_dma.c" path="cmsis_lib/source/stm32f4xx_dma.c" type="1"/>
     <File name="platform_coocox/random/stm32_ub_rng.c" path="random/stm32_ub_rng.c" type="1"/>
-    <File name="platform_coocox/cmsis_boot/startup" path="" type="2"/>
     <File name="platform_coocox/stdio/printf.c" path="stdio/printf.c" type="1"/>
+    <File name="platform_coocox/cmsis_boot/startup" path="" type="2"/>
     <File name="platform_coocox/NesGamePad/NesGamePad.c" path="NesGamePad/NesGamePad.c" type="1"/>
     <File name="common/canvas/canvas.h" path="../common/canvas/canvas.h" type="1"/>
     <File name="platform_coocox/LCD/SSD1289.c" path="LCD/SSD1289.c" type="1"/>
@@ -115,13 +115,13 @@
     <File name="platform_coocox/cmsis_lib/source/stm32f4xx_spi.c" path="cmsis_lib/source/stm32f4xx_spi.c" type="1"/>
     <File name="platform_coocox/LCD/SSD1289.h" path="LCD/SSD1289.h" type="1"/>
     <File name="platform_coocox" path="" type="2"/>
-    <File name="common" path="" type="2"/>
-    <File name="platform_coocox/cmsis_lib/source" path="" type="2"/>
     <File name="platform_coocox/cmsis_boot" path="" type="2"/>
+    <File name="platform_coocox/cmsis_lib/source" path="" type="2"/>
+    <File name="common" path="" type="2"/>
     <File name="platform_coocox/cmsis_lib/source/stm32f4xx_rcc.c" path="cmsis_lib/source/stm32f4xx_rcc.c" type="1"/>
     <File name="platform_coocox/NesGamePad/NesGamePad.h" path="NesGamePad/NesGamePad.h" type="1"/>
-    <File name="platform_coocox/cmsis_boot/stm32f4xx_conf.h" path="cmsis_boot/stm32f4xx_conf.h" type="1"/>
     <File name="hal" path="" type="2"/>
+    <File name="platform_coocox/cmsis_boot/stm32f4xx_conf.h" path="cmsis_boot/stm32f4xx_conf.h" type="1"/>
     <File name="platform_coocox/misc/delay.c" path="misc/delay.c" type="1"/>
     <File name="hal/hal_inputdevice_stm32f4.c" path="../hal/hal_inputdevice_stm32f4.c" type="1"/>
     <File name="common/canvas/canvas.c" path="../common/canvas/canvas.c" type="1"/>

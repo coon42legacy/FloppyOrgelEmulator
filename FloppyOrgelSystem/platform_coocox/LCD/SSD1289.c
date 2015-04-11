@@ -2,15 +2,16 @@
 
 SSD1289 based display driver
 
-Copyright (C) 2013  Fabio Angeletti - fabio.angeletti89@gmail.com
+Copyright (C) 2015  Stephan Thiele - stephant86@gmail.com
+
+Part of this code is an adaptation from souce code provided by
+        Fabio Angeletti - fabio.angeletti89@gmail.com
 
 Part of this code is an adaptation from souce code provided by
         WaveShare - http://www.waveshare.net
 
 Part of this code is an adaptation from souce code provided by
         Michael Margolis - https://code.google.com/p/glcd-arduino/
-
-I'm not the owner of the whole code
 
 // TODO: write proper driver
 ------------------------------------------------------------------------------*/
@@ -19,6 +20,20 @@ I'm not the owner of the whole code
 #include "SSD1289.h"
 #include "delay.h"
 #include <stdlib.h>
+
+static void SSD1289_SetCursor(uint16_t x, uint16_t y) {
+  #if  ( DISP_ORIENTATION == 90 ) || ( DISP_ORIENTATION == 270 )
+
+  uint16_t temp = x;
+  x = y;
+  y = (MAX_X - 1) - temp;
+
+  #elif  (DISP_ORIENTATION == 0) || (DISP_ORIENTATION == 180)
+  #endif
+
+  SSD1289_WriteReg(SET_GDDRAM_X_ADDRESS_COUNTER, x);
+  SSD1289_WriteReg(SET_GDDRAM_Y_ADDRESS_COUNTER, y);
+}
 
 void LCD_CtrlLinesConfig(void) {
   GPIO_InitTypeDef GPIO_InitStructure;
@@ -164,32 +179,29 @@ static void SSD1289_Configuration(void) {
   LCD_FSMCConfig2();
 }
 
+uint16_t SSD1289_ReadData(void) {
+  GPIO_InitTypeDef GPIO_InitStructure;
+  uint16_t value;
 
-uint16_t SSD1289_ReadData(void)
-{
-	GPIO_InitTypeDef GPIO_InitStructure;
-	uint16_t value;
+  Set_Rs;
+  Set_nWr;
+  Clr_nRd;
 
-	Set_Rs;
-	Set_nWr;
-	Clr_nRd;
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_All;
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
+  GPIO_Init(SSD1289_DATA_PORT, &GPIO_InitStructure);
 
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_All;
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
-    GPIO_Init(SSD1289_DATA_PORT, &GPIO_InitStructure);
+  value = GPIO_ReadInputData(SSD1289_DATA_PORT);
+  value = GPIO_ReadInputData(SSD1289_DATA_PORT);
 
-	value = GPIO_ReadInputData(SSD1289_DATA_PORT);
-    value = GPIO_ReadInputData(SSD1289_DATA_PORT);
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_All;
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+  GPIO_Init(SSD1289_DATA_PORT, &GPIO_InitStructure);
 
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_All;
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-    GPIO_Init(SSD1289_DATA_PORT, &GPIO_InitStructure);
-
-    Set_nRd;
-
-    return value;
+  Set_nRd;
+  return value;
 }
 
 // old
@@ -202,33 +214,15 @@ void LCD_WriteRAM_Prepare(void) {
 }
 ///
 
-
 void SSD1289_WriteReg(uint16_t SSD1289_Reg, uint16_t SSD1289_RegValue) {
   LCD_REG = SSD1289_Reg;
   LCD_RAM = SSD1289_RegValue;
 }
 
-static void SSD1289_SetCursor( uint16_t Xpos, uint16_t Ypos ) {
-    #if  ( DISP_ORIENTATION == 90 ) || ( DISP_ORIENTATION == 270 )
+void SSD1289_Init(void) {
+  SSD1289_Configuration();
 
- 	uint16_t temp = Xpos;
-
-			 Xpos = Ypos;
-			 Ypos = ( MAX_X - 1 ) - temp;
-
-	#elif  ( DISP_ORIENTATION == 0 ) || ( DISP_ORIENTATION == 180 )
-
-	#endif
-
-  SSD1289_WriteReg(0x004e, Xpos);
-  SSD1289_WriteReg(0x004f, Ypos);
-}
-
-void SSD1289_Init(void)
-{
-	SSD1289_Configuration();
-
-	RegSSD1289_OSCILLATION_START_t                   oscillation_start;
+  RegSSD1289_OSCILLATION_START_t                   oscillation_start;
   RegSSD1289_DRIVER_OUTPUT_t                       driver_output;
   RegSSD1289_LCD_DRIVE_AC_t                        lcd_drive_ac;
   RegSSD1289_POWER_CONTROL_1_t                     power_control_1;
@@ -243,17 +237,17 @@ void SSD1289_Init(void)
   RegSSD1289_SLEEP_MODE_t                          sleep_mode;
   RegSSD1289_ENTRY_MODE_t                          entry_mode;
   RegSSD1289_OPTIMIZE_ACCESS_SPEED_3_t             optimize_access_speed_3;
-  // RegSSD1289_GENERIC_INTERFACE_CONTROL_t           generic_interface_control;
+  RegSSD1289_GENERIC_INTERFACE_CONTROL_t           generic_interface_control;
   RegSSD1289_HORIZONTAL_PORCH_t                    horizontal_porch;
   RegSSD1289_VERTICAL_PORCH_t                      vertical_porch;
   RegSSD1289_POWER_CONTROL_5_t                     power_control_5;
-  // RegSSD1289_RAM_DATA_READ_WRITE_t                 ram_data_read_write;
+  RegSSD1289_RAM_DATA_READ_WRITE_t                 ram_data_read_write;
   RegSSD1289_RAM_WRITE_DATA_MASK_1_t               ram_write_data_mask_1;
   RegSSD1289_RAM_WRITE_DATA_MASK_2_t               ram_write_data_mask_2;
   RegSSD1289_FRAME_FREQUENCY_t                     frame_frequency;
-  // RegSSD1289_VCOM_OTP28_t                          vcom_otp28;
+  RegSSD1289_VCOM_OTP28_t                          vcom_otp28;
   RegSSD1289_OPTIMIZE_ACCESS_SPEED_1_t             optimize_access_speed_1;
-  // RegSSD1289_VCOM_OTP29_t                          vcom_otp29;
+  RegSSD1289_VCOM_OTP29_t                          vcom_otp29;
   RegSSD1289_OPTIMIZE_ACCESS_SPEED_2_t             optimize_access_speed_2;
   RegSSD1289_GAMMA_CONTROL_1_t                     gamma_control_1;
   RegSSD1289_GAMMA_CONTROL_2_t                     gamma_control_2;
@@ -277,7 +271,7 @@ void SSD1289_Init(void)
   RegSSD1289_SET_GDDRAM_X_ADDRESS_COUNTER_t        set_gddram_x_address_counter;
   RegSSD1289_SET_GDDRAM_Y_ADDRESS_COUNTER_t        set_gddram_y_address_counter;
 
-	oscillation_start.OSCEN = 1;
+  oscillation_start.OSCEN = 1;
   power_control_1.AP = 7; //2;
   power_control_1.DC = 10;
   power_control_1.BT = 4;
@@ -372,15 +366,15 @@ void SSD1289_Init(void)
   set_gddram_y_address_counter.YAD = 0;
   optimize_access_speed_1.setThisVariableTo_0x06 = 0x10; // 0x06 0r 0x10?
   optimize_access_speed_2.setThisVariableTo_0x12BE = 0x12BE;
-  optimize_access_speed_3.setThisVariableTo_0x16CEB = 0x16CEB;
+  optimize_access_speed_3.setThisVariableTo_0x16CEB = 0x16CEB; // not a 16 bit value? (will be truncated)
 
-  SSD1289_WriteReg(OSCILLATION_START,                   *(uint16_t*)&oscillation_start);  // Enable SSD1289 Oscillator
+  SSD1289_WriteReg(OSCILLATION_START,                   *(uint16_t*)&oscillation_start); // Enable SSD1289 Oscillator
   SSD1289_WriteReg(POWER_CONTROL_1,                     *(uint16_t*)&power_control_1);
   SSD1289_WriteReg(POWER_CONTROL_2,                     *(uint16_t*)&power_control_2);
   SSD1289_WriteReg(POWER_CONTROL_3,                     *(uint16_t*)&power_control_3);
   SSD1289_WriteReg(POWER_CONTROL_4,                     *(uint16_t*)&power_control_4);
   SSD1289_WriteReg(POWER_CONTROL_5,                     *(uint16_t*)&power_control_5);
-  SSD1289_WriteReg(DRIVER_OUTPUT,                       *(uint16_t*)&driver_output);  // 320*240 0x2B3F
+  SSD1289_WriteReg(DRIVER_OUTPUT,                       *(uint16_t*)&driver_output); // 320*240 0x2B3F
   SSD1289_WriteReg(LCD_DRIVE_AC,                        *(uint16_t*)&lcd_drive_ac);
   SSD1289_WriteReg(SLEEP_MODE,                          *(uint16_t*)&sleep_mode);
   SSD1289_WriteReg(ENTRY_MODE,                          *(uint16_t*)&entry_mode);
@@ -424,75 +418,32 @@ void SSD1289_Init(void)
   SSD1289_Clear(Black);
 }
 
-void P_LCD1289_InitChip(uint16_t mode)
-{
-  SSD1289_WriteReg(0x0007,0x0021);
-  SSD1289_WriteReg(0x0000,0x0001);
-  SSD1289_WriteReg(0x0007,0x0023);
-  SSD1289_WriteReg(0x0010,0x0000);
-  SSD1289_WriteReg(0x0007,0x0033);
-  SSD1289_WriteReg(0x0011, mode);   // Portrait, Landscape
-  SSD1289_WriteReg(0x0002,0x0600);
-  SSD1289_WriteReg(0x0012,0x6CEB);
-  SSD1289_WriteReg(0x0003,0xA8A4);
-  SSD1289_WriteReg(0x000C,0x0000);
-  SSD1289_WriteReg(0x000D,0x080C);
-  SSD1289_WriteReg(0x000E,0x2B00);
-  SSD1289_WriteReg(0x001E,0x00B0);
-  SSD1289_WriteReg(0x0001,0x2b3F);
-  SSD1289_WriteReg(0x0005,0x0000);
-  SSD1289_WriteReg(0x0006,0x0000);
-  SSD1289_WriteReg(0x0016,0xEF1C);
-  SSD1289_WriteReg(0x0017,0x0103);
-  SSD1289_WriteReg(0x000B,0x0000);
-  SSD1289_WriteReg(0x000F,0x0000);
-  SSD1289_WriteReg(0x0041,0x0000);
-  SSD1289_WriteReg(0x0042,0x0000);
-  SSD1289_WriteReg(0x0048,0x0000);
-  SSD1289_WriteReg(0x0049,0x013F);
-  SSD1289_WriteReg(0x004A,0x0000);
-  SSD1289_WriteReg(0x004B,0x0000);
-  SSD1289_WriteReg(0x0044,0xEF00);  // Horizontal Start und Ende
-  SSD1289_WriteReg(0x0045,0x0000);  // Vertikal Start
-  SSD1289_WriteReg(0x0046,0x013F);  // Vertikal Ende
-  SSD1289_WriteReg(0x0030,0x0707);
-  SSD1289_WriteReg(0x0031,0x0204);
-  SSD1289_WriteReg(0x0032,0x0204);
-  SSD1289_WriteReg(0x0033,0x0502);
-  SSD1289_WriteReg(0x0034,0x0507);
-  SSD1289_WriteReg(0x0035,0x0204);
-  SSD1289_WriteReg(0x0036,0x0204);
-  SSD1289_WriteReg(0x0037,0x0502);
-  SSD1289_WriteReg(0x003A,0x0302);
-  SSD1289_WriteReg(0x002F,0x12BE);
-  SSD1289_WriteReg(0x003B,0x0302);
-  SSD1289_WriteReg(0x0023,0x0000);
-  SSD1289_WriteReg(0x0024,0x0000);
-  SSD1289_WriteReg(0x0025,0x8000);
-  SSD1289_WriteReg(0x004f,0x0000);
-  SSD1289_WriteReg(0x004e,0x0000);
-
-  // kleine pause
-  delayMs(100);
-}
-
 void SSD1289_Clear(uint16_t Color) {
-	uint32_t index = 0;
-	SSD1289_SetCursor(0,0);
+  uint32_t index = 0;
+  SSD1289_SetCursor(0,0);
   LCD_WriteRAM_Prepare();
 
   for(index = 0; index < MAX_X * MAX_Y; index++)
-    LCD_RAM = Color;
+    LCD_RAM = Color; // Use DMA-Controller here?
 }
 
 void SSD1289_SetPoint(uint16_t Xpos, uint16_t Ypos, uint16_t point) {
-	if( Xpos >= MAX_X || Ypos >= MAX_Y )
-		return;
+  if( Xpos >= MAX_X || Ypos >= MAX_Y )
+    return;
 
-	SSD1289_SetCursor(Xpos, Ypos);
-	SSD1289_WriteReg(RAM_DATA_READ_WRITE, point);
+  SSD1289_SetCursor(Xpos, Ypos);
+  SSD1289_WriteReg(RAM_DATA_READ_WRITE, point);
 }
 
+void SSD1289_Backlight(uint32_t val) {
+  if(val > 0)
+    Set_Backlight;
+  else
+    Clr_Backlight;
+}
+
+// The following functions are generic drawing functions and therefore not part of the driver.
+// TODO: remove?
 void SSD1289_DrawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2 , uint16_t color) {
     int delta_x = x2 - x1;
     // if x1 == x2, then it does not matter what we set here
@@ -729,10 +680,4 @@ void SSD1289_DrawCross(uint16_t Xpos, uint16_t Ypos, uint16_t in_color, uint16_t
   SSD1289_DrawLine(Xpos+15,Ypos-15,Xpos+15,Ypos-7,out_color);
 }
 
-void SSD1289_Backlight(uint32_t val)
-{
-    if(val > 0)
-        Set_Backlight;
-    else
-        Clr_Backlight;
-}
+
