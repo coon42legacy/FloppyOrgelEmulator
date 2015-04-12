@@ -48,9 +48,6 @@
     <ClCompile Include="..\common\canvas\canvas.c">
       <Filter>Quelldateien\common\canvas</Filter>
     </ClCompile>
-    <ClCompile Include="..\common\embedded-midilib\hal_midiplayer_win32.c">
-      <Filter>Quelldateien\common\embedded-midilib</Filter>
-    </ClCompile>
     <ClCompile Include="..\common\embedded-midilib\midifile.c">
       <Filter>Quelldateien\common\embedded-midilib</Filter>
     </ClCompile>
@@ -87,6 +84,9 @@
     <ClCompile Include="guicon.cpp">
       <Filter>Quelldateien\platform_win32</Filter>
     </ClCompile>
+    <ClCompile Include="..\hal\hal_misc_win32.c">
+      <Filter>Quelldateien\hal</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\common\AsciiLib\AsciiLib.h">
@@ -109,9 +109,6 @@
     </ClInclude>
     <ClInclude Include="..\hal\hal_inputdevice.h">
       <Filter>Headerdateien\hal</Filter>
-    </ClInclude>
-    <ClInclude Include="..\common\embedded-midilib\hal_midiplayer_win32.h">
-      <Filter>Headerdateien\common\embedded-midilib</Filter>
     </ClInclude>
     <ClInclude Include="..\common\floppyorgel_system.h">
       <Filter>Headerdateien\common</Filter>
@@ -136,6 +133,9 @@
     </ClInclude>
     <ClInclude Include="ressources\resource.h">
       <Filter>Ressourcendateien</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hal\hal_misc.h">
+      <Filter>Headerdateien\hal</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -8,3 +8,7 @@ Debug
 _sdcard
 desktop.ini
 *.sdf
+*.cogui
+*.comarker
+*.opensdf
+*.suo

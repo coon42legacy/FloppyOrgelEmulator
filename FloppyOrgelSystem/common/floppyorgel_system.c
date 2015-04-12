@@ -1,18 +1,14 @@
 #include <stdio.h>
 #include <stdint.h>
-#include "../hal/hal_inputdevice.h"
+#include "../hal/hal_misc.h"
 #include "floppyorgel_system.h"
 #include "menu.h"
 
-void debugPrintln(char* text) {
-  printf("%s\n\r", text);
-}
-
-void system_main() {  
-  debugPrintln("\n\r");
-  debugPrintln("################################");
-  debugPrintln("Floppy Orgel v3.0 initialisiert.");
-  debugPrintln("################################"); 
+void system_main() {
+  hal_printf("\n\r");
+  hal_printf("################################");
+  hal_printf("Floppy Orgel v3.0 initialisiert.");
+  hal_printf("################################");
    
   fsmInit();
   fsmPush(fsmStateMainMenu);

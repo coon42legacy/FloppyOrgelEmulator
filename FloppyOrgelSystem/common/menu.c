@@ -2,8 +2,8 @@
 #include "../hal/hal_inputdevice.h"
 #include "../hal/hal_filesystem.h"
 #include "../hal/hal_display.h"
-// #include "embedded-midilib/midiplayer.h"
-// #include "embedded-midilib/hal_midiplayer_win32.h"
+#include "../hal/hal_misc.h"
+#include "embedded-midilib/midiplayer.h"
 #include "canvas/canvas.h"
 #include "AsciiLib/AsciiLib.h"
 #include "config.h"
@@ -13,8 +13,11 @@
 #define FSM_STACK_SIZE 16
 void* stack[FSM_STACK_SIZE];
 int _stackSize;
-//static MIDI_PLAYER mpl;
+static MIDI_PLAYER mpl;
 static char filePathOfSongToPlay[256];
+
+// Midi Event handlers
+char noteName[64]; // TOOD: refactor to const string array
 
 // States
 void fsmStateMainMenu() {
@@ -84,9 +87,166 @@ void fsmStatePlaylist() {
   drawMenu(MIDI_PATH, cursorPos);
 }
 
+void HexList(uint8_t *pData, int32_t iNumBytes) {
+  for (int32_t i = 0; i < iNumBytes; i++)
+    printf("%.2x ", pData[i]);
+}
+
+void printTrackPrefix(uint32_t track, uint32_t tick, char* pEventName)  {
+  printf("[Track: %d] %06d %s ", track, tick, pEventName);
+}
+
+static void onNoteOff(int32_t track, int32_t tick, int32_t channel, int32_t note) {
+  muGetNameFromNote(noteName, note);
+  //MidiOutMessage(msgNoteOff, channel, note, 0);
+  printTrackPrefix(track, tick, "Note Off");
+  printf("(%d) %s", channel, noteName);
+  printf("\r\n");
+}
+
+static void onNoteOn(int32_t track, int32_t tick, int32_t channel, int32_t note, int32_t velocity) {
+  muGetNameFromNote(noteName, note);
+  //MidiOutMessage(msgNoteOn, channel, note, velocity);
+  printTrackPrefix(track, tick, "Note On");
+  printf("(%d) %s [%d] %d", channel, noteName, note, velocity);
+  printf("\r\n");
+}
+
+static void onNoteKeyPressure(int32_t track, int32_t tick, int32_t channel, int32_t note, int32_t pressure) {
+  muGetNameFromNote(noteName, note);
+  //MidiOutMessage(msgNoteKeyPressure, channel, note, pressure);
+  printTrackPrefix(track, tick, "Note Key Pressure");
+  printf("(%d) %s %d", channel, noteName, pressure);
+  printf("\r\n");
+}
+
+static void onSetParameter(int32_t track, int32_t tick, int32_t channel, int32_t control, int32_t parameter) {
+  muGetControlName(noteName, control);
+  printTrackPrefix(track, tick, "Set Parameter");
+  //MidiOutMessage(msgSetParameter, channel, control, parameter);
+  printf("(%d) %s -> %d", channel, noteName, parameter);
+  printf("\r\n");
+}
+
+static void onSetProgram(int32_t track, int32_t tick, int32_t channel, int32_t program) {
+  muGetInstrumentName(noteName, program);
+  //MidiOutMessage(msgSetProgram, channel, program, 0);
+  printTrackPrefix(track, tick, "Set Program");
+  printf("(%d) %s", channel, noteName);
+  printf("\r\n");
+}
+
+static void onChangePressure(int32_t track, int32_t tick, int32_t channel, int32_t pressure) {
+  muGetControlName(noteName, pressure);
+  //MidiOutMessage(msgChangePressure, channel, pressure, 0);
+  printTrackPrefix(track, tick, "Change Pressure");
+  printf("(%d) %s", channel, noteName);
+  printf("\r\n");
+}
+
+static void onSetPitchWheel(int32_t track, int32_t tick, int32_t channel, int16_t pitch) {
+  //MidiOutMessage(msgSetPitchWheel, channel, pitch << 1, pitch >> 7);
+  printTrackPrefix(track, tick, "Set Pitch Wheel");
+  printf("(%d) %d", channel, pitch);
+  printf("\r\n");
+}
+
+static void onMetaMIDIPort(int32_t track, int32_t tick, int32_t midiPort) {
+  printTrackPrefix(track, tick, "Meta event ----");
+  printf("MIDI Port = %d", midiPort);
+  printf("\r\n");
+}
+
+static void onMetaSequenceNumber(int32_t track, int32_t tick, int32_t sequenceNumber) {
+  printTrackPrefix(track, tick, "Meta event ----");
+  printf("Sequence Number = %d", sequenceNumber);
+  printf("\r\n");
+}
+
+static void _onTextEvents(int32_t track, int32_t tick, const char* textType, const char* pText) {
+  printTrackPrefix(track, tick, "Meta event ----");
+  hal_printfInfo("%s = %s", textType, pText);
+}
+
+static void onMetaTextEvent(int32_t track, int32_t tick, char* pText) {
+  _onTextEvents(track, tick, "Text", pText);
+}
+
+static void onMetaCopyright(int32_t track, int32_t tick, char* pText) {
+  _onTextEvents(track, tick, "Copyright ", pText);
+}
+
+static void onMetaTrackName(int32_t track, int32_t tick, char *pText) {
+  _onTextEvents(track, tick, "Track name", pText);
+}
+
+static void onMetaInstrument(int32_t track, int32_t tick, char *pText) {
+  _onTextEvents(track, tick, "Instrument", pText);
+}
+
+static void onMetaLyric(int32_t track, int32_t tick, char *pText) {
+  _onTextEvents(track, tick, "Lyric", pText);
+}
+
+static void onMetaMarker(int32_t track, int32_t tick, char *pText) {
+  _onTextEvents(track, tick, "Marker", pText);
+}
+
+static void onMetaCuePoint(int32_t track, int32_t tick, char *pText) {
+  _onTextEvents(track, tick, "Cue point", pText);
+}
+
+static void onMetaEndSequence(int32_t track, int32_t tick) {
+  printTrackPrefix(track, tick, "Meta event ----");
+  printf("End Sequence");
+  printf("\r\n");
+}
+
+static void onMetaSetTempo(int32_t track, int32_t tick, int32_t bpm) {
+  printTrackPrefix(track, tick, "Meta event ----");
+  hal_printfWarning("Tempo = %d bpm", bpm);
+}
+
+static void onMetaSMPTEOffset(int32_t track, int32_t tick, uint32_t hours, uint32_t minutes, uint32_t seconds, uint32_t frames, uint32_t subframes) {
+  printTrackPrefix(track, tick, "Meta event ----");
+  printf("SMPTE offset = %d:%d:%d.%d %d", hours, minutes, seconds, frames, subframes);
+  printf("\r\n");
+}
+
+static void onMetaTimeSig(int32_t track, int32_t tick, int32_t nom, int32_t denom, int32_t metronome, int32_t thirtyseconds) {
+  printTrackPrefix(track, tick, "Meta event ----");
+  printf("Time sig = %d/%d", nom, denom);
+  printf("\r\n");
+}
+
+static void onMetaKeySig(int32_t track, int32_t tick, uint32_t key, uint32_t scale) {
+  printTrackPrefix(track, tick, "Meta event ----");
+  if (muGetKeySigName(noteName, key)) {
+    printf("Key sig = %s", noteName);
+    printf("\r\n");
+  }
+}
+
+static void onMetaSequencerSpecific(int32_t track, int32_t tick, void* pData, uint32_t size) {
+  printTrackPrefix(track, tick, "Meta event ----");
+  printf("Sequencer specific = ");
+  HexList(pData, size);
+  printf("\r\n");
+}
+
+static void onMetaSysEx(int32_t track, int32_t tick, void* pData, uint32_t size) {
+  printTrackPrefix(track, tick, "Meta event ----");
+  printf("SysEx = ");
+  HexList(pData, size);
+  printf("\r\n");
+}
+
 void fsmStartPlayBack() {
-/*
-  hal_midiplayer_init(&mpl);
+  midiplayer_init(&mpl, onNoteOff, onNoteOn, onNoteKeyPressure, onSetParameter, onSetProgram, onChangePressure,
+    onSetPitchWheel, onMetaMIDIPort, onMetaSequenceNumber, onMetaTextEvent, onMetaCopyright, onMetaTrackName, 
+    onMetaInstrument, onMetaLyric, onMetaMarker, onMetaCuePoint, onMetaEndSequence, onMetaSetTempo, 
+    onMetaSMPTEOffset, onMetaTimeSig, onMetaKeySig, onMetaSequencerSpecific, onMetaSysEx);
+
   playMidiFile(&mpl, filePathOfSongToPlay);
   static const uint32_t X_OFFSET = 65;
   static const uint32_t Y_OFFSET = 240 - 18;
@@ -98,11 +258,9 @@ void fsmStartPlayBack() {
 
   fsmPop();
   fsmPush(fsmStatePlaying);
-  */
 }
 
 void fsmStatePlaying() {
-	/*
   InputDeviceStates_t buttonPressed = getInputDeviceState();
 
   if (buttonPressed.Back) {
@@ -114,20 +272,17 @@ void fsmStatePlaying() {
     fsmPop();
     fsmPush(fsmStatePlaybackFinished);
   }
-  */
 }
 
 void fsmStatePlaybackFinished() {
-  // hal_printfSuccess("Playback finished!");
-  // hal_midiplayer_free(&mpl);
+  hal_printfSuccess("Playback finished!");
 
   fsmPop();
   fsmPush(fsmStatePlaylist);
 }
 
 void fsmStatePlaybackAborted() {
-  // hal_printfSuccess("Playback aborted by user.");
-  // hal_midiplayer_free(&mpl);
+  hal_printfSuccess("Playback aborted by user.");
 
   fsmPop();
   fsmPush(fsmStatePlaylist);
@@ -177,7 +332,7 @@ void getFileNameFromCursorPos(char* srcPath, char* dstFilePath, int cursorPos) {
   strcpy(dstFilePath, srcPath);
   strcat(dstFilePath, "\\*");
 
-  bool endOfDirectory = !fo_findInit(dstFilePath, &findData);
+  bool endOfDirectory = !hal_findInit(dstFilePath, &findData);
   // static const uint32_t X_OFFSET = 35;
   // static const uint32_t Y_OFFSET = 40;
   int itemCount = 0;
@@ -191,11 +346,11 @@ void getFileNameFromCursorPos(char* srcPath, char* dstFilePath, int cursorPos) {
           break;
         }
 
-        if (!fo_findNext(&findData))
+        if (!hal_findNext(&findData))
           endOfDirectory = true;
   }
 
-  fo_findFree();
+  hal_findFree();
 }
 
 int drawTracks(char* path) {
@@ -204,7 +359,7 @@ int drawTracks(char* path) {
   static const uint32_t X_OFFSET = 35;
   static const uint32_t Y_OFFSET = 40;
   int itemCount = 0;
-  bool endOfDirectory = !fo_findInit(path, &findData);
+  bool endOfDirectory = !hal_findInit(path, &findData);
 
   while (!endOfDirectory) {
     if (findData.fileName[0] != '.')
@@ -213,10 +368,10 @@ int drawTracks(char* path) {
           0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
       }
 
-      if (!fo_findNext(&findData))
+      if (!hal_findNext(&findData))
         endOfDirectory = true;
   }
-  fo_findFree();
+  hal_findFree();
 
   return 0;
 }
