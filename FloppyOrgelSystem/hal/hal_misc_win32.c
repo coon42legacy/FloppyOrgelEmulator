@@ -16,8 +16,9 @@ static void _printColored(const char* text, uint16_t colorAttributes) {
   GetConsoleScreenBufferInfo(hConsole, &consoleInfo); // Save current font color
   saved_attributes = consoleInfo.wAttributes;
   SetConsoleTextAttribute(hConsole, colorAttributes); // Change font color
-  printf("%s\n\r", text);
+  printf(text);
   SetConsoleTextAttribute(hConsole, saved_attributes); // Restore original font color
+  printf("\n\r");
 }
 
 void hal_printf(char* format, ...) {

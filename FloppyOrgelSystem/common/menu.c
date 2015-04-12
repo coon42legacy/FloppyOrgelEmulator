@@ -3,6 +3,7 @@
 #include "../hal/hal_filesystem.h"
 #include "../hal/hal_display.h"
 #include "../hal/hal_misc.h"
+#include "../hal/hal_mididevice.h"
 #include "embedded-midilib/midiplayer.h"
 #include "canvas/canvas.h"
 #include "AsciiLib/AsciiLib.h"
@@ -98,7 +99,7 @@ void printTrackPrefix(uint32_t track, uint32_t tick, char* pEventName)  {
 
 static void onNoteOff(int32_t track, int32_t tick, int32_t channel, int32_t note) {
   muGetNameFromNote(noteName, note);
-  //MidiOutMessage(msgNoteOff, channel, note, 0);
+  hal_midiDeviceMessage(msgNoteOff, channel, note, 0);
   printTrackPrefix(track, tick, "Note Off");
   printf("(%d) %s", channel, noteName);
   printf("\r\n");
@@ -106,7 +107,7 @@ static void onNoteOff(int32_t track, int32_t tick, int32_t channel, int32_t note
 
 static void onNoteOn(int32_t track, int32_t tick, int32_t channel, int32_t note, int32_t velocity) {
   muGetNameFromNote(noteName, note);
-  //MidiOutMessage(msgNoteOn, channel, note, velocity);
+  hal_midiDeviceMessage(msgNoteOn, channel, note, velocity);
   printTrackPrefix(track, tick, "Note On");
   printf("(%d) %s [%d] %d", channel, noteName, note, velocity);
   printf("\r\n");
@@ -114,7 +115,7 @@ static void onNoteOn(int32_t track, int32_t tick, int32_t channel, int32_t note,
 
 static void onNoteKeyPressure(int32_t track, int32_t tick, int32_t channel, int32_t note, int32_t pressure) {
   muGetNameFromNote(noteName, note);
-  //MidiOutMessage(msgNoteKeyPressure, channel, note, pressure);
+  hal_midiDeviceMessage(msgNoteKeyPressure, channel, note, pressure);
   printTrackPrefix(track, tick, "Note Key Pressure");
   printf("(%d) %s %d", channel, noteName, pressure);
   printf("\r\n");
@@ -123,14 +124,14 @@ static void onNoteKeyPressure(int32_t track, int32_t tick, int32_t channel, int3
 static void onSetParameter(int32_t track, int32_t tick, int32_t channel, int32_t control, int32_t parameter) {
   muGetControlName(noteName, control);
   printTrackPrefix(track, tick, "Set Parameter");
-  //MidiOutMessage(msgSetParameter, channel, control, parameter);
+  hal_midiDeviceMessage(msgSetParameter, channel, control, parameter);
   printf("(%d) %s -> %d", channel, noteName, parameter);
   printf("\r\n");
 }
 
 static void onSetProgram(int32_t track, int32_t tick, int32_t channel, int32_t program) {
   muGetInstrumentName(noteName, program);
-  //MidiOutMessage(msgSetProgram, channel, program, 0);
+  hal_midiDeviceMessage(msgSetProgram, channel, program, 0);
   printTrackPrefix(track, tick, "Set Program");
   printf("(%d) %s", channel, noteName);
   printf("\r\n");
@@ -138,14 +139,14 @@ static void onSetProgram(int32_t track, int32_t tick, int32_t channel, int32_t p
 
 static void onChangePressure(int32_t track, int32_t tick, int32_t channel, int32_t pressure) {
   muGetControlName(noteName, pressure);
-  //MidiOutMessage(msgChangePressure, channel, pressure, 0);
+  hal_midiDeviceMessage(msgChangePressure, channel, pressure, 0);
   printTrackPrefix(track, tick, "Change Pressure");
   printf("(%d) %s", channel, noteName);
   printf("\r\n");
 }
 
 static void onSetPitchWheel(int32_t track, int32_t tick, int32_t channel, int16_t pitch) {
-  //MidiOutMessage(msgSetPitchWheel, channel, pitch << 1, pitch >> 7);
+  hal_midiDeviceMessage(msgSetPitchWheel, channel, pitch << 1, pitch >> 7);
   printTrackPrefix(track, tick, "Set Pitch Wheel");
   printf("(%d) %d", channel, pitch);
   printf("\r\n");
@@ -242,6 +243,7 @@ static void onMetaSysEx(int32_t track, int32_t tick, void* pData, uint32_t size)
 }
 
 void fsmStartPlayBack() {
+  hal_midiDeviceInit();
   midiplayer_init(&mpl, onNoteOff, onNoteOn, onNoteKeyPressure, onSetParameter, onSetProgram, onChangePressure,
     onSetPitchWheel, onMetaMIDIPort, onMetaSequenceNumber, onMetaTextEvent, onMetaCopyright, onMetaTrackName, 
     onMetaInstrument, onMetaLyric, onMetaMarker, onMetaCuePoint, onMetaEndSequence, onMetaSetTempo, 
@@ -276,6 +278,7 @@ void fsmStatePlaying() {
 
 void fsmStatePlaybackFinished() {
   hal_printfSuccess("Playback finished!");
+  hal_midiDeviceFree();
 
   fsmPop();
   fsmPush(fsmStatePlaylist);
@@ -283,6 +286,7 @@ void fsmStatePlaybackFinished() {
 
 void fsmStatePlaybackAborted() {
   hal_printfSuccess("Playback aborted by user.");
+  hal_midiDeviceFree();
 
   fsmPop();
   fsmPush(fsmStatePlaylist);

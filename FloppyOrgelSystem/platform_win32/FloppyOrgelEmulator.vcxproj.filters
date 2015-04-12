@@ -87,6 +87,9 @@
     <ClCompile Include="..\hal\hal_misc_win32.c">
       <Filter>Quelldateien\hal</Filter>
     </ClCompile>
+    <ClCompile Include="..\hal\hal_mididevice_win32.c">
+      <Filter>Quelldateien\hal</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\common\AsciiLib\AsciiLib.h">
@@ -135,6 +138,9 @@
       <Filter>Ressourcendateien</Filter>
     </ClInclude>
     <ClInclude Include="..\hal\hal_misc.h">
+      <Filter>Headerdateien\hal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\hal\hal_mididevice.h">
       <Filter>Headerdateien\hal</Filter>
     </ClInclude>
   </ItemGroup>
