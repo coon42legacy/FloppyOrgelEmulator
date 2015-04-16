@@ -26,7 +26,7 @@ void fsmStateMainMenu() {
 
   static const uint32_t X_OFFSET = 65;
   //static const uint32_t Y_OFFSET = 240 - 18;
-  static uint8_t cursorPos = 0;
+  static uint8_t cursorPos = 1;
 
   canvas_clear(0x00, 0x00, 0x00);
   canvas_drawText(X_OFFSET - 30, 0, "Use the game pad to navigate", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
@@ -334,7 +334,7 @@ void getFileNameFromCursorPos(char* srcPath, char* dstFilePath, int cursorPos) {
   FO_FIND_DATA findData;
 
   strcpy(dstFilePath, srcPath);
-  strcat(dstFilePath, "\\*");
+  strcat(dstFilePath, "/*");
 
   bool endOfDirectory = !hal_findInit(dstFilePath, &findData);
   // static const uint32_t X_OFFSET = 35;
@@ -396,7 +396,7 @@ void drawMenu(char* path, int16_t cursorPos) {
   canvas_drawText(X_OFFSET - 30, 0, "Use the game pad to select a song", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
   canvas_drawText(X_OFFSET + 10, 18, "Press A button to start", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
   strcpy(searchPath, path);
-  strcat(searchPath, "\\*");
+  strcat(searchPath, "/*");
   drawTracks(searchPath);
   drawCursor(cursorPos);
 

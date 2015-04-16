@@ -9,7 +9,7 @@ void system_main() {
   hal_printf("################################");
   hal_printf("Floppy Orgel v3.0 initialisiert.");
   hal_printf("################################");
-   
+
   fsmInit();
   fsmPush(fsmStateMainMenu);
 
