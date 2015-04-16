@@ -19,6 +19,7 @@
   ******************************************************************************
   */
     
+#include "../hal/hal_misc.h"
 
 /*----------Stack Configuration-----------------------------------------------*/
 #define STACK_SIZE       0x00002000      /*!< Stack size (in Words)           */
@@ -409,21 +410,21 @@ void Default_Reset_Handler(void)
   */
 
 static void hardfault(void) {
+  hal_printf("**************** CRASH: hardfault! ****************\n\r");
   Default_Handler();
 }
 
 static void memmanage(void) {
+  hal_printf("**************** CRASH: memmanage! ****************\n\r");
   Default_Handler();
 }
 
 
 static void Default_Handler(void)
 {
-	/* Go into an infinite loop. */
-  // printf("**************** CRASH: Hardfault! ****************\n\r");
-	while (1)
-	{
-	}
+  /* Go into an infinite loop. */
+  while (1) {
+  }
 }
 
 /*********************** (C) COPYRIGHT 2009 Coocox ************END OF FILE*****/

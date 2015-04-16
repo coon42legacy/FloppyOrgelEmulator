@@ -3,6 +3,7 @@
 #include "LCD/SSD1289.h"
 #include "NesGamePad/NesGamePad.h"
 #include "floppyorgel_system.h"
+#include "../hal/hal_filesystem.h"
 
 // Ring buffer
 #define RING_BUFFER_SIZE 32
@@ -188,14 +189,15 @@ void initializeBusUart(uint32_t baudrate) {
 }
 
 int main(void) {
-	enableDelayTimer();
+    enableDelayTimer();
    // enableMidiTimer();
     //initializeDebugUart(9600);
     //initializeBusUart(9600);
     setupNesGamePad();
     SSD1289_Init();
     SSD1289_Clear(Black);
-	system_main();
+    hal_fileSystemInit();
+    system_main();
 }
 
 

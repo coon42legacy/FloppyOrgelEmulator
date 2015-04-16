@@ -1,6 +1,7 @@
 #include <Windows.h>
 #include <stdint.h>
 #include <mmsystem.h>
+#include "hal_misc.h"
 #include "hal_mididevice.h"
 #pragma comment (lib, "winmm.lib")
 
