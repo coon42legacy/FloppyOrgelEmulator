@@ -4,6 +4,7 @@
 #include <io.h>
 #include <iostream>
 #include <fstream>
+#include "guicon.h"
 
 #ifndef _USE_OLD_IOSTREAMS
 
