@@ -22,9 +22,12 @@ static bool mountSdCard() {
     /* Total space */
     hal_printf("Total: %8u kB; %5u MB; %2u GB\n\r", total, total / 1024, total / 1048576);
     hal_printf("Free:  %8u kB; %5u MB; %2u GB\n\r", free, free / 1024, free / 1048576);
+    return true;
   }
-  else
+  else {
     hal_printf("Failed! No SD-Card?\n\r");
+    return false;
+  }
 }
 
 void hal_fileSystemInit() {
@@ -37,7 +40,7 @@ bool hal_findInit(char* path, FO_FIND_DATA* findData) {
 }
 
 bool hal_findNext(FO_FIND_DATA* findData) {
-  FILINFO finfo;
+  static FILINFO finfo;
   finfo.lfname = findData->fileName;
   finfo.lfsize = 256;
   FRESULT fres = f_readdir(&dirs, &finfo);
