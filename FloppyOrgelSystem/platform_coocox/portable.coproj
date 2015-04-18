@@ -91,9 +91,9 @@
     <File name="platform_coocox/cmsis_lib/include/stm32f4xx_spi.h" path="cmsis_lib/include/stm32f4xx_spi.h" type="1"/>
     <File name="platform_coocox/Filesystem/fatfs/integer.h" path="Filesystem/fatfs/integer.h" type="1"/>
     <File name="platform_coocox/cmsis_lib/source/misc.c" path="cmsis_lib/source/misc.c" type="1"/>
-    <File name="hal/hal_display.h" path="../hal/hal_display.h" type="1"/>
     <File name="hal/hal_misc_stm32f4.c" path="../hal/hal_misc_stm32f4.c" type="1"/>
     <File name="platform_coocox/cmsis_lib/source/stm32f4xx_rng.c" path="cmsis_lib/source/stm32f4xx_rng.c" type="1"/>
+    <File name="hal/hal_display.h" path="../hal/hal_display.h" type="1"/>
     <File name="platform_coocox/syscalls" path="" type="2"/>
     <File name="platform_coocox/Filesystem/fatfs/ffconf.h" path="Filesystem/fatfs/ffconf.h" type="1"/>
     <File name="platform_coocox/cmsis_lib/source/stm32f4xx_spi.c" path="cmsis_lib/source/stm32f4xx_spi.c" type="1"/>
@@ -121,9 +121,9 @@
     <File name="platform_coocox/syscalls/syscalls.c" path="syscalls/syscalls.c" type="1"/>
     <File name="platform_coocox/Filesystem/fatfs/ff.c" path="Filesystem/fatfs/ff.c" type="1"/>
     <File name="platform_coocox/cmsis_boot/system_stm32f4xx.h" path="cmsis_boot/system_stm32f4xx.h" type="1"/>
-    <File name="platform_coocox/random/stm32_ub_rng.h" path="random/stm32_ub_rng.h" type="1"/>
     <File name="platform_coocox/cmsis_lib/include/misc.h" path="cmsis_lib/include/misc.h" type="1"/>
     <File name="hal/hal_mididevice_stm32f4.c" path="../hal/hal_mididevice_stm32f4.c" type="1"/>
+    <File name="platform_coocox/random/stm32_ub_rng.h" path="random/stm32_ub_rng.h" type="1"/>
     <File name="platform_coocox/Filesystem/tm_stm32f4_fatfs.h" path="Filesystem/tm_stm32f4_fatfs.h" type="1"/>
     <File name="hal/hal_display_stm32f4.c" path="../hal/hal_display_stm32f4.c" type="1"/>
     <File name="platform_coocox/cmsis_lib" path="" type="2"/>
