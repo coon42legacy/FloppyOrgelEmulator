@@ -90,11 +90,7 @@ void canvas_drawText(uint16_t x, uint16_t y, char* str,
 }
 
 void canvas_clear(uint8_t red, uint8_t green, uint8_t blue) {
-  for (int y = 0; y < DISPLAY_RESOLUTION_Y; y++) {
-    for (int x = 0; x < DISPLAY_RESOLUTION_X; x++) {
-      display_setPixel(x, y, red, green, blue);
-    }
-  }
+  display_clear(red, green, blue);
 }
 
 void canvas_drawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t red, uint8_t green, uint8_t blue) {
