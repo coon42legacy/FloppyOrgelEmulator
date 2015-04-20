@@ -44,7 +44,9 @@ bool hal_findNext(FO_FIND_DATA* findData) {
   finfo.lfname = findData->fileName;
   finfo.lfsize = 256;
   FRESULT fres = f_readdir(&dirs, &finfo);
-  return fres == FR_OK && finfo.fname[0];
+  bool foundFile = finfo.lfname[0];
+
+  return fres == FR_OK && foundFile;
 }
 
 void hal_findFree() {
