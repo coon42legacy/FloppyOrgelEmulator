@@ -9,7 +9,6 @@
 #include "AsciiLib/AsciiLib.h"
 #include "config.h"
 #include "menu.h"
-#include "ff.h" // TODO: remove later!
 
 // Stack based FSM
 #define FSM_STACK_SIZE 16
@@ -20,54 +19,6 @@ static char filePathOfSongToPlay[256];
 
 // Midi Event handlers
 char noteName[64]; // TOOD: refactor to const string array
-
-// debug
-FRESULT scan_files(char* path) {        /* Start node to be scanned (also used as work area) */
-  static const uint32_t X_OFFSET = 35;
-  static const uint32_t Y_OFFSET = 40;
-  int itemCount = 0;
-
-    FRESULT res;
-    FILINFO fno;
-    DIR dir;
-    int i;
-    char *fn;   /* This function assumes non-Unicode configuration */
-#if _USE_LFN
-    static char lfn[_MAX_LFN + 1];   /* Buffer to store the LFN */
-    fno.lfname = lfn;
-    fno.lfsize = sizeof lfn;
-#endif
-
-
-    res = f_opendir(&dir, path);                       /* Open the directory */
-    if (res == FR_OK) {
-        i = strlen(path);
-        for (;;) {
-            res = f_readdir(&dir, &fno);                   /* Read a directory item */
-            if (res != FR_OK || fno.fname[0] == 0) break;  /* Break on error or end of dir */
-            if (fno.fname[0] == '.') continue;             /* Ignore dot entry */
-#if _USE_LFN
-            fn = *fno.lfname ? fno.lfname : fno.fname;
-#else
-            fn = fno.fname;
-#endif
-            if (fno.fattrib & AM_DIR) {                    /* It is a directory */
-                sprintf(&path[i], "/%s", fn);
-                res = scan_files(path);
-                path[i] = 0;
-                if (res != FR_OK) break;
-            } else {                                       /* It is a file. */
-                // printf("%s/%s\n", path, fn);
-                canvas_drawText(X_OFFSET, Y_OFFSET + 18 * itemCount++, fn,
-                              0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
-            }
-        }
-        f_closedir(&dir);
-    }
-
-    return res;
-}
-//
 
 // States
 void fsmStateMainMenu() {
