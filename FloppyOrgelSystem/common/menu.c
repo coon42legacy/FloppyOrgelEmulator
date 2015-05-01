@@ -80,6 +80,7 @@ void fsmStatePlaylist() {
     cursorPos--;
   else if (buttonPressed.Action) {
     getFileNameFromCursorPos(MIDI_PATH, filePathOfSongToPlay, cursorPos);
+    printf("Playing: %s\r\n", filePathOfSongToPlay);
     fsmPush(fsmStartPlayBack);
   }
   else if (buttonPressed.Back)
@@ -99,7 +100,8 @@ void printTrackPrefix(uint32_t track, uint32_t tick, char* pEventName)  {
 
 static void onNoteOff(int32_t track, int32_t tick, int32_t channel, int32_t note) {
   muGetNameFromNote(noteName, note);
-  hal_midiDeviceMessage(msgNoteOff, channel, note, 0);
+  //hal_midiDeviceMessage(msgNoteOff, channel, note, 0);
+  hal_midiDeviceNoteOff(channel, note);
   printTrackPrefix(track, tick, "Note Off");
   printf("(%d) %s", channel, noteName);
   printf("\r\n");
@@ -107,7 +109,8 @@ static void onNoteOff(int32_t track, int32_t tick, int32_t channel, int32_t note
 
 static void onNoteOn(int32_t track, int32_t tick, int32_t channel, int32_t note, int32_t velocity) {
   muGetNameFromNote(noteName, note);
-  hal_midiDeviceMessage(msgNoteOn, channel, note, velocity);
+  //hal_midiDeviceMessage(msgNoteOn, channel, note, velocity);
+  hal_midiDeviceNoteOn(channel, note, velocity);
   printTrackPrefix(track, tick, "Note On");
   printf("(%d) %s [%d] %d", channel, noteName, note, velocity);
   printf("\r\n");
@@ -276,9 +279,15 @@ void fsmStatePlaying() {
   }
 }
 
+void stopAllDrives() {
+  for(int i = 0; i < 16; i++)
+    onNoteOff(0, 0, i, 0);
+}
+
 void fsmStatePlaybackFinished() {
   hal_printfSuccess("Playback finished!");
   hal_midiDeviceFree();
+  stopAllDrives();
 
   fsmPop();
   fsmPush(fsmStatePlaylist);
@@ -287,6 +296,7 @@ void fsmStatePlaybackFinished() {
 void fsmStatePlaybackAborted() {
   hal_printfSuccess("Playback aborted by user.");
   hal_midiDeviceFree();
+  stopAllDrives();
 
   fsmPop();
   fsmPush(fsmStatePlaylist);

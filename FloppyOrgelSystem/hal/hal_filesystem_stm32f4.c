@@ -57,10 +57,10 @@ void hal_findFree() {
 // TODO: check pointer dereferencing here!!!
 int32_t hal_fopen(FILE** pFile, const char* pFileName) {
   static FIL file;
-  bool res = f_open(&file, pFileName, FA_READ);
+  FRESULT res = f_open(&file, pFileName, FA_READ);
   *pFile = &file;
 
-  return res;
+  return res == FR_OK;
 }
 
 int32_t hal_fclose(FILE* pFile) {
