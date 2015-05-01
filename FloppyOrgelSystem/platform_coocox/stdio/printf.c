@@ -513,6 +513,7 @@ signed int puts(const char *pStr)
  *        not stdout or stderr.
  */
 
+/*
 signed int fputc(signed int c, FILE *pStream)
 {
     if ((pStream == stdout) || (pStream == stderr)) {
@@ -526,6 +527,7 @@ signed int fputc(signed int c, FILE *pStream)
         return EOF;
     }
 }
+*/
 
 /**
  * @brief  Implementation of fputs using the DBGU as the standard output. Required

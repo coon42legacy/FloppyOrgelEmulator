@@ -188,11 +188,23 @@ void initializeBusUart(uint32_t baudrate) {
   USART_Cmd(USART6, ENABLE);
 }
 
+// This will print on usart 1 (the original function has been commented out in printf.c !!!
+signed int fputc(signed int c, FILE *pStream) {
+  /*
+  // Wait until transmit finishes
+  while (USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET);
+
+  // Transmit the character using USART1
+  USART_SendData(USART1, (u8) c);
+  return c;
+  */
+}
+
 int main(void) {
     enableDelayTimer();
-   // enableMidiTimer();
-    //initializeDebugUart(9600);
-    //initializeBusUart(9600);
+    enableMidiTimer();
+    initializeDebugUart(115200);
+    initializeBusUart(9600);
     setupNesGamePad();
     SSD1289_Init();
     SSD1289_Clear(Black);
