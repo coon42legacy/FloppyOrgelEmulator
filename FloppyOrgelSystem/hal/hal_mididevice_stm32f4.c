@@ -133,6 +133,12 @@ static uint16_t midiNote2Ticks[] = {
     0,
 };
 
+void hal_midiDeviceInit() {
+}
+
+void hal_midiDeviceFree() {
+}
+
 static void _sendBusData(unsigned char* data, int dataSize) {
   for(int i = 0; i < dataSize; i++) {
     while (USART_GetFlagStatus(USART6, USART_FLAG_TXE) == RESET); // Wait until transmit finishes
@@ -140,28 +146,17 @@ static void _sendBusData(unsigned char* data, int dataSize) {
   }
 }
 
-void hal_midiDeviceInit() {
-}
-
-void hal_midiDeviceFree() {
-}
-
-void hal_midiDeviceNoteOff(int32_t channel, int32_t note) {
-  uint16_t ticks = 0;
+void hal_midiDeviceNoteOn(int32_t channel, int32_t note, int32_t velocity) {
+  uint16_t ticks = velocity ? midiNote2Ticks[note] : 0;
   unsigned char data[5] = {0x55, 0xAA, channel, ((char*)&ticks)[1], ((char*)&ticks)[0]};
   _sendBusData(data, sizeof(data));
 }
 
-void hal_midiDeviceNoteOn(int32_t channel, int32_t note, int32_t velocity) {
-  if(velocity == 0)
-    hal_midiDeviceNoteOff(channel, note);
-  else {
-    uint16_t ticks = midiNote2Ticks[note];
-    unsigned char data[5] = {0x55, 0xAA, channel, ((char*)&ticks)[1], ((char*)&ticks)[0]};
-    _sendBusData(data, sizeof(data));
-  }
+void hal_midiDeviceNoteOff(int32_t channel, int32_t note) {
+  hal_midiDeviceNoteOn(channel, note, 0);
 }
 
 uint32_t hal_midiDeviceMessage(int32_t iStatus, int32_t iChannel, int32_t iData1, int32_t iData2) {
+  // Not used on stm32f4
   return 0;
 }

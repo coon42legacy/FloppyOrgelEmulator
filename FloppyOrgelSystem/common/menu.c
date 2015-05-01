@@ -100,7 +100,7 @@ void printTrackPrefix(uint32_t track, uint32_t tick, char* pEventName)  {
 
 static void onNoteOff(int32_t track, int32_t tick, int32_t channel, int32_t note) {
   muGetNameFromNote(noteName, note);
-  //hal_midiDeviceMessage(msgNoteOff, channel, note, 0);
+  hal_midiDeviceMessage(msgNoteOff, channel, note, 0);
   hal_midiDeviceNoteOff(channel, note);
   printTrackPrefix(track, tick, "Note Off");
   printf("(%d) %s", channel, noteName);
@@ -109,7 +109,7 @@ static void onNoteOff(int32_t track, int32_t tick, int32_t channel, int32_t note
 
 static void onNoteOn(int32_t track, int32_t tick, int32_t channel, int32_t note, int32_t velocity) {
   muGetNameFromNote(noteName, note);
-  //hal_midiDeviceMessage(msgNoteOn, channel, note, velocity);
+  hal_midiDeviceMessage(msgNoteOn, channel, note, velocity);
   hal_midiDeviceNoteOn(channel, note, velocity);
   printTrackPrefix(track, tick, "Note On");
   printf("(%d) %s [%d] %d", channel, noteName, note, velocity);
@@ -280,6 +280,7 @@ void fsmStatePlaying() {
 }
 
 void stopAllDrives() {
+  hal_printfInfo("Stopping all drives...");
   for(int i = 0; i < 16; i++)
     onNoteOff(0, 0, i, 0);
 }

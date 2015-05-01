@@ -17,6 +17,14 @@ void hal_midiDeviceFree() {
   midiOutClose(hMidiOut);
 }
 
+void hal_midiDeviceNoteOff(int32_t channel, int32_t note) {
+  // Not used on win32
+}
+
+void hal_midiDeviceNoteOn(int32_t channel, int32_t note, int32_t velocity) {
+  // Not used on win32
+}
+
 uint32_t hal_midiDeviceMessage(int32_t iStatus, int32_t iChannel, int32_t iData1, int32_t iData2) {
   uint32_t dwMessage = iStatus | iChannel - 1 | (iData1 << 8) | (iData2 << 16);
   return midiOutShortMsg(hMidiOut, dwMessage);
