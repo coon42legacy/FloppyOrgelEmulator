@@ -99,28 +99,25 @@ void printTrackPrefix(uint32_t track, uint32_t tick, char* pEventName)  {
 }
 
 static void onNoteOff(int32_t track, int32_t tick, int32_t channel, int32_t note) {
-  muGetNameFromNote(noteName, note);
   hal_midiDeviceMessage(msgNoteOff, channel, note, 0);
   hal_midiDeviceNoteOff(channel, note);
   printTrackPrefix(track, tick, "Note Off");
-  printf("(%d) %s", channel, noteName);
+  printf("(%d) %s", channel, muGetNameFromNote(note));
   printf("\r\n");
 }
 
 static void onNoteOn(int32_t track, int32_t tick, int32_t channel, int32_t note, int32_t velocity) {
-  muGetNameFromNote(noteName, note);
   hal_midiDeviceMessage(msgNoteOn, channel, note, velocity);
   hal_midiDeviceNoteOn(channel, note, velocity);
   printTrackPrefix(track, tick, "Note On");
-  printf("(%d) %s [%d] %d", channel, noteName, note, velocity);
+  printf("(%d) %s [%d] %d", channel, muGetNameFromNote(note), note, velocity);
   printf("\r\n");
 }
 
 static void onNoteKeyPressure(int32_t track, int32_t tick, int32_t channel, int32_t note, int32_t pressure) {
-  muGetNameFromNote(noteName, note);
   hal_midiDeviceMessage(msgNoteKeyPressure, channel, note, pressure);
   printTrackPrefix(track, tick, "Note Key Pressure");
-  printf("(%d) %s %d", channel, noteName, pressure);
+  printf("(%d) %s %d", channel, muGetNameFromNote(note), pressure);
   printf("\r\n");
 }
 
