@@ -29,3 +29,11 @@ uint32_t hal_midiDeviceMessage(int32_t iStatus, int32_t iChannel, int32_t iData1
   uint32_t dwMessage = iStatus | iChannel - 1 | (iData1 << 8) | (iData2 << 16);
   return midiOutShortMsg(hMidiOut, dwMessage);
 }
+
+void hal_rs485Send(char dataByte) {
+  // Not used on win32 yet.
+}
+
+void hal_rs485init(LockFreeFIFO_t* pFifo) {
+
+}

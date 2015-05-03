@@ -11,6 +11,35 @@
 #include "config.h"
 #include "menu.h"
 
+// Ring buffer
+static LockFreeFIFO_t fifoDebugPort;
+
+int getRingBufferDistance(LockFreeFIFO_t* lff) {
+  return lff->rptr > lff->wptr ? lff->rptr - lff->wptr : lff->rptr - lff->wptr + RING_BUFFER_SIZE;
+}
+
+void writeToRingBuffer(LockFreeFIFO_t* lff, char b) {
+  if (getRingBufferDistance(lff) == 1) {
+    printf("Ring buffer overflow!\n\r");
+    return;
+  }
+
+  lff->ringBuffer[lff->wptr] = b;
+  lff->wptr = (lff->wptr + 1) % RING_BUFFER_SIZE;
+}
+
+char readFromRingBuffer(LockFreeFIFO_t* lff) {
+  if (getRingBufferDistance(lff) == RING_BUFFER_SIZE) {
+    printf("Ring buffer underflow!\n\r");
+    return 0;
+  }
+
+  char ret = lff->ringBuffer[lff->rptr];
+  lff->rptr = (lff->rptr + 1) % RING_BUFFER_SIZE;
+  return ret;
+}
+// ---
+
 // Stack based FSM
 #define FSM_STACK_SIZE 16
 void* stack[FSM_STACK_SIZE];
@@ -27,7 +56,7 @@ void fsmStateMainMenu() {
 
   static const uint32_t X_OFFSET = 65;
   //static const uint32_t Y_OFFSET = 240 - 18;
-  static uint8_t cursorPos = 1;
+  static uint8_t cursorPos = 2;
 
   canvas_clear(0x00, 0x00, 0x00);
   canvas_drawText(X_OFFSET - 30, 0, "Use the game pad to navigate", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
@@ -52,6 +81,9 @@ void fsmStateMainMenu() {
         break;
       case 1:
         fsmPush(fsmStatePlaylist);
+        break;
+      case 2:
+        fsmPush(fsmStateLiveMode);
         break;
     }        
   }
@@ -88,6 +120,30 @@ void fsmStatePlaylist() {
     fsmPop();
 
   drawMenu(MIDI_PATH, cursorPos);
+}
+
+void fsmStateLiveMode() {
+  static const uint32_t X_OFFSET = 100;
+  canvas_clear(0x00, 0x00, 0x00);
+  canvas_drawText(X_OFFSET - 30, 0, "--- Live mode ---", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
+  canvas_drawText(0, 18, "Now receiving MIDI-Data on debug port...", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
+  display_redraw();
+
+  fsmPush(fsmStateLiveReceiving);
+}
+
+void fsmStateLiveReceiving() {
+  InputDeviceStates_t buttonPressed = getInputDeviceState();
+
+  while (getRingBufferDistance(&fifoDebugPort) < RING_BUFFER_SIZE) {
+    hal_rs485Send(readFromRingBuffer(&fifoDebugPort));
+    // display_clear(0, 255, 0);
+  }
+  
+  if (buttonPressed.Back) {
+    fsmPop();
+    fsmPop();
+  }
 }
 
 void HexList(uint8_t *pData, int32_t iNumBytes) {
@@ -304,6 +360,7 @@ void fsmStatePlaybackAborted() {
 // FSM
 void fsmInit() {
   _stackSize = 0;
+  hal_rs485init(&fifoDebugPort);
 }
 
 bool fsmPush(void* state) {
@@ -411,7 +468,3 @@ void drawMenu(char* path, int16_t cursorPos) {
 
   display_redraw();
 }
-
-
-
-

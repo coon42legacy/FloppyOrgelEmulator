@@ -2,6 +2,8 @@
 #include "stm32f4xx.h"
 #include "hal_mididevice.h"
 
+static LockFreeFIFO_t* pFifoDebugPort = 0;
+
 static uint16_t midiNote2Ticks[] = {
     0,
     0,
@@ -159,4 +161,19 @@ void hal_midiDeviceNoteOff(int32_t channel, int32_t note) {
 uint32_t hal_midiDeviceMessage(int32_t iStatus, int32_t iChannel, int32_t iData1, int32_t iData2) {
   // Not used on stm32f4
   return 0;
+}
+
+void hal_rs485init(LockFreeFIFO_t* pFifo) {
+  pFifoDebugPort = pFifo;
+}
+
+void hal_rs485Send(char dataByte) {
+  while (USART_GetFlagStatus(USART6, USART_FLAG_TXE) == RESET);
+  USART_SendData(USART6, dataByte);
+}
+
+void USART1_IRQHandler() {
+  // check if the USART1 receive interrupt flag was set
+  if(USART_GetITStatus(USART1, USART_IT_RXNE))
+    writeToRingBuffer(pFifoDebugPort, USART1->DR); // The Interrupt gets released just by reading USART1->DR
 }

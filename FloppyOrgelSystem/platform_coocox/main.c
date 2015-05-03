@@ -5,44 +5,6 @@
 #include "floppyorgel_system.h"
 #include "../hal/hal_filesystem.h"
 
-// Ring buffer
-#define RING_BUFFER_SIZE 32
-
-typedef struct {
-  char ringBuffer[RING_BUFFER_SIZE];
-  int wptr;
-  int rptr;
-} LockFreeFIFO_t;
-
-
-// static LockFreeFIFO_t fifoUART1;
-// static LockFreeFIFO_t fifoUART6;
-
-int getRingBufferDistance(LockFreeFIFO_t* lff) {
-  return lff->rptr > lff->wptr ? lff->rptr - lff->wptr : lff->rptr - lff->wptr + RING_BUFFER_SIZE;
-}
-
-void writeToRingBuffer(LockFreeFIFO_t* lff, char b) {
-  if(getRingBufferDistance(lff) == 1) {
-    printf("Ring buffer overflow!\n\r");
-    return;
-  }
-
-  lff->ringBuffer[lff->wptr] = b;
-  lff->wptr = (lff->wptr + 1) % RING_BUFFER_SIZE;
-}
-
-char readFromRingBuffer(LockFreeFIFO_t* lff) {
-  if(getRingBufferDistance(lff) == RING_BUFFER_SIZE) {
-    printf("Ring buffer underflow!\n\r");
-    return 0;
-  }
-
-  char ret = lff->ringBuffer[lff->rptr];
-  lff->rptr = (lff->rptr + 1) % RING_BUFFER_SIZE;
-  return ret;
-}
-
 void enableDelayTimer() {
   RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
 
@@ -81,6 +43,7 @@ void initializeDebugUart(uint32_t baudrate) {
 	 */
 	GPIO_InitTypeDef GPIO_InitStruct; // this is for the GPIO pins used as TX and RX
 	USART_InitTypeDef USART_InitStruct; // this is for the USART1 initilization
+	NVIC_InitTypeDef NVIC_InitStructure;
 
 	/* enable APB2 peripheral clock for USART1
 	 * note that only USART1 and USART6 are connected to APB2
@@ -128,14 +91,12 @@ void initializeDebugUart(uint32_t baudrate) {
 	 * if the USART1 receive interrupt occurs
 	 */
 
-	/*
 	USART_ITConfig(USART1, USART_IT_RXNE, ENABLE); // enable the USART1 receive interrupt
 	NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;		 // we want to configure the USART1 interrupts
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;// this sets the priority group of the USART1 interrupts
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;		 // this sets the subpriority inside the group
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;			 // the USART1 interrupts are globally enabled
 	NVIC_Init(&NVIC_InitStructure);							 // the properties are passed to the NVIC_Init function which takes care of the low level stuff
-	*/
 
 	// finally this enables the complete USART1 peripheral
 	USART_Cmd(USART1, ENABLE);

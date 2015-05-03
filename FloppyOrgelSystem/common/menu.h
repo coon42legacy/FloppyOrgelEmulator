@@ -5,6 +5,8 @@
 
 void fsmStateMainMenu();
 void fsmStateButtonTest();
+void fsmStateLiveMode();
+void fsmStateLiveReceiving();
 void fsmStatePlaylist();
 void fsmStartPlayBack();
 void fsmStatePlaying();
