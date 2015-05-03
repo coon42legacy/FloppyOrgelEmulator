@@ -4,6 +4,7 @@
 #include "../hal/hal_display.h"
 #include "../hal/hal_misc.h"
 #include "../hal/hal_mididevice.h"
+#include "embedded-midilib/midiutil.h"
 #include "embedded-midilib/midiplayer.h"
 #include "canvas/canvas.h"
 #include "AsciiLib/AsciiLib.h"
