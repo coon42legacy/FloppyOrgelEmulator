@@ -13,12 +13,6 @@ void fsmStatePlaying();
 void fsmStatePlaybackAborted();
 void fsmStatePlaybackFinished();
 
-void fsmInit();
-bool fsmPush(void* state);
-bool fsmPop();
-void* fsmGetCurrentState();
-void fsmTick();
-
 void drawCursor(uint32_t cursorPos);
 void drawMenu(char* path, int16_t cursorPos);
 int drawTracks(char* path);

@@ -8,6 +8,7 @@
   #define MIDI_PATH ""
 #endif
 
+#define FSM_STACK_SIZE 16
 #define DISPLAY_RESOLUTION_X 320
 #define DISPLAY_RESOLUTION_Y 240
 

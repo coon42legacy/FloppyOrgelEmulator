@@ -5,7 +5,4 @@
   void system_main();
 #endif
 
-void debugPrintNesGamePadState();
-int drawTracks(char* path);
-
 #endif // __FLOPPYORGEL_SYSTEM_H
