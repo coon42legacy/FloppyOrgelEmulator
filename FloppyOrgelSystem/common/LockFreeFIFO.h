@@ -1,7 +1,8 @@
 #ifndef __LOCK_FREE_FIFO_H
 #define __LOCK_FREE_FIFO_H
 
-#define RING_BUFFER_SIZE 256
+#include "config.h"
+
 typedef struct {
   char ringBuffer[RING_BUFFER_SIZE];
   int wptr;

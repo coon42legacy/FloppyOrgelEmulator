@@ -3,6 +3,8 @@
 #include <mmsystem.h>
 #include "hal_misc.h"
 #include "hal_mididevice.h"
+#include "../common/lockfreefifo.h"
+
 #pragma comment (lib, "winmm.lib")
 
 static HMIDIOUT hMidiOut;

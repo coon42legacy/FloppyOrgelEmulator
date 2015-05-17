@@ -1,12 +1,7 @@
 #ifndef __HAL_MIDIDEVICE_H
 #define __HAL_MIDIDEVICE_H
 
-#define RING_BUFFER_SIZE 256
-typedef struct {
-  char ringBuffer[RING_BUFFER_SIZE];
-  int wptr;
-  int rptr;
-} LockFreeFIFO_t;
+#include "../common/LockFreeFifo.h"
 
 void hal_midiDeviceInit();
 void hal_midiDeviceFree();
