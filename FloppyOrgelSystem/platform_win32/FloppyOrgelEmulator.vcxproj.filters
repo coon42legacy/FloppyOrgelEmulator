@@ -90,10 +90,13 @@
     <ClCompile Include="..\hal\hal_mididevice_win32.c">
       <Filter>Quelldateien\hal</Filter>
     </ClCompile>
-    <ClCompile Include="..\common\LockFreeFIFO.c">
+    <ClCompile Include="..\common\StackBasedFsm.c">
       <Filter>Quelldateien\common</Filter>
     </ClCompile>
-    <ClCompile Include="..\common\StackBasedFsm.c">
+    <ClCompile Include="..\common\LockFreeFifo.c">
+      <Filter>Quelldateien\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\SlotBasedMenu.c">
       <Filter>Quelldateien\common</Filter>
     </ClCompile>
   </ItemGroup>
@@ -149,10 +152,13 @@
     <ClInclude Include="..\hal\hal_mididevice.h">
       <Filter>Headerdateien\hal</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\lockfreefifo.h">
+    <ClInclude Include="..\common\StackBasedFsm.h">
       <Filter>Headerdateien\common</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\StackBasedFsm.h">
+    <ClInclude Include="..\common\LockFreeFifo.h">
+      <Filter>Headerdateien\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\SlotBasedMenu.h">
       <Filter>Headerdateien\common</Filter>
     </ClInclude>
   </ItemGroup>

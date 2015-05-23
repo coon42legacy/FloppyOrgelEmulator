@@ -6,9 +6,9 @@ void fsmInit(StackBasedFsm_t* fsm) {
   fsm->stackSize_ = 0;
 }
 
-bool fsmPush(StackBasedFsm_t* fsm, void* state) {
-  if (fsm->stackSize_ < FSM_STACK_SIZE) {
-    fsm->stack[fsm->stackSize_++] = state;
+bool fsmPush(StackBasedFsm_t* fsm, FsmStateFunc stateFunc) {
+  if (stateFunc != NULL && fsm->stackSize_ < FSM_STACK_SIZE) {
+    fsm->stack[fsm->stackSize_++] = stateFunc;
     return true;
   }
   else
@@ -16,7 +16,7 @@ bool fsmPush(StackBasedFsm_t* fsm, void* state) {
 }
 
 bool fsmPop(StackBasedFsm_t* fsm) {
-  if (fsm->stackSize_ > 0) {
+  if (fsm->stackSize_ > 1) {
     fsm->stackSize_--;
     return true;
   }
@@ -24,7 +24,7 @@ bool fsmPop(StackBasedFsm_t* fsm) {
     return false;
 }
 
-void* fsmGetCurrentState(StackBasedFsm_t* fsm) {
+FsmState* fsmGetCurrentState(StackBasedFsm_t* fsm) {
   if (fsm->stackSize_ > 0)
     return fsm->stack[fsm->stackSize_ - 1];
   else
@@ -32,8 +32,8 @@ void* fsmGetCurrentState(StackBasedFsm_t* fsm) {
 }
 
 void fsmTick(StackBasedFsm_t* fsm) {
-  void(*stateFunc)(StackBasedFsm_t* fsm) = fsmGetCurrentState(fsm);
+  FsmStateFunc pStateFunc = fsmGetCurrentState(fsm);
 
-  if (stateFunc != NULL)
-    stateFunc(fsm);
+  if (pStateFunc != NULL)
+    pStateFunc(fsm);
 }

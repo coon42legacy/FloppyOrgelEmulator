@@ -17,8 +17,9 @@
     <ClCompile Include="..\common\embedded-midilib\midiplayer.c" />
     <ClCompile Include="..\common\embedded-midilib\midiutil.c" />
     <ClCompile Include="..\common\floppyorgel_system.c" />
-    <ClCompile Include="..\common\LockFreeFIFO.c" />
+    <ClCompile Include="..\common\LockFreeFifo.c" />
     <ClCompile Include="..\common\menu.c" />
+    <ClCompile Include="..\common\SlotBasedMenu.c" />
     <ClCompile Include="..\common\StackBasedFsm.c" />
     <ClCompile Include="..\hal\hal_mididevice_win32.c" />
     <ClCompile Include="..\hal\hal_misc_win32.c" />
@@ -37,8 +38,9 @@
     <ClInclude Include="..\common\embedded-midilib\midiplayer.h" />
     <ClInclude Include="..\common\embedded-midilib\midiutil.h" />
     <ClInclude Include="..\common\floppyorgel_system.h" />
-    <ClInclude Include="..\common\lockfreefifo.h" />
+    <ClInclude Include="..\common\LockFreeFifo.h" />
     <ClInclude Include="..\common\menu.h" />
+    <ClInclude Include="..\common\SlotBasedMenu.h" />
     <ClInclude Include="..\common\StackBasedFsm.h" />
     <ClInclude Include="..\hal\hal_mididevice.h" />
     <ClInclude Include="..\hal\hal_misc.h" />

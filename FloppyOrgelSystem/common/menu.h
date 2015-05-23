@@ -3,15 +3,15 @@
 
 #include <stdbool.h>
 
-void fsmStateMainMenu();
-void fsmStateButtonTest();
-void fsmStateLiveMode();
-void fsmStateLiveReceiving();
-void fsmStatePlaylist();
-void fsmStartPlayBack();
-void fsmStatePlaying();
-void fsmStatePlaybackAborted();
-void fsmStatePlaybackFinished();
+FsmState mainMenu(StackBasedFsm_t* fsm);
+FsmState buttonTest(StackBasedFsm_t* fsm);
+FsmState liveMode(StackBasedFsm_t* fsm);
+FsmState liveReceiving(StackBasedFsm_t* fsm);
+FsmState playlist(StackBasedFsm_t* fsm);
+FsmState startPlayBack(StackBasedFsm_t* fsm);
+FsmState playing(StackBasedFsm_t* fsm);
+FsmState playbackAborted(StackBasedFsm_t* fsm);
+FsmState playbackFinished(StackBasedFsm_t* fsm);
 
 void drawCursor(uint32_t cursorPos);
 void drawMenu(char* path, int16_t cursorPos);

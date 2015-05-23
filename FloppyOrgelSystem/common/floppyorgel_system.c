@@ -14,7 +14,7 @@ void system_main() {
   hal_printf("################################");
 
   fsmInit(&fsm);
-  fsmPush(&fsm, fsmStateMainMenu);
+  fsmPush(&fsm, mainMenu);
 
   while (1) {
     fsmTick(&fsm);

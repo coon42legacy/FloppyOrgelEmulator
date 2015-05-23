@@ -10,6 +10,7 @@
 #include "AsciiLib/AsciiLib.h"
 #include "LockFreeFIFO.h"
 #include "StackBasedFsm.h"
+#include "SlotBasedMenu.h"
 #include "config.h"
 #include "menu.h"
 
@@ -17,6 +18,8 @@ static LockFreeFIFO_t fifoDebugPort;
 static MIDI_PLAYER mpl;
 static char filePathOfSongToPlay[256];
 
+// menu
+static uint8_t menuCursorPos = 0;
 // Midi Event handlers
 
 // helpers
@@ -255,50 +258,32 @@ void drawMenu(char* path, int16_t cursorPos) {
 }
 
 // States
-void fsmStateMainMenu(StackBasedFsm_t* fsm) {
+FsmState mainMenu(StackBasedFsm_t* fsm) {
+  static SlotBasedMenu_t menu;
+
   static bool firstRun = true;
   if (firstRun) {
     hal_rs485init(&fifoDebugPort);
+
+    memset(&menu, 0, sizeof(menu));
+    menuAddSlot(&menu, "[Button Test]", buttonTest);
+    menuAddSlot(&menu, "[Play MIDI File]", playlist);
+    menuAddSlot(&menu, "[Live Mode]", liveMode);
+    menuAddSlot(&menu, "[Floppy Test]", NULL);
+      
     firstRun = false;
   }
   
-  InputDeviceStates_t buttonPressed = getInputDeviceState();
-  static const uint32_t X_OFFSET = 65;
-  //static const uint32_t Y_OFFSET = 240 - 18;
-  static uint8_t cursorPos = 2;
-
   canvas_clear(0x00, 0x00, 0x00);
-  canvas_drawText(X_OFFSET - 30, 0, "Use the game pad to navigate", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
-  canvas_drawText(X_OFFSET + 10, 18, "Press A button to select", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
+  canvas_drawText(65 - 30, 0, "Use the game pad to navigate", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
+  canvas_drawText(65 + 10, 18, "Press A button to select", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
 
-  canvas_drawText(35, 40 + 18 * 0, "Button Test", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
-  canvas_drawText(35, 40 + 18 * 1, "Play MIDI File", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
-  canvas_drawText(35, 40 + 18 * 2, "Live Mode", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
-  canvas_drawText(35, 40 + 18 * 3, "Floppy Test", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
-  drawCursor(cursorPos);
+  menuTick(&menu, fsm);
+  menuDraw(&menu);
   display_redraw();
-
-  if (buttonPressed.South)
-    cursorPos++;
-  else if (buttonPressed.North)
-    cursorPos--;
-
-  if (buttonPressed.Action) {
-    switch (cursorPos) {
-      case 0:
-        fsmPush(fsm, fsmStateButtonTest);
-        break;
-      case 1:        
-        fsmPush(fsm, fsmStatePlaylist);
-        break;
-      case 2:
-        fsmPush(fsm, fsmStateLiveMode);
-        break;
-    }        
-  }
 }
 
-void fsmStateButtonTest(StackBasedFsm_t* fsm) {
+FsmState buttonTest(StackBasedFsm_t* fsm) {
   InputDeviceStates_t buttonPressed = getInputDeviceState();
   static const uint32_t X_OFFSET = 65;
   // static const uint32_t Y_OFFSET = 240 - 18;
@@ -312,36 +297,35 @@ void fsmStateButtonTest(StackBasedFsm_t* fsm) {
     fsmPop(fsm);
 }
 
-void fsmStatePlaylist(StackBasedFsm_t* fsm) {
+FsmState playlist(StackBasedFsm_t* fsm) {
   InputDeviceStates_t buttonPressed = getInputDeviceState();
-  static uint8_t cursorPos = 0;
-
+  
   if (buttonPressed.South)
-    cursorPos++;
+    menuCursorPos++;
   else if (buttonPressed.North)
-    cursorPos--;
+    menuCursorPos--;
   else if (buttonPressed.Action) {
-    getFileNameFromCursorPos(MIDI_PATH, filePathOfSongToPlay, cursorPos);
+    getFileNameFromCursorPos(MIDI_PATH, filePathOfSongToPlay, menuCursorPos);
     printf("Playing: %s\r\n", filePathOfSongToPlay);
-    fsmPush(fsm, fsmStartPlayBack);
+    fsmPush(fsm, startPlayBack);
   }
   else if (buttonPressed.Back)
     fsmPop(fsm);
 
-  drawMenu(MIDI_PATH, cursorPos);
+  drawMenu(MIDI_PATH, menuCursorPos);
 }
 
-void fsmStateLiveMode(StackBasedFsm_t* fsm) {
+FsmState liveMode(StackBasedFsm_t* fsm) {
   static const uint32_t X_OFFSET = 100;
   canvas_clear(0x00, 0x00, 0x00);
   canvas_drawText(X_OFFSET - 30, 0, "--- Live mode ---", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
   canvas_drawText(0, 18, "Now receiving MIDI-Data on debug port...", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
   display_redraw();
 
-  fsmPush(fsm, fsmStateLiveReceiving);
+  fsmPush(fsm, liveReceiving);
 }
 
-void fsmStateLiveReceiving(StackBasedFsm_t* fsm) {
+FsmState liveReceiving(StackBasedFsm_t* fsm) {
   InputDeviceStates_t buttonPressed = getInputDeviceState();
 
   while (getRingBufferDistance(&fifoDebugPort) < RING_BUFFER_SIZE) {
@@ -355,7 +339,7 @@ void fsmStateLiveReceiving(StackBasedFsm_t* fsm) {
   }
 }
 
-void fsmStartPlayBack(StackBasedFsm_t* fsm) {
+FsmState startPlayBack(StackBasedFsm_t* fsm) {
   hal_midiDeviceInit();
   midiplayer_init(&mpl, onNoteOff, onNoteOn, onNoteKeyPressure, onSetParameter, onSetProgram, onChangePressure,
     onSetPitchWheel, onMetaMIDIPort, onMetaSequenceNumber, onMetaTextEvent, onMetaCopyright, onMetaTrackName,
@@ -372,37 +356,37 @@ void fsmStartPlayBack(StackBasedFsm_t* fsm) {
   display_redraw();
 
   fsmPop(fsm);
-  fsmPush(fsm, fsmStatePlaying);
+  fsmPush(fsm, playing);
 }
 
-void fsmStatePlaying(StackBasedFsm_t* fsm) {
+FsmState playing(StackBasedFsm_t* fsm) {
   InputDeviceStates_t buttonPressed = getInputDeviceState();
 
   if (buttonPressed.Back) {
     fsmPop(fsm);
-    fsmPush(fsm, fsmStatePlaybackAborted);
+    fsmPush(fsm, playbackAborted);
   }
 
   if (!midiPlayerTick(&mpl)) {
     fsmPop(fsm);
-    fsmPush(fsm, fsmStatePlaybackFinished);
+    fsmPush(fsm, playbackFinished);
   }
 }
 
-void fsmStatePlaybackFinished(StackBasedFsm_t* fsm) {
+FsmState playbackFinished(StackBasedFsm_t* fsm) {
   hal_printfSuccess("Playback finished!");
   stopAllDrives();
   hal_midiDeviceFree();
 
   fsmPop(fsm);
-  fsmPush(fsm, fsmStatePlaylist);
+  fsmPush(fsm, playlist);
 }
 
-void fsmStatePlaybackAborted(StackBasedFsm_t* fsm) {
+FsmState playbackAborted(StackBasedFsm_t* fsm) {
   hal_printfSuccess("Playback aborted by user.");
   stopAllDrives();
   hal_midiDeviceFree();
 
   fsmPop(fsm);
-  fsmPush(fsm, fsmStatePlaylist);
+  fsmPush(fsm, playlist);
 }
