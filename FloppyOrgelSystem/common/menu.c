@@ -18,7 +18,6 @@ static MIDI_PLAYER mpl;
 static char filePathOfSongToPlay[256];
 
 // Midi Event handlers
-char noteName[64]; // TOOD: refactor to const string array
 
 // helpers
 void HexList(uint8_t *pData, int32_t iNumBytes) {
@@ -56,26 +55,23 @@ static void onNoteKeyPressure(int32_t track, int32_t tick, int32_t channel, int3
 }
 
 static void onSetParameter(int32_t track, int32_t tick, int32_t channel, int32_t control, int32_t parameter) {
-  muGetControlName(noteName, control);
   printTrackPrefix(track, tick, "Set Parameter");
   hal_midiDeviceMessage(msgSetParameter, channel, control, parameter);
-  printf("(%d) %s -> %d", channel, noteName, parameter);
+  printf("(%d) %s -> %d", channel, muGetControlName(control), parameter);
   printf("\r\n");
 }
 
 static void onSetProgram(int32_t track, int32_t tick, int32_t channel, int32_t program) {
-  muGetInstrumentName(noteName, program);
   hal_midiDeviceMessage(msgSetProgram, channel, program, 0);
   printTrackPrefix(track, tick, "Set Program");
-  printf("(%d) %s", channel, noteName);
+  printf("(%d) %s", channel, muGetInstrumentName(program));
   printf("\r\n");
 }
 
 static void onChangePressure(int32_t track, int32_t tick, int32_t channel, int32_t pressure) {
-  muGetControlName(noteName, pressure);
   hal_midiDeviceMessage(msgChangePressure, channel, pressure, 0);
   printTrackPrefix(track, tick, "Change Pressure");
-  printf("(%d) %s", channel, noteName);
+  printf("(%d) %s", channel, muGetControlName(pressure));
   printf("\r\n");
 }
 
@@ -155,6 +151,8 @@ static void onMetaTimeSig(int32_t track, int32_t tick, int32_t nom, int32_t deno
 }
 
 static void onMetaKeySig(int32_t track, int32_t tick, uint32_t key, uint32_t scale) {
+  // TODO: fix
+  static char noteName[256];
   printTrackPrefix(track, tick, "Meta event ----");
   if (muGetKeySigName(noteName, key)) {
     printf("Key sig = %s", noteName);
@@ -176,10 +174,11 @@ static void onMetaSysEx(int32_t track, int32_t tick, void* pData, uint32_t size)
   printf("\r\n");
 }
 
-void stopAllDrives() {
+void stopAllDrives() {  
   hal_printfInfo("Stopping all drives...");
-  for (int i = 0; i < 16; i++)
+  for (int i = 0; i < 16; i++) {    
     onNoteOff(0, 0, i, 0);
+  }
 }
 
 void getFileNameFromCursorPos(char* srcPath, char* dstFilePath, int cursorPos) {
@@ -263,6 +262,7 @@ void fsmStateMainMenu(StackBasedFsm_t* fsm) {
     firstRun = false;
   }
   
+  InputDeviceStates_t buttonPressed = getInputDeviceState();
   static const uint32_t X_OFFSET = 65;
   //static const uint32_t Y_OFFSET = 240 - 18;
   static uint8_t cursorPos = 2;
@@ -278,7 +278,6 @@ void fsmStateMainMenu(StackBasedFsm_t* fsm) {
   drawCursor(cursorPos);
   display_redraw();
 
-  InputDeviceStates_t buttonPressed = getInputDeviceState();
   if (buttonPressed.South)
     cursorPos++;
   else if (buttonPressed.North)
@@ -289,7 +288,7 @@ void fsmStateMainMenu(StackBasedFsm_t* fsm) {
       case 0:
         fsmPush(fsm, fsmStateButtonTest);
         break;
-      case 1:
+      case 1:        
         fsmPush(fsm, fsmStatePlaylist);
         break;
       case 2:
@@ -392,8 +391,8 @@ void fsmStatePlaying(StackBasedFsm_t* fsm) {
 
 void fsmStatePlaybackFinished(StackBasedFsm_t* fsm) {
   hal_printfSuccess("Playback finished!");
-  hal_midiDeviceFree();
   stopAllDrives();
+  hal_midiDeviceFree();
 
   fsmPop(fsm);
   fsmPush(fsm, fsmStatePlaylist);
@@ -401,10 +400,9 @@ void fsmStatePlaybackFinished(StackBasedFsm_t* fsm) {
 
 void fsmStatePlaybackAborted(StackBasedFsm_t* fsm) {
   hal_printfSuccess("Playback aborted by user.");
-  hal_midiDeviceFree();
   stopAllDrives();
+  hal_midiDeviceFree();
 
   fsmPop(fsm);
   fsmPush(fsm, fsmStatePlaylist);
 }
-
