@@ -10,7 +10,7 @@ typedef struct {
 } StackBasedFsm_t;
 
 typedef void FsmState;
-typedef FsmState(*FsmStateFunc)(StackBasedFsm_t* fsm);
+typedef FsmState (*FsmStateFunc)(StackBasedFsm_t* fsm);
 
 void fsmInit(StackBasedFsm_t* fsm);
 bool fsmPush(StackBasedFsm_t* fsm, FsmStateFunc stateFunc);

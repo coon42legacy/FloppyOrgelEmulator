@@ -1,9 +1,9 @@
 #include <stdint.h>
 #include "../hal/hal_inputdevice.h"
-#include "../hal/hal_filesystem.h"
 #include "../hal/hal_display.h"
 #include "../hal/hal_misc.h"
 #include "../hal/hal_mididevice.h"
+#include "../hal/hal_filesystem.h"
 #include "embedded-midilib/midiutil.h"
 #include "embedded-midilib/midiplayer.h"
 #include "canvas/canvas.h"
@@ -19,6 +19,7 @@ static MIDI_PLAYER mpl;
 static char filePathOfSongToPlay[256];
 
 // menu
+// TODO: remove when SlotBasedMenu is done.
 static uint8_t menuCursorPos = 0;
 // Midi Event handlers
 
@@ -184,80 +185,26 @@ void stopAllDrives() {
   }
 }
 
-void getFileNameFromCursorPos(char* srcPath, char* dstFilePath, int cursorPos) {
-  static FO_FIND_DATA findData;
+// states
 
-  strcpy(dstFilePath, srcPath);
-  strcat(dstFilePath, "/*");
-
-  bool endOfDirectory = !hal_findInit(dstFilePath, &findData);
-  // static const uint32_t X_OFFSET = 35;
-  // static const uint32_t Y_OFFSET = 40;
-  int itemCount = 0;
-
-  while (!endOfDirectory) {
-    if (findData.fileName[0] != '.')
-    if (findData.fileName[1] != '.')
-    if (itemCount++ == cursorPos) {
-      dstFilePath[strlen(dstFilePath) - 1] = '\0'; // remove trailing start
-      strcat(dstFilePath, findData.fileName);
-      break;
-    }
-
-    if (!hal_findNext(&findData))
-      endOfDirectory = true;
-  }
-
-  hal_findFree();
+void onUserMenuAction(StackBasedFsm_t* fsm, FsmStateFunc curState, FsmStateFunc nextState) {
+  fsmPush(fsm, nextState);
 }
 
-int drawTracks(char* path) {
-  static FO_FIND_DATA findData;
-
-  static const uint32_t X_OFFSET = 35;
-  static const uint32_t Y_OFFSET = 40;
-  int itemCount = 0;
-  bool endOfDirectory = !hal_findInit(path, &findData);
-
-  while (!endOfDirectory) {
-    if (findData.fileName[0] != '.')
-    if (findData.fileName[1] != '.') {
-      canvas_drawText(X_OFFSET, Y_OFFSET + 18 * itemCount++, findData.fileName,
-        0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
-    }
-
-    if (!hal_findNext(&findData))
-      endOfDirectory = true;
-  }
-  hal_findFree();
-
-  return 0;
+void onUserMenuBack(StackBasedFsm_t* fsm, FsmStateFunc curState) {
+  fsmPop(fsm);
 }
 
-void drawCursor(uint32_t cursorPos) {
-  const uint32_t X_OFFSET = 25;
-  const uint32_t Y_OFFSET = 45;
-
-  canvas_drawRect(X_OFFSET, Y_OFFSET + 18 * cursorPos, 5, 5, 255, 255, 255);
+void onBrowseMenuAction(StackBasedFsm_t* fsm, char* filePath) {
+  strcpy(filePathOfSongToPlay, filePath);
+  hal_printf("Playing: %s\r\n", filePath);
+  fsmPush(fsm, startPlayBack);
 }
 
-void drawMenu(char* path, int16_t cursorPos) {
-  static const uint32_t X_OFFSET = 65;
-  // static const uint32_t Y_OFFSET = 240 - 18;
-  static char searchPath[256];
-
-  canvas_clear(0x00, 0x00, 0x00);
-  canvas_drawText(X_OFFSET - 30, 0, "Use the game pad to select a song", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
-  canvas_drawText(X_OFFSET + 10, 18, "Press A button to start", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
-  strcpy(searchPath, path);
-  strcat(searchPath, "/*");
-  drawTracks(searchPath);
-  drawCursor(cursorPos);
-
-  display_redraw();
+void onBrowseMenuBack(StackBasedFsm_t* fsm) {
+  fsmPop(fsm);
 }
 
-// States
 FsmState mainMenu(StackBasedFsm_t* fsm) {
   static SlotBasedMenu_t menu;
 
@@ -265,7 +212,7 @@ FsmState mainMenu(StackBasedFsm_t* fsm) {
   if (firstRun) {
     hal_rs485init(&fifoDebugPort);
 
-    memset(&menu, 0, sizeof(menu));
+    userMenuInit(&menu, 25, 45, onUserMenuAction, onUserMenuBack);
     menuAddSlot(&menu, "[Button Test]", buttonTest);
     menuAddSlot(&menu, "[Play MIDI File]", playlist);
     menuAddSlot(&menu, "[Live Mode]", liveMode);
@@ -283,10 +230,30 @@ FsmState mainMenu(StackBasedFsm_t* fsm) {
   display_redraw();
 }
 
+FsmState playlist(StackBasedFsm_t* fsm) {
+  static SlotBasedMenu_t menu;
+  static const uint32_t X_OFFSET = 55; // TODO: remove
+  static const uint32_t Y_OFFSET = 40; // TODO: remove
+  static char searchPath[256]; // TOOD: remove
+
+  static bool firstRun = true;
+  if (firstRun) {
+    browseMenuInit(&menu, 35, 40, MIDI_PATH, onBrowseMenuAction, onBrowseMenuBack);
+    firstRun = false;
+  }
+
+  canvas_clear(0x00, 0x00, 0x00);
+  canvas_drawText(X_OFFSET - 30, 0, "Use the game pad to select a song", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
+  canvas_drawText(X_OFFSET + 10, 18, "Press A button to start", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
+
+  menuTick(&menu, fsm);
+  // menuDraw(&menu);
+  display_redraw();
+}
+
 FsmState buttonTest(StackBasedFsm_t* fsm) {
   InputDeviceStates_t buttonPressed = getInputDeviceState();
   static const uint32_t X_OFFSET = 65;
-  // static const uint32_t Y_OFFSET = 240 - 18;
 
   canvas_clear(0x00, 0x00, 0x00);
   canvas_drawText(X_OFFSET - 30, 0, "Button Test", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
@@ -295,24 +262,6 @@ FsmState buttonTest(StackBasedFsm_t* fsm) {
 
   if (buttonPressed.Back)
     fsmPop(fsm);
-}
-
-FsmState playlist(StackBasedFsm_t* fsm) {
-  InputDeviceStates_t buttonPressed = getInputDeviceState();
-  
-  if (buttonPressed.South)
-    menuCursorPos++;
-  else if (buttonPressed.North)
-    menuCursorPos--;
-  else if (buttonPressed.Action) {
-    getFileNameFromCursorPos(MIDI_PATH, filePathOfSongToPlay, menuCursorPos);
-    printf("Playing: %s\r\n", filePathOfSongToPlay);
-    fsmPush(fsm, startPlayBack);
-  }
-  else if (buttonPressed.Back)
-    fsmPop(fsm);
-
-  drawMenu(MIDI_PATH, menuCursorPos);
 }
 
 FsmState liveMode(StackBasedFsm_t* fsm) {
