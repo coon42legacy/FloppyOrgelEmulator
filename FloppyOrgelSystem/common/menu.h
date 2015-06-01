@@ -12,6 +12,7 @@ FsmState startPlayBack(StackBasedFsm_t* fsm);
 FsmState playing(StackBasedFsm_t* fsm);
 FsmState playbackAborted(StackBasedFsm_t* fsm);
 FsmState playbackFinished(StackBasedFsm_t* fsm);
+FsmState floppyTest(StackBasedFsm_t* fsm);
 
 void drawCursor(uint32_t cursorPos);
 void drawMenu(char* path, int16_t cursorPos);

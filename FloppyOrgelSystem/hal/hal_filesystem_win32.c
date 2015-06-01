@@ -6,9 +6,13 @@
 static HANDLE fo_findHandle;
 
 bool hal_findInit(char* path, FO_FIND_DATA* findData) {
+  char searchPath[256];
   WIN32_FIND_DATA search_data;
   memset(&search_data, 0, sizeof(WIN32_FIND_DATA));
-  fo_findHandle = FindFirstFile(path, &search_data);
+  strcpy(searchPath, path);
+  strcat(searchPath, "/*");
+
+  fo_findHandle = FindFirstFile(searchPath, &search_data);
   strcpy_s(findData->fileName, sizeof(findData->fileName), search_data.cFileName);
   return fo_findHandle != INVALID_HANDLE_VALUE ? TRUE : FALSE;
 }

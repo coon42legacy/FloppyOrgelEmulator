@@ -36,16 +36,14 @@ static void getFileNameFromCursorPos(char* srcPath, char* dstFilePath, int curso
   static FO_FIND_DATA findData;
 
   strcpy(dstFilePath, srcPath);
-  strcat(dstFilePath, "/*");
 
   bool endOfDirectory = !hal_findInit(dstFilePath, &findData);
   int itemCount = 0;
 
   while (!endOfDirectory) {
-    if (findData.fileName[0] != '.')
-    if (findData.fileName[1] != '.')
+    if (findData.fileName[0] != '.' && findData.fileName[1] != '.')
     if (itemCount++ == cursorPos) {
-      dstFilePath[strlen(dstFilePath) - 1] = '\0'; // remove trailing start
+      strcat(dstFilePath, "/");
       strcat(dstFilePath, findData.fileName);
       break;
     }
@@ -69,17 +67,16 @@ void menuTick(SlotBasedMenu_t* sbm, StackBasedFsm_t* fsm) {
     case USER_MENU: {
       FsmStateFunc curState = fsm->stack[fsm->stackSize_ - 1];
 
-      if (buttonPressed.Action)
+      if (buttonPressed.Action && sbm->userMenu.onAction)
         sbm->userMenu.onAction(fsm, curState, sbm->slot[sbm->cursorPos].pNextFsmStateFunc);
-      else if (buttonPressed.Back)
+      else if (buttonPressed.Back && sbm->userMenu.onBack)
         sbm->userMenu.onBack(fsm, curState);
       break;
     }
 
     case BROWSE_MENU: {
-      char fileNameOnCursor[256];
-      char searchPath[256];
-      FO_FIND_DATA findData;
+      static char fileNameOnCursor[256];
+      static FO_FIND_DATA findData;
 
       if (buttonPressed.Action) {
         getFileNameFromCursorPos(sbm->browseMenu.filePath, fileNameOnCursor, sbm->cursorPos);
@@ -87,13 +84,10 @@ void menuTick(SlotBasedMenu_t* sbm, StackBasedFsm_t* fsm) {
       }
       else if (buttonPressed.Back)
         sbm->browseMenu.onBack(fsm);
-
-      strcpy(searchPath, sbm->browseMenu.filePath);
-      strcat(searchPath, "/*");
       
       // Draw tracks
       sbm->numSlots = 0;
-      bool endOfDirectory = !hal_findInit(searchPath, &findData);
+      bool endOfDirectory = !hal_findInit(sbm->browseMenu.filePath, &findData);
 
       while (!endOfDirectory) {
         if (findData.fileName[0] != '.')

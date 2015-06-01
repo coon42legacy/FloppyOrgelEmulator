@@ -185,7 +185,9 @@ void stopAllDrives() {
   }
 }
 
+//-------------------------------------------------------------------------------------------------------------
 // states
+//-------------------------------------------------------------------------------------------------------------
 
 void onUserMenuAction(StackBasedFsm_t* fsm, FsmStateFunc curState, FsmStateFunc nextState) {
   fsmPush(fsm, nextState);
@@ -216,7 +218,7 @@ FsmState mainMenu(StackBasedFsm_t* fsm) {
     menuAddSlot(&menu, "[Button Test]", buttonTest);
     menuAddSlot(&menu, "[Play MIDI File]", playlist);
     menuAddSlot(&menu, "[Live Mode]", liveMode);
-    menuAddSlot(&menu, "[Floppy Test]", NULL);
+    menuAddSlot(&menu, "[Floppy Test]", floppyTest);
       
     firstRun = false;
   }
@@ -232,19 +234,16 @@ FsmState mainMenu(StackBasedFsm_t* fsm) {
 
 FsmState playlist(StackBasedFsm_t* fsm) {
   static SlotBasedMenu_t menu;
-  static const uint32_t X_OFFSET = 55; // TODO: remove
-  static const uint32_t Y_OFFSET = 40; // TODO: remove
-  static char searchPath[256]; // TOOD: remove
 
   static bool firstRun = true;
   if (firstRun) {
-    browseMenuInit(&menu, 35, 40, MIDI_PATH, onBrowseMenuAction, onBrowseMenuBack);
+    browseMenuInit(&menu, 20, 50, MIDI_PATH, onBrowseMenuAction, onBrowseMenuBack);
     firstRun = false;
   }
 
   canvas_clear(0x00, 0x00, 0x00);
-  canvas_drawText(X_OFFSET - 30, 0, "Use the game pad to select a song", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
-  canvas_drawText(X_OFFSET + 10, 18, "Press A button to start", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
+  canvas_drawText(25, 0, "Use the game pad to select a song", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
+  canvas_drawText(65, 18, "Press A button to start", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
 
   menuTick(&menu, fsm);
   // menuDraw(&menu);
@@ -338,4 +337,20 @@ FsmState playbackAborted(StackBasedFsm_t* fsm) {
 
   fsmPop(fsm);
   fsmPush(fsm, playlist);
+}
+
+FsmState floppyTest(StackBasedFsm_t* fsm) {
+  static SlotBasedMenu_t menu;
+  static bool firstRun = true;
+  if (firstRun) {
+    userMenuInit(&menu, 0, 0, 0, 0);
+    firstRun = false;
+  }
+  menuTick(&menu, fsm);
+
+  canvas_clear(0x00, 0x00, 0x00);
+  canvas_drawText(70, 0, "--- Floppy Test ---", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
+  canvas_drawText(0, 18, "Select drive and Frequency. Press 'A' Button to play.", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
+
+  display_redraw();
 }
