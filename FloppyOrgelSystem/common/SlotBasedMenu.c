@@ -21,11 +21,12 @@ void userMenuInit(SlotBasedMenu_t* sbm, int16_t xPos, int16_t yPos, UserMenuActi
   sbm->userMenu.onBack = onBack;
 }
 
-void browseMenuInit(SlotBasedMenu_t* sbm, int16_t xPos, int16_t yPos, char* filePath, BrowseMenuActionCallback onAction, BrowseMenuBackCallback onBack) {
+void browseMenuInit(SlotBasedMenu_t* sbm, int16_t xPos, int16_t yPos, char* filePath, BrowseMenuActionCallback onAction, BrowseMenuBackCallback onBack, BrowseNewPageCallback onNewPage) {
   menuInit(sbm, BROWSE_MENU, xPos, yPos);
   sbm->browseMenu.filePath = filePath;
   sbm->browseMenu.onAction = onAction;
   sbm->browseMenu.onBack = onBack;
+  sbm->browseMenu.onNewPage = onNewPage;
 }
 
 static void menuDrawCursor(SlotBasedMenu_t* sbm) {
@@ -99,6 +100,8 @@ void menuTick(SlotBasedMenu_t* sbm, StackBasedFsm_t* fsm) {
       }
       hal_findFree();
       menuDrawCursor(sbm);
+
+      sbm->browseMenu.onNewPage(1, 42); // FIXME: implement correctly!
       //
 
       break;

@@ -20,6 +20,7 @@ typedef void (*UserMenuBackCallback)(StackBasedFsm_t* fsm, FsmStateFunc curState
 // browse menu callbacks
 typedef void (*BrowseMenuActionCallback)(StackBasedFsm_t* fsm, char* filePath);
 typedef void (*BrowseMenuBackCallback)(StackBasedFsm_t* fsm);
+typedef void(*BrowseNewPageCallback)(int currentPage, int totalPages);
 
 typedef struct {
   MenuType_t type;
@@ -34,6 +35,7 @@ typedef struct {
       char* filePath;
       BrowseMenuActionCallback onAction;
       BrowseMenuBackCallback onBack;
+      BrowseNewPageCallback onNewPage;
     } browseMenu;
   };
 
@@ -53,6 +55,6 @@ void menuDraw(SlotBasedMenu_t* sbm);
 void userMenuInit(SlotBasedMenu_t* sbm, int16_t xPos, int16_t yPos, UserMenuActionCallback onAction, UserMenuBackCallback onBack);
 
 // browse menu specific functions
-void browseMenuInit(SlotBasedMenu_t* sbm, int16_t xPos, int16_t yPos, char* filePath, BrowseMenuActionCallback onAction, BrowseMenuBackCallback onBack);
+void browseMenuInit(SlotBasedMenu_t* sbm, int16_t xPos, int16_t yPos, char* filePath, BrowseMenuActionCallback onAction, BrowseMenuBackCallback onBack, BrowseNewPageCallback onNewPage);
 
 #endif // __SLOT_BASED_FSM_H

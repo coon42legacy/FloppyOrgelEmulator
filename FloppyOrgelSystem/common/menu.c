@@ -207,6 +207,13 @@ void onBrowseMenuBack(StackBasedFsm_t* fsm) {
   fsmPop(fsm);
 }
 
+void onBrowseNewPage(int currentPage, int totalPages) {
+  char pageText[32];
+  sprintf(pageText, "%d / %d", currentPage, totalPages); // TODO: hal_sprintf
+
+  canvas_drawText(265, 220, pageText, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
+}
+
 FsmState mainMenu(StackBasedFsm_t* fsm) {
   static SlotBasedMenu_t menu;
 
@@ -237,7 +244,7 @@ FsmState playlist(StackBasedFsm_t* fsm) {
 
   static bool firstRun = true;
   if (firstRun) {
-    browseMenuInit(&menu, 20, 50, MIDI_PATH, onBrowseMenuAction, onBrowseMenuBack);
+    browseMenuInit(&menu, 20, 50, MIDI_PATH, onBrowseMenuAction, onBrowseMenuBack, onBrowseNewPage);
     firstRun = false;
   }
 
@@ -246,7 +253,6 @@ FsmState playlist(StackBasedFsm_t* fsm) {
   canvas_drawText(65, 18, "Press A button to start", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
 
   menuTick(&menu, fsm);
-  // menuDraw(&menu);
   display_redraw();
 }
 
