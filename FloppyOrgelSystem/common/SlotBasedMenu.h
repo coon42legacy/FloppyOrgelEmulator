@@ -2,6 +2,7 @@
 #define __SLOT_BASED_FSM_H
 
 #define MENU_MAX_SLOTS 12
+#define MENU_FILES_PER_PAGE 10
 
 typedef enum {
   USER_MENU,
@@ -32,6 +33,7 @@ typedef struct {
     } userMenu;
 
     struct {
+      int curPage;
       char* filePath;
       BrowseMenuActionCallback onAction;
       BrowseMenuBackCallback onBack;

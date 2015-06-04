@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Project version="2G - 2.0.2" name="portable">
   <Target name="portable" isCurrent="1">
-    <Device manufacturerId="9" manufacturerName="ST" chipId="261" chipName="STM32F407VG" boardId="" boardName="" coreId="" coreName=""/>
+    <Device manufacturerId="9" manufacturerName="ST" chipId="261" chipName="STM32F407VG" boardId="" boardName=""/>
     <BuildOption>
       <Compile>
         <Option name="OptimizationLevel" value="0"/>
@@ -34,7 +34,7 @@
           <Memory name="IROM2" type="ReadOnly" size="" startValue=""/>
           <Memory name="IRAM2" type="ReadWrite" size="0x00010000" startValue="0x10000000"/>
         </MemoryAreas>
-        <LocateLinkFile path="../../../../../appdata/roaming/coocox/coide/configuration/programdata/portable/arm-gcc-link.ld" type="0"/>
+        <LocateLinkFile path="../../../../../../../coocox/coide_old/configuration/programdata/portable/arm-gcc-link.ld" type="0"/>
       </Link>
       <Output>
         <Option name="OutputFileType" value="0"/>
@@ -69,17 +69,12 @@
     </DebugOption>
     <ExcludeFile/>
   </Target>
-  <Components path="./">
-    <Component id="50" name="CMSIS core" path="" type="BasicComponet"/>
-    <Component id="440" name="RCC" path="" type="BasicComponet"/>
-    <Component id="464" name="CMSIS Boot" path="" type="BasicComponet"/>
-    <Component id="467" name="MISC" path="" type="BasicComponet"/>
-  </Components>
-  <LocalComponents/>
+  <Components path="./"/>
   <Files>
     <File name="common/embedded-midilib/midifile.c" path="../common/embedded-midilib/midifile.c" type="1"/>
     <File name="platform_coocox/cmsis_lib/include/stm32f4xx_rcc.h" path="cmsis_lib/include/stm32f4xx_rcc.h" type="1"/>
     <File name="common/menu.h" path="../common/menu.h" type="1"/>
+    <File name="common/StackBasedFsm.c" path="../common/StackBasedFsm.c" type="1"/>
     <File name="platform_coocox/cmsis_lib/include/stm32f4xx_syscfg.h" path="cmsis_lib/include/stm32f4xx_syscfg.h" type="1"/>
     <File name="platform_coocox/cmsis_lib/include/stm32f4xx_usart.h" path="cmsis_lib/include/stm32f4xx_usart.h" type="1"/>
     <File name="platform_coocox/Filesystem/fatfs/drivers" path="" type="2"/>
@@ -93,15 +88,16 @@
     <File name="platform_coocox/stdio/printf.c" path="stdio/printf.c" type="1"/>
     <File name="platform_coocox/cmsis_boot/startup" path="" type="2"/>
     <File name="platform_coocox/Filesystem/fatfs" path="" type="2"/>
+    <File name="common/StackBasedFsm.h" path="../common/StackBasedFsm.h" type="1"/>
     <File name="common/canvas/canvas.h" path="../common/canvas/canvas.h" type="1"/>
     <File name="common/config.h" path="../common/config.h" type="1"/>
     <File name="platform_coocox/misc/delay.h" path="misc/delay.h" type="1"/>
     <File name="platform_coocox/cmsis_lib/include/stm32f4xx_spi.h" path="cmsis_lib/include/stm32f4xx_spi.h" type="1"/>
     <File name="platform_coocox/Filesystem/fatfs/integer.h" path="Filesystem/fatfs/integer.h" type="1"/>
     <File name="platform_coocox/cmsis_lib/source/misc.c" path="stm_lib/src/misc.c" type="1"/>
-    <File name="hal/hal_display.h" path="../hal/hal_display.h" type="1"/>
-    <File name="hal/hal_misc_stm32f4.c" path="../hal/hal_misc_stm32f4.c" type="1"/>
     <File name="platform_coocox/cmsis_lib/source/stm32f4xx_rng.c" path="cmsis_lib/source/stm32f4xx_rng.c" type="1"/>
+    <File name="hal/hal_misc_stm32f4.c" path="../hal/hal_misc_stm32f4.c" type="1"/>
+    <File name="hal/hal_display.h" path="../hal/hal_display.h" type="1"/>
     <File name="platform_coocox/syscalls" path="" type="2"/>
     <File name="platform_coocox/Filesystem/fatfs/ffconf.h" path="Filesystem/fatfs/ffconf.h" type="1"/>
     <File name="platform_coocox/cmsis_lib/source/stm32f4xx_spi.c" path="cmsis_lib/source/stm32f4xx_spi.c" type="1"/>
@@ -122,6 +118,7 @@
     <File name="common/embedded-midilib/midiplayer.c" path="../common/embedded-midilib/midiplayer.c" type="1"/>
     <File name="platform_coocox/Filesystem/fatfs/diskio.c" path="Filesystem/fatfs/diskio.c" type="1"/>
     <File name="common/canvas" path="" type="2"/>
+    <File name="common/LockFreeFIFO.c" path="../common/LockFreeFIFO.c" type="1"/>
     <File name="platform_coocox/Filesystem/fatfs/ff.h" path="Filesystem/fatfs/ff.h" type="1"/>
     <File name="cmsis" path="" type="2"/>
     <File name="platform_coocox/Filesystem" path="" type="2"/>
@@ -132,6 +129,7 @@
     <File name="platform_coocox/cmsis_lib/source/stm32f4xx_sdio.c" path="cmsis_lib/source/stm32f4xx_sdio.c" type="1"/>
     <File name="hal/hal_inputdevice.h" path="../hal/hal_inputdevice.h" type="1"/>
     <File name="platform_coocox/syscalls/syscalls.c" path="syscalls/syscalls.c" type="1"/>
+    <File name="common/LockFreeFIFO.h" path="../common/LockFreeFIFO.h" type="1"/>
     <File name="platform_coocox/cmsis_boot/system_stm32f4xx.h" path="cmsis_boot/system_stm32f4xx.h" type="1"/>
     <File name="platform_coocox/Filesystem/fatfs/ff.c" path="Filesystem/fatfs/ff.c" type="1"/>
     <File name="platform_coocox/cmsis_lib/include/misc.h" path="stm_lib/inc/misc.h" type="1"/>
@@ -143,10 +141,11 @@
     <File name="platform_coocox/random" path="" type="2"/>
     <File name="common/canvas/AsciiLib.h" path="../common/AsciiLib/AsciiLib.h" type="1"/>
     <File name="platform_coocox/Filesystem/tm_stm32f4_gpio.h" path="Filesystem/tm_stm32f4_gpio.h" type="1"/>
+    <File name="common/SlotBasedMenu.h" path="../common/SlotBasedMenu.h" type="1"/>
     <File name="platform_coocox/Filesystem/fatfs/diskio.h" path="Filesystem/fatfs/diskio.h" type="1"/>
     <File name="common/embedded-midilib/midiutil.c" path="../common/embedded-midilib/midiutil.c" type="1"/>
-    <File name="platform_coocox/NesGamePad" path="" type="2"/>
     <File name="cmsis_boot" path="" type="2"/>
+    <File name="platform_coocox/NesGamePad" path="" type="2"/>
     <File name="common/embedded-midilib/midiplayer.h" path="../common/embedded-midilib/midiplayer.h" type="1"/>
     <File name="platform_coocox/cmsis_lib/source/stm32f4xx_gpio.c" path="cmsis_lib/source/stm32f4xx_gpio.c" type="1"/>
     <File name="platform_coocox/cmsis_lib/include/stm32f4xx_rng.h" path="cmsis_lib/include/stm32f4xx_rng.h" type="1"/>
@@ -166,12 +165,13 @@
     <File name="platform_coocox/LCD/SSD1289.c" path="LCD/SSD1289.c" type="1"/>
     <File name="platform_coocox/cmsis" path="" type="2"/>
     <File name="common/floppyorgel_system.c" path="../common/floppyorgel_system.c" type="1"/>
+    <File name="common/SlotBasedMenu.c" path="../common/SlotBasedMenu.c" type="1"/>
     <File name="cmsis_boot/stm32f4xx_conf.h" path="cmsis_boot/stm32f4xx_conf.h" type="1"/>
-    <File name="cmsis_boot/system_stm32f4xx.h" path="cmsis_boot/system_stm32f4xx.h" type="1"/>
     <File name="platform_coocox/Filesystem/fatfs/drivers/fatfs_sd_sdio.c" path="Filesystem/fatfs/drivers/fatfs_sd_sdio.c" type="1"/>
+    <File name="cmsis_boot/system_stm32f4xx.h" path="cmsis_boot/system_stm32f4xx.h" type="1"/>
     <File name="platform_coocox/Filesystem/tm_stm32f4_timer_properties.h" path="Filesystem/tm_stm32f4_timer_properties.h" type="1"/>
-    <File name="platform_coocox/misc" path="" type="2"/>
     <File name="platform_coocox/cmsis_lib/source/stm32f4xx_fsmc.c" path="cmsis_lib/source/stm32f4xx_fsmc.c" type="1"/>
+    <File name="platform_coocox/misc" path="" type="2"/>
     <File name="platform_coocox/cmsis_lib/include/stm32f4xx_sdio.h" path="cmsis_lib/include/stm32f4xx_sdio.h" type="1"/>
     <File name="common/canvas/AsciiLib.c" path="../common/AsciiLib/AsciiLib.c" type="1"/>
     <File name="platform_coocox/cmsis_lib/include" path="" type="2"/>
@@ -198,5 +198,4 @@
     <File name="platform_coocox/stdio" path="" type="2"/>
     <File name="hal/hal_filesystem_stm32f4.c" path="../hal/hal_filesystem_stm32f4.c" type="1"/>
   </Files>
-  <Bookmarks/>
 </Project>

@@ -19,9 +19,6 @@ static MIDI_PLAYER mpl;
 static char filePathOfSongToPlay[256];
 
 // menu
-// TODO: remove when SlotBasedMenu is done.
-static uint8_t menuCursorPos = 0;
-// Midi Event handlers
 
 // helpers
 void HexList(uint8_t *pData, int32_t iNumBytes) {
@@ -209,9 +206,9 @@ void onBrowseMenuBack(StackBasedFsm_t* fsm) {
 
 void onBrowseNewPage(int currentPage, int totalPages) {
   char pageText[32];
-  sprintf(pageText, "%d / %d", currentPage, totalPages); // TODO: hal_sprintf
+  sprintf(pageText, "%2d / %2d", currentPage, totalPages); // TODO: hal_sprintf?
 
-  canvas_drawText(265, 220, pageText, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
+  canvas_drawText(255, 220, pageText, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
 }
 
 FsmState mainMenu(StackBasedFsm_t* fsm) {
@@ -222,10 +219,10 @@ FsmState mainMenu(StackBasedFsm_t* fsm) {
     hal_rs485init(&fifoDebugPort);
 
     userMenuInit(&menu, 25, 45, onUserMenuAction, onUserMenuBack);
-    menuAddSlot(&menu, "[Button Test]", buttonTest);
-    menuAddSlot(&menu, "[Play MIDI File]", playlist);
-    menuAddSlot(&menu, "[Live Mode]", liveMode);
-    menuAddSlot(&menu, "[Floppy Test]", floppyTest);
+    menuAddSlot(&menu, "Button Test", buttonTest);
+    menuAddSlot(&menu, "Play MIDI File", playlist);
+    menuAddSlot(&menu, "Live Mode", liveMode);
+    menuAddSlot(&menu, "Floppy Test", NULL);
       
     firstRun = false;
   }
