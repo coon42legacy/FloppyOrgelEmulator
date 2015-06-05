@@ -21,6 +21,12 @@ void userMenuInit(SlotBasedMenu_t* sbm, int16_t xPos, int16_t yPos, UserMenuActi
   sbm->userMenu.onBack = onBack;
 }
 
+void settingsMenuInit(SlotBasedMenu_t* sbm, int16_t xPos, int16_t yPos, SettingsMenuActionCallback onAction, SettingsMenuBackCallback onBack) {
+  menuInit(sbm, SETTINGS_MENU, xPos, yPos);
+  sbm->settingsMenu.onAction = onAction;
+  sbm->settingsMenu.onBack = onBack;
+}
+
 void browseMenuInit(SlotBasedMenu_t* sbm, int16_t xPos, int16_t yPos, char* filePath, BrowseMenuActionCallback onAction, BrowseMenuBackCallback onBack, BrowseNewPageCallback onNewPage) {
   menuInit(sbm, BROWSE_MENU, xPos, yPos);
   sbm->browseMenu.filePath = filePath;
@@ -38,6 +44,10 @@ static void menuDrawCursor(SlotBasedMenu_t* sbm) {
 
   case BROWSE_MENU:
     canvas_drawRect(sbm->xPos, sbm->yPos + 18 * (sbm->cursorPos % MENU_FILES_PER_PAGE), 5, 5, 255, 255, 255);
+    break;
+
+  case SETTINGS_MENU:
+    canvas_drawRect(sbm->xPos, sbm->yPos + 18 * sbm->cursorPos, 5, 5, 255, 255, 255);
     break;
   }
 }
@@ -107,6 +117,14 @@ void menuTick(SlotBasedMenu_t* sbm, StackBasedFsm_t* fsm) {
       break;
     }
 
+    case SETTINGS_MENU: {
+      if (buttonPressed.Action && sbm->settingsMenu.onAction)
+        sbm->settingsMenu.onAction(fsm);
+      else if (buttonPressed.Back && sbm->settingsMenu.onBack)
+        sbm->settingsMenu.onBack(fsm);
+      break;
+    }
+
     case BROWSE_MENU: {
       static char fileNameOnCursor[256];
       static FO_FIND_DATA findData;
@@ -154,6 +172,10 @@ void menuAddSlot(SlotBasedMenu_t* sbm, char* label, FsmStateFunc pTransitionStat
   sbm->slot[sbm->numSlots].pLabel = label;
   sbm->slot[sbm->numSlots].pNextFsmStateFunc = pTransitionStateFunc;
   sbm->numSlots++;
+}
+
+void menuAddSettingsSlot(SlotBasedMenu_t* sbm, char* label) {
+
 }
 
 void menuDraw(SlotBasedMenu_t* sbm) {

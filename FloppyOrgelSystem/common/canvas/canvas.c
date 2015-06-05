@@ -64,6 +64,9 @@ void canvas_textFont(uint16_t x, uint16_t y, char* str,
     break;
   }
 
+  x = x == CENTER ? (DISPLAY_RESOLUTION_X - delta_x * strlen(str)) / 2 : x;
+  y = y == CENTER ? (DISPLAY_RESOLUTION_Y - 2 * delta_y) / 2 : y;
+
   do {
     TempChar = *str++;
     canvas_putCharFont(x, y, TempChar,

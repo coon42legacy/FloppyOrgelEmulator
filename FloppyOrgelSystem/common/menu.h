@@ -4,6 +4,8 @@
 #include <stdbool.h>
 
 FsmState mainMenu(StackBasedFsm_t* fsm);
+FsmState settings(StackBasedFsm_t* fsm);
+FsmState about(StackBasedFsm_t* fsm);
 FsmState buttonTest(StackBasedFsm_t* fsm);
 FsmState liveMode(StackBasedFsm_t* fsm);
 FsmState liveReceiving(StackBasedFsm_t* fsm);

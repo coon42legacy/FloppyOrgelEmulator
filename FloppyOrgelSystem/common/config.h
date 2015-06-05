@@ -1,6 +1,8 @@
 #ifndef __FO_CONFIG_H
 #define __FO_CONFIG_H
 
+#define VERSION "0.8.0"
+
 #ifdef _WIN32
   #define DONT_DEFINE_SYSTEM_MAIN
   #define MIDI_PATH "_sdcard"

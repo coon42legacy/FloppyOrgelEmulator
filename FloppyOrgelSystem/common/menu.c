@@ -194,6 +194,15 @@ void onUserMenuBack(StackBasedFsm_t* fsm, FsmStateFunc curState) {
   fsmPop(fsm);
 }
 
+void onSettingsMenuAction(StackBasedFsm_t* fsm) {
+  
+}
+
+void onSettingsMenuBack(StackBasedFsm_t* fsm) {
+  fsmPop(fsm);
+}
+
+
 void onBrowseMenuAction(StackBasedFsm_t* fsm, char* filePath) {
   strcpy(filePathOfSongToPlay, filePath);
   hal_printf("Playing: %s\r\n", filePath);
@@ -222,17 +231,49 @@ FsmState mainMenu(StackBasedFsm_t* fsm) {
     menuAddSlot(&menu, "Button Test", buttonTest);
     menuAddSlot(&menu, "Play MIDI File", playlist);
     menuAddSlot(&menu, "Live Mode", liveMode);
-    menuAddSlot(&menu, "Floppy Test", NULL);
+    menuAddSlot(&menu, "Settings", settings);
+    menuAddSlot(&menu, "About", about);
       
     firstRun = false;
   }
   
   canvas_clear(0x00, 0x00, 0x00);
-  canvas_drawText(65 - 30, 0, "Use the game pad to navigate", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
-  canvas_drawText(65 + 10, 18, "Press A button to select", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
+  canvas_drawText(CENTER, 0, "Use the game pad to navigate", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
+  canvas_drawText(CENTER, 18, "Press A button to select", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
 
   menuTick(&menu, fsm);
   menuDraw(&menu);
+  display_redraw();
+}
+
+FsmState settings(StackBasedFsm_t* fsm) {
+  static SlotBasedMenu_t menu;
+
+  display_clear(0, 0, 0);
+  canvas_drawText(CENTER, 0, "--- Settings ---", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
+
+  static bool firstRun = true;
+  if (firstRun) {
+    settingsMenuInit(&menu, 25, 45, onSettingsMenuAction, onSettingsMenuBack);
+    menuAddSlot(&menu, "BG Red: [0x00]", NULL);
+    menuAddSlot(&menu, "BG Green: [0x00]", NULL);
+    menuAddSlot(&menu, "BG Blue: [0x00]", NULL);
+
+    firstRun = false;
+  }
+
+  menuTick(&menu, fsm);
+  menuDraw(&menu);
+  display_redraw();
+}
+
+FsmState about(StackBasedFsm_t* fsm) {
+  display_clear(0, 0, 0);
+  canvas_drawText(CENTER, CENTER, "Version: " VERSION, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
+
+  if (getInputDeviceState().Back)
+    fsmPop(fsm);
+  
   display_redraw();
 }
 
@@ -246,8 +287,8 @@ FsmState playlist(StackBasedFsm_t* fsm) {
   }
 
   canvas_clear(0x00, 0x00, 0x00);
-  canvas_drawText(25, 0, "Use the game pad to select a song", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
-  canvas_drawText(65, 18, "Press A button to start", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
+  canvas_drawText(CENTER, 0, "Use the game pad to select a song", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
+  canvas_drawText(CENTER, 18, "Press A button to start", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
 
   menuTick(&menu, fsm);
   display_redraw();
@@ -255,11 +296,10 @@ FsmState playlist(StackBasedFsm_t* fsm) {
 
 FsmState buttonTest(StackBasedFsm_t* fsm) {
   InputDeviceStates_t buttonPressed = getInputDeviceState();
-  static const uint32_t X_OFFSET = 65;
-
+  
   canvas_clear(0x00, 0x00, 0x00);
-  canvas_drawText(X_OFFSET - 30, 0, "Button Test", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
-  canvas_drawText(X_OFFSET + 10, 18, "Comming soon!", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
+  canvas_drawText(CENTER, 0, "Button Test", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
+  canvas_drawText(CENTER, 18, "Comming soon!", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
   display_redraw();
 
   if (buttonPressed.Back)
@@ -267,10 +307,9 @@ FsmState buttonTest(StackBasedFsm_t* fsm) {
 }
 
 FsmState liveMode(StackBasedFsm_t* fsm) {
-  static const uint32_t X_OFFSET = 100;
   canvas_clear(0x00, 0x00, 0x00);
-  canvas_drawText(X_OFFSET - 30, 0, "--- Live mode ---", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
-  canvas_drawText(0, 18, "Now receiving MIDI-Data on debug port...", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
+  canvas_drawText(CENTER, 0, "--- Live mode ---", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
+  canvas_drawText(CENTER, 18, "Now receiving MIDI-Data on debug port...", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
   display_redraw();
 
   fsmPush(fsm, liveReceiving);
@@ -352,8 +391,8 @@ FsmState floppyTest(StackBasedFsm_t* fsm) {
   menuTick(&menu, fsm);
 
   canvas_clear(0x00, 0x00, 0x00);
-  canvas_drawText(70, 0, "--- Floppy Test ---", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
-  canvas_drawText(0, 18, "Select drive and Frequency. Press 'A' Button to play.", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
+  canvas_drawText(CENTER, 0, "--- Floppy Test ---", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
+  canvas_drawText(CENTER, 18, "Select drive and Frequency. Press 'A' Button to play.", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
 
   display_redraw();
 }
