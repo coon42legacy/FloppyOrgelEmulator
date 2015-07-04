@@ -21,10 +21,10 @@ void userMenuInit(SlotBasedMenu_t* sbm, int16_t xPos, int16_t yPos, UserMenuActi
   sbm->userMenu.onBack = onBack;
 }
 
-void settingsMenuInit(SlotBasedMenu_t* sbm, int16_t xPos, int16_t yPos, SettingsMenuActionCallback onAction, SettingsMenuBackCallback onBack) {
+void settingsMenuInit(SlotBasedMenu_t* sbm, int16_t xPos, int16_t yPos, SettingsMenuSaveCallback onSave, SettingsMenuCancelCallback onCancel) {
   menuInit(sbm, SETTINGS_MENU, xPos, yPos);
-  sbm->settingsMenu.onAction = onAction;
-  sbm->settingsMenu.onBack = onBack;
+  sbm->settingsMenu.onAction = onSave;
+  sbm->settingsMenu.onBack = onCancel;
 }
 
 void browseMenuInit(SlotBasedMenu_t* sbm, int16_t xPos, int16_t yPos, char* filePath, BrowseMenuActionCallback onAction, BrowseMenuBackCallback onBack, BrowseNewPageCallback onNewPage) {

@@ -299,7 +299,7 @@ FsmState buttonTest(StackBasedFsm_t* fsm) {
   
   canvas_clear(0x00, 0x00, 0x00);
   canvas_drawText(CENTER, 0, "Button Test", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
-  canvas_drawText(CENTER, 18, "Comming soon!", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
+  canvas_drawText(CENTER, 18, "Coming soon!", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
   display_redraw();
 
   if (buttonPressed.Back)
@@ -341,8 +341,8 @@ FsmState startPlayBack(StackBasedFsm_t* fsm) {
   static const uint32_t Y_OFFSET = 240 - 18;
 
   canvas_clear(0x00, 0x00, 0x00);
-  canvas_drawText(X_OFFSET - 30, 0, "Now Playing!", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
-  canvas_drawText(X_OFFSET + 10, 18, "Press B to stop playback.", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
+  canvas_drawText(CENTER, 0, "Now Playing!", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
+  canvas_drawText(CENTER, 18, "Press B to stop playback.", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
   display_redraw();
 
   fsmPop(fsm);
