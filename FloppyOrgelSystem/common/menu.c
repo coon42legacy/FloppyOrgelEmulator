@@ -56,8 +56,8 @@ static void onNoteKeyPressure(int32_t track, int32_t tick, int32_t channel, int3
 }
 
 static void onSetParameter(int32_t track, int32_t tick, int32_t channel, int32_t control, int32_t parameter) {
-  printTrackPrefix(track, tick, "Set Parameter");
-  hal_midiDeviceMessage(msgSetParameter, channel, control, parameter);
+  printTrackPrefix(track, tick, "Control Change");
+  hal_midiDeviceMessage(msgControlChange, channel, control, parameter);
   printf("(%d) %s -> %d", channel, muGetControlName(control), parameter);
   printf("\r\n");
 }
@@ -202,7 +202,6 @@ void onSettingsMenuBack(StackBasedFsm_t* fsm) {
   fsmPop(fsm);
 }
 
-
 void onBrowseMenuAction(StackBasedFsm_t* fsm, char* filePath) {
   strcpy(filePathOfSongToPlay, filePath);
   hal_printf("Playing: %s\r\n", filePath);
@@ -222,9 +221,9 @@ void onBrowseNewPage(int currentPage, int totalPages) {
 
 FsmState mainMenu(StackBasedFsm_t* fsm) {
   static SlotBasedMenu_t menu;
+  bool redrawScreen = false;
 
-  static bool firstRun = true;
-  if (firstRun) {
+  if (fsm->firstRunOfCurrentState) {
     hal_rs485init(&fifoDebugPort);
 
     userMenuInit(&menu, 25, 45, onUserMenuAction, onUserMenuBack);
@@ -233,42 +232,55 @@ FsmState mainMenu(StackBasedFsm_t* fsm) {
     menuAddSlot(&menu, "Live Mode", liveMode);
     menuAddSlot(&menu, "Settings", settings);
     menuAddSlot(&menu, "About", about);
-      
-    firstRun = false;
-  }
-  
-  canvas_clear(0x00, 0x00, 0x00);
-  canvas_drawText(CENTER, 0, "Use the game pad to navigate", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
-  canvas_drawText(CENTER, 18, "Press A button to select", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
 
-  menuTick(&menu, fsm);
-  menuDraw(&menu);
-  display_redraw();
+    redrawScreen = true;
+    fsm->firstRunOfCurrentState = false;    
+  }
+
+  bool anyButtonPressed;
+  menuTick(&menu, fsm, &anyButtonPressed, false);
+  redrawScreen |= anyButtonPressed;
+
+  if (redrawScreen) {
+    // begin draw
+    canvas_clear(0x00, 0x00, 0x00);
+    canvas_drawText(CENTER, 0, "Use the game pad to navigate", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
+    canvas_drawText(CENTER, 18, "Press A button to select", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
+
+    menuDraw(&menu);
+    display_redraw();
+  }
 }
 
 FsmState settings(StackBasedFsm_t* fsm) {
   static SlotBasedMenu_t menu;
+  bool redrawScreen = false;
 
-  display_clear(0, 0, 0);
-  canvas_drawText(CENTER, 0, "--- Settings ---", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
-
-  static bool firstRun = true;
-  if (firstRun) {
+  fsm->firstRunOfCurrentState = true;
+  if (fsm->firstRunOfCurrentState) {
     settingsMenuInit(&menu, 25, 45, onSettingsMenuAction, onSettingsMenuBack);
     menuAddSlot(&menu, "BG Red: [0x00]", NULL);
     menuAddSlot(&menu, "BG Green: [0x00]", NULL);
     menuAddSlot(&menu, "BG Blue: [0x00]", NULL);
 
-    firstRun = false;
+    redrawScreen = true;
+    fsm->firstRunOfCurrentState = false;
   }
 
-  menuTick(&menu, fsm);
-  menuDraw(&menu);
-  display_redraw();
+  bool anyButtonPressed;
+  menuTick(&menu, fsm, &anyButtonPressed, false);
+  redrawScreen |= anyButtonPressed;
+
+  if (redrawScreen) {
+    canvas_clear(0x00, 0x00, 0x00);
+    canvas_drawText(CENTER, 0, "--- Settings ---", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
+    menuDraw(&menu);
+    display_redraw();
+  }
 }
 
 FsmState about(StackBasedFsm_t* fsm) {
-  display_clear(0, 0, 0);
+  canvas_clear(0x00, 0x00, 0x00);
   canvas_drawText(CENTER, CENTER, "Version: " VERSION, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
 
   if (getInputDeviceState().Back)
@@ -279,18 +291,22 @@ FsmState about(StackBasedFsm_t* fsm) {
 
 FsmState playlist(StackBasedFsm_t* fsm) {
   static SlotBasedMenu_t menu;
+  bool redrawScreen = false;
+  bool playListFirstRun = false;
 
-  static bool firstRun = true;
-  if (firstRun) {
+  if (fsm->firstRunOfCurrentState) {
     browseMenuInit(&menu, 20, 50, MIDI_PATH, onBrowseMenuAction, onBrowseMenuBack, onBrowseNewPage);
-    firstRun = false;
+    
+    bool redrawScreen = true;
+    playListFirstRun = true;
+    fsm->firstRunOfCurrentState = false;
   }
 
-  canvas_clear(0x00, 0x00, 0x00);
-  canvas_drawText(CENTER, 0, "Use the game pad to select a song", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
-  canvas_drawText(CENTER, 18, "Press A button to start", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
-
-  menuTick(&menu, fsm);
+  // TODO: refactor
+  // The whole Drawing is done in menuTickm, so things are a bit different here...
+  
+  bool anyButtonPressed;
+  menuTick(&menu, fsm, &anyButtonPressed, playListFirstRun);
   display_redraw();
 }
 
@@ -388,7 +404,8 @@ FsmState floppyTest(StackBasedFsm_t* fsm) {
     userMenuInit(&menu, 0, 0, 0, 0);
     firstRun = false;
   }
-  menuTick(&menu, fsm);
+  bool anyButtonPressed;
+  menuTick(&menu, fsm, &anyButtonPressed, false);
 
   canvas_clear(0x00, 0x00, 0x00);
   canvas_drawText(CENTER, 0, "--- Floppy Test ---", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);

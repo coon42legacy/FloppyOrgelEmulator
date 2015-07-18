@@ -7,6 +7,9 @@
 typedef struct {
   void* stack[FSM_STACK_SIZE]; // TODO: type should be FsmStateFunc but is not possible to define???
   int stackSize_;
+
+  // TODO: Maybe there is a better solution!
+  bool firstRunOfCurrentState;
 } StackBasedFsm_t;
 
 typedef void FsmState;

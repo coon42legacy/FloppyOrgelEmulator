@@ -97,10 +97,18 @@ uint32_t getNumPages(uint32_t numFiles, uint32_t filesPerPage) {
   return numFiles % filesPerPage == 0 ? numFiles / filesPerPage : numFiles / filesPerPage + 1;
 }
 
-
-void menuTick(SlotBasedMenu_t* sbm, StackBasedFsm_t* fsm) {
+void menuTick(SlotBasedMenu_t* sbm, StackBasedFsm_t* fsm, bool* anyButtonPressed, bool playListFirstRun) {
   InputDeviceStates_t buttonPressed = getInputDeviceState();
 
+  // TODO: implement correctly!
+  if (anyButtonPressed) {
+    if (buttonPressed.Action || buttonPressed.Back || buttonPressed.East || buttonPressed.North ||
+      buttonPressed.South || buttonPressed.West)
+      *anyButtonPressed = (uint16_t*)&buttonPressed != 0;
+    else
+      *anyButtonPressed = false;
+  }
+  
   if (buttonPressed.South && sbm->cursorPos + 1 < sbm->numSlots)
     sbm->cursorPos++;
   else if (buttonPressed.North && sbm->cursorPos > 0)
@@ -126,6 +134,14 @@ void menuTick(SlotBasedMenu_t* sbm, StackBasedFsm_t* fsm) {
     }
 
     case BROWSE_MENU: {
+      // TODO: this is a quick hack! Maybe it's better when drawing of tracks is not done in here...
+                        if (!*anyButtonPressed && !playListFirstRun)
+                          break;
+
+      canvas_clear(0x00, 0x00, 0x00);
+      canvas_drawText(CENTER, 0, "Use the game pad to select a song", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
+      canvas_drawText(CENTER, 18, "Press A button to start", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
+
       static char fileNameOnCursor[256];
       static FO_FIND_DATA findData;
 

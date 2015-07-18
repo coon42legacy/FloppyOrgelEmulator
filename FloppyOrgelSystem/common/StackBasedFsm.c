@@ -9,6 +9,7 @@ void fsmInit(StackBasedFsm_t* fsm) {
 bool fsmPush(StackBasedFsm_t* fsm, FsmStateFunc stateFunc) {
   if (stateFunc != NULL && fsm->stackSize_ < FSM_STACK_SIZE) {
     fsm->stack[fsm->stackSize_++] = stateFunc;
+    fsm->firstRunOfCurrentState = true;
     return true;
   }
   else
@@ -18,6 +19,7 @@ bool fsmPush(StackBasedFsm_t* fsm, FsmStateFunc stateFunc) {
 bool fsmPop(StackBasedFsm_t* fsm) {
   if (fsm->stackSize_ > 1) {
     fsm->stackSize_--;
+    fsm->firstRunOfCurrentState = true;
     return true;
   }
   else

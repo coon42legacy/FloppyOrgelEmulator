@@ -4,7 +4,7 @@
 #include <stdint.h>
 
 // Timing function
-uint32_t hal_clock();
+uint32_t hal_clockUs();
 
 // Colored debugging print functions
 void hal_printf(char* format, ...);

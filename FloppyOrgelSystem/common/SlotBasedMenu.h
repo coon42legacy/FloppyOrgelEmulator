@@ -60,7 +60,7 @@ typedef struct {
 } SlotBasedMenu_t;
 
 // general menu functions
-void menuTick(SlotBasedMenu_t* sbm, StackBasedFsm_t* fsm);
+void menuTick(SlotBasedMenu_t* sbm, StackBasedFsm_t* fsm, bool* anyButtonPressed, bool playListFirstRun); // TODO: refactor!!!
 void menuAddSlot(SlotBasedMenu_t* sbm, char* label, FsmStateFunc pTransitionStateFunc);
 void menuDraw(SlotBasedMenu_t* sbm);
 
