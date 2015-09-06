@@ -227,7 +227,7 @@ FsmState mainMenu(StackBasedFsm_t* fsm) {
   if (firstRun) {
     hal_rs485init(&fifoDebugPort);
 
-    userMenuInit(&menu, 25, 45, onUserMenuAction, onUserMenuBack);
+    userMenuInit(&menu, 3, 45, onUserMenuAction, onUserMenuBack);
     menuAddSlot(&menu, "Button Test", buttonTest);
     menuAddSlot(&menu, "Play MIDI File", playlist);
     menuAddSlot(&menu, "Live Mode", liveMode);
@@ -282,7 +282,7 @@ FsmState playlist(StackBasedFsm_t* fsm) {
 
   static bool firstRun = true;
   if (firstRun) {
-    browseMenuInit(&menu, 20, 50, MIDI_PATH, onBrowseMenuAction, onBrowseMenuBack, onBrowseNewPage);
+    browseMenuInit(&menu, 3, 50, MIDI_PATH, onBrowseMenuAction, onBrowseMenuBack, onBrowseNewPage);
     firstRun = false;
   }
 

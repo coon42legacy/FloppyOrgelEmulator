@@ -39,15 +39,15 @@ void browseMenuInit(SlotBasedMenu_t* sbm, int16_t xPos, int16_t yPos, char* file
 static void menuDrawCursor(SlotBasedMenu_t* sbm) {
   switch (sbm->type) {
   case USER_MENU:
-    canvas_drawRect(sbm->xPos, sbm->yPos + 18 * sbm->cursorPos, 5, 5, 255, 255, 255);
+    canvas_drawImage(sbm->xPos, sbm->yPos + 18 * sbm->cursorPos, cursorImg);
     break;
 
   case BROWSE_MENU:
-    canvas_drawRect(sbm->xPos, sbm->yPos + 18 * (sbm->cursorPos % MENU_FILES_PER_PAGE), 5, 5, 255, 255, 255);
+    canvas_drawImage(sbm->xPos, sbm->yPos + 18 * (sbm->cursorPos % MENU_FILES_PER_PAGE), cursorImg);
     break;
 
-  case SETTINGS_MENU:
-    canvas_drawRect(sbm->xPos, sbm->yPos + 18 * sbm->cursorPos, 5, 5, 255, 255, 255);
+  case SETTINGS_MENU:    
+    canvas_drawImage(sbm->xPos, sbm->yPos + 18 * sbm->cursorPos, cursorImg);
     break;
   }
 }
@@ -149,7 +149,7 @@ void menuTick(SlotBasedMenu_t* sbm, StackBasedFsm_t* fsm) {
         if (findData.fileName[0] != '.')
           if (findData.fileName[1] != '.')
             if (i++ >= (page - 1) * MENU_FILES_PER_PAGE)
-              canvas_drawText(sbm->xPos + 10, sbm->yPos - 5 + 18 * itemCount++, findData.fileName, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
+              canvas_drawText(sbm->xPos + 27, sbm->yPos - 5 + 18 * itemCount++, findData.fileName, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
 
         if (!hal_findNext(&findData) || i >= (page - 1) * MENU_FILES_PER_PAGE + MENU_FILES_PER_PAGE)
           endOfDirectory = true;
@@ -180,7 +180,7 @@ void menuAddSettingsSlot(SlotBasedMenu_t* sbm, char* label) {
 
 void menuDraw(SlotBasedMenu_t* sbm) {
   for (int i = 0; i < sbm->numSlots; i++) 
-    canvas_drawText(sbm->xPos + 10, sbm->yPos - 5 + 18 * i, sbm->slot[i].pLabel, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
+    canvas_drawText(sbm->xPos + 28, sbm->yPos - 5 + 18 * i, sbm->slot[i].pLabel, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
 
   menuDrawCursor(sbm);
 }

@@ -33,6 +33,7 @@
   <ItemGroup>
     <ClInclude Include="..\common\AsciiLib\AsciiLib.h" />
     <ClInclude Include="..\common\canvas\canvas.h" />
+    <ClInclude Include="..\common\canvas\images.h" />
     <ClInclude Include="..\common\config.h" />
     <ClInclude Include="..\common\embedded-midilib\midifile.h" />
     <ClInclude Include="..\common\embedded-midilib\midiplayer.h" />

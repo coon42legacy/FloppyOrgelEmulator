@@ -161,6 +161,9 @@
     <ClInclude Include="..\common\SlotBasedMenu.h">
       <Filter>Headerdateien\common</Filter>
     </ClInclude>
+    <ClInclude Include="..\common\canvas\images.h">
+      <Filter>Headerdateien\common\canvas</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ressources\Resource.rc">
