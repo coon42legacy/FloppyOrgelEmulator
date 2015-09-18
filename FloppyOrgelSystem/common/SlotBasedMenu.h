@@ -1,6 +1,8 @@
 #ifndef __SLOT_BASED_FSM_H
 #define __SLOT_BASED_FSM_H
 
+#include <stdint.h>
+
 #define MENU_MAX_SLOTS 12
 #define MENU_FILES_PER_PAGE 10
 

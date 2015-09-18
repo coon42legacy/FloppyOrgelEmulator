@@ -1,6 +1,7 @@
 #ifndef __CANVAS_H
 #define __CANVAS_H
 
+#include <stdint.h>
 #include <stdlib.h>
 #include <limits.h>
 #include "images.h"

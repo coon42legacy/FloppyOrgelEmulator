@@ -43,6 +43,12 @@
     <Filter Include="Quelldateien\platform_win32">
       <UniqueIdentifier>{675bd313-d41b-470b-b887-97499b3a4451}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Quelldateien\common\states">
+      <UniqueIdentifier>{82b0ebc7-e64e-4a85-aa45-397466c0a68b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\common\states">
+      <UniqueIdentifier>{ae6fa622-69d2-416f-a503-9dc44ad2d93d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\common\canvas\canvas.c">
@@ -59,12 +65,6 @@
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Quelldateien\platform_win32</Filter>
-    </ClCompile>
-    <ClCompile Include="..\common\floppyorgel_system.c">
-      <Filter>Quelldateien\common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\common\menu.c">
-      <Filter>Quelldateien\common</Filter>
     </ClCompile>
     <ClCompile Include="..\hal\hal_display_win32.c">
       <Filter>Quelldateien\hal</Filter>
@@ -99,6 +99,30 @@
     <ClCompile Include="..\common\SlotBasedMenu.c">
       <Filter>Quelldateien\common</Filter>
     </ClCompile>
+    <ClCompile Include="..\common\states\buttonTest.c">
+      <Filter>Quelldateien\common\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\states\floppyTest.c">
+      <Filter>Quelldateien\common\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\states\liveMode.c">
+      <Filter>Quelldateien\common\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\states\mainMenu.c">
+      <Filter>Quelldateien\common\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\states\playlist.c">
+      <Filter>Quelldateien\common\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\states\settings.c">
+      <Filter>Quelldateien\common\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\states\about.c">
+      <Filter>Quelldateien\common\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\common_main.c">
+      <Filter>Quelldateien\common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\common\AsciiLib\AsciiLib.h">
@@ -122,14 +146,8 @@
     <ClInclude Include="..\hal\hal_inputdevice.h">
       <Filter>Headerdateien\hal</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\floppyorgel_system.h">
-      <Filter>Headerdateien\common</Filter>
-    </ClInclude>
     <ClInclude Include="main.h">
       <Filter>Headerdateien\platform_win32</Filter>
-    </ClInclude>
-    <ClInclude Include="..\common\menu.h">
-      <Filter>Headerdateien\common</Filter>
     </ClInclude>
     <ClInclude Include="..\common\embedded-midilib\midifile.h">
       <Filter>Headerdateien\common\embedded-midilib</Filter>
@@ -163,6 +181,30 @@
     </ClInclude>
     <ClInclude Include="..\common\canvas\images.h">
       <Filter>Headerdateien\common\canvas</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\states\mainMenu.h">
+      <Filter>Headerdateien\common\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\states\buttonTest.h">
+      <Filter>Headerdateien\common\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\states\floppyTest.h">
+      <Filter>Headerdateien\common\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\states\liveMode.h">
+      <Filter>Headerdateien\common\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\states\about.h">
+      <Filter>Headerdateien\common\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\states\playlist.h">
+      <Filter>Headerdateien\common\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\states\settings.h">
+      <Filter>Headerdateien\common\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\common_main.h">
+      <Filter>Headerdateien\common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

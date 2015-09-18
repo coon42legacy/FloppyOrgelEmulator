@@ -2,7 +2,7 @@
 #define __FLOPPYORGEL_SYSTEM_H
 
 #ifndef DONT_DEFINE_SYSTEM_MAIN
-  void system_main();
+  void common_main();
 #endif
 
 #endif // __FLOPPYORGEL_SYSTEM_H

@@ -1,13 +1,12 @@
 #include <stdio.h>
 #include <stdint.h>
 #include "../hal/hal_misc.h"
-#include "floppyorgel_system.h"
-#include "StackBasedFsm.h"
-#include "menu.h"
+#include "common_main.h"
+#include "states/mainMenu.h"
 
 static StackBasedFsm_t fsm;
 
-void system_main() {
+void common_main() {
   hal_printf("\n\r");
   hal_printf("################################");
   hal_printf("Floppy Orgel v3.0 initialisiert.");

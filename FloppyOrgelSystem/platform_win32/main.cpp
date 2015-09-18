@@ -5,20 +5,20 @@
 #include <stdint.h>
 #include "guicon.h"
 #include "../common/config.h"
-#include "../common/floppyorgel_system.h"
+#include "../common/common_main.h"
 #include "main.h"
 
 SkinnedWindow sk;
 
 // Global variables for C-code.
 extern "C" {
-  void system_main();
+  void common_main();
   HDC g_hDisplayDC;
   HWND g_hEmuWnd;
 }
 
 DWORD WINAPI system_thread(LPVOID lpParam) {
-  system_main();
+  common_main();
   return 0;
 }
 
@@ -88,5 +88,6 @@ LRESULT CALLBACK mainDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
     PostQuitMessage(0);
     return (0);
   }
+
   return DefWindowProc(hWnd, message, wParam, lParam);
 }
