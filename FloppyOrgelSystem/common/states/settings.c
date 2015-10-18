@@ -12,7 +12,7 @@ void onSettingsMenuBack(StackBasedFsm_t* fsm) {
   fsmPop(fsm);
 }
 
-FsmState settings(StackBasedFsm_t* fsm) {
+FsmState settings(StackBasedFsm_t* pFsm) {
   static SlotBasedMenu_t menu;
 
   canvas_clear(0, 0, 0);
@@ -20,15 +20,15 @@ FsmState settings(StackBasedFsm_t* fsm) {
 
   static bool firstRun = true;
   if (firstRun) {
-    settingsMenuInit(&menu, 25, 45, onSettingsMenuAction, onSettingsMenuBack);
-    menuAddSlot(&menu, "BG Red: [0x00]", NULL);
-    menuAddSlot(&menu, "BG Green: [0x00]", NULL);
-    menuAddSlot(&menu, "BG Blue: [0x00]", NULL);
+    settingsMenuInit(&menu, pFsm, 25, 45, onSettingsMenuAction, onSettingsMenuBack);
+    // menuAddSlot(&menu, "BG Red: [0x00]", NULL);
+    // menuAddSlot(&menu, "BG Green: [0x00]", NULL);
+    // menuAddSlot(&menu, "BG Blue: [0x00]", NULL);
 
     firstRun = false;
   }
 
-  menuTick(&menu, fsm);
+  menuTick(&menu, pFsm);
   menuDraw(&menu);
   display_redraw();
 }

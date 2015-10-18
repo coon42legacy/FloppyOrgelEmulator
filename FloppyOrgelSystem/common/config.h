@@ -4,7 +4,7 @@
 #define VERSION "0.8.0"
 
 #ifdef _WIN32
-  #define DONT_DEFINE_SYSTEM_MAIN
+  #define DONT_DEFINE_COMMON_MAIN
   #define MIDI_PATH "_sdcard"
 #else
   #define MIDI_PATH ""

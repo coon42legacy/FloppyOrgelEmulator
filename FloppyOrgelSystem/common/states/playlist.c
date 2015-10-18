@@ -186,12 +186,12 @@ FsmState playing(StackBasedFsm_t* fsm) {
 
   if (buttonPressed.Back) {
     fsmPop(fsm);
-    fsmPush(fsm, playbackAborted);
+    fsmPush(fsm, playbackAborted, NULL);
   }
 
   if (!midiPlayerTick(&mpl)) {
     fsmPop(fsm);
-    fsmPush(fsm, playbackFinished);
+    fsmPush(fsm, playbackFinished, NULL);
   }
 }
 
@@ -216,20 +216,20 @@ FsmState startPlayBack(StackBasedFsm_t* fsm) {
   display_redraw();
 
   fsmPop(fsm);
-  fsmPush(fsm, playing);
+  fsmPush(fsm, playing, NULL);
 }
 
 // ------------------------------------------------------------------------------------------------------------
 // playlist
 // ------------------------------------------------------------------------------------------------------------
 
-static void onBrowseMenuAction(StackBasedFsm_t* fsm, char* filePath) {
+static void onAction(StackBasedFsm_t* fsm, char* filePath) {
   strcpy(filePathOfSongToPlay, filePath);
   hal_printf("Playing: %s\r\n", filePath);
-  fsmPush(fsm, startPlayBack);
+  fsmPush(fsm, startPlayBack, NULL);
 }
 
-static void onBrowseMenuBack(StackBasedFsm_t* fsm) {
+static void onBack(StackBasedFsm_t* fsm) {
   fsmPop(fsm);
 }
 
@@ -240,12 +240,12 @@ static void onBrowseNewPage(int currentPage, int totalPages) {
   canvas_drawText(255, 220, pageText, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
 }
 
-FsmState playlist(StackBasedFsm_t* fsm) {
+FsmState playlist(StackBasedFsm_t* pFsm) {
   static SlotBasedMenu_t menu;
 
   static bool firstRun = true;
   if (firstRun) {
-    browseMenuInit(&menu, 3, 50, MIDI_PATH, onBrowseMenuAction, onBrowseMenuBack, onBrowseNewPage);
+    browseMenuInit(&menu, pFsm, 3, 50, MIDI_PATH, onAction, onBack, onBrowseNewPage);
     firstRun = false;
   }
 
@@ -253,7 +253,7 @@ FsmState playlist(StackBasedFsm_t* fsm) {
   canvas_drawText(CENTER, 0, "Use the game pad to select a song", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
   canvas_drawText(CENTER, 18, "Press A button to start", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
 
-  menuTick(&menu, fsm);
+  menuTick(&menu, pFsm);
   display_redraw();
 }
 
@@ -267,7 +267,7 @@ FsmState playbackFinished(StackBasedFsm_t* fsm) {
   hal_midiDeviceFree();
 
   fsmPop(fsm);
-  fsmPush(fsm, playlist);
+  fsmPush(fsm, playlist, NULL);
 }
 
 // ------------------------------------------------------------------------------------------------------------
@@ -280,5 +280,5 @@ FsmState playbackAborted(StackBasedFsm_t* fsm) {
   hal_midiDeviceFree();
 
   fsmPop(fsm);
-  fsmPush(fsm, playlist);
+  fsmPush(fsm, playlist, NULL);
 }

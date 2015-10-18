@@ -14,21 +14,21 @@ typedef enum {
 
 typedef struct {
   char* pLabel;
-  FsmStateFunc pNextFsmStateFunc;
+  TransitionFunc pNextStateTransitionFunc;
 } MenuSlot_t;
 
 // user menu callbacks
-typedef void (*UserMenuActionCallback)(StackBasedFsm_t* fsm, FsmStateFunc curState, FsmStateFunc nextState);
-typedef void (*UserMenuBackCallback)(StackBasedFsm_t* fsm, FsmStateFunc curState);
+typedef void (*UserMenuActionCallback)();
+typedef void (*UserMenuBackCallback)();
 
 // browse menu callbacks
-typedef void (*BrowseMenuActionCallback)(StackBasedFsm_t* fsm, char* filePath);
-typedef void (*BrowseMenuBackCallback)(StackBasedFsm_t* fsm);
+typedef void (*BrowseMenuActionCallback)(char* filePath);
+typedef void (*BrowseMenuBackCallback)(fsm);
 typedef void (*BrowseNewPageCallback)(int currentPage, int totalPages);
 
 // settings menu callbacks
-typedef void(*SettingsMenuSaveCallback)(StackBasedFsm_t* fsm);
-typedef void(*SettingsMenuCancelCallback)(StackBasedFsm_t* fsm);
+typedef void(*SettingsMenuSaveCallback)();
+typedef void(*SettingsMenuCancelCallback)();
 
 
 typedef struct {
@@ -58,21 +58,24 @@ typedef struct {
   uint16_t yPos;
   uint8_t numSlots;
   uint8_t cursorPos;
-  MenuSlot_t slot[MENU_MAX_SLOTS];
+  StackBasedFsm_t* pFsm;
+  MenuSlot_t slot[MENU_MAX_SLOTS]; 
 } SlotBasedMenu_t;
 
 // general menu functions
-void menuTick(SlotBasedMenu_t* sbm, StackBasedFsm_t* fsm);
-void menuAddSlot(SlotBasedMenu_t* sbm, char* label, FsmStateFunc pTransitionStateFunc);
+void menuTick(SlotBasedMenu_t* sbm);
+void menuAddSlot(SlotBasedMenu_t* sbm, char* label, TransitionFunc pTransitionStateFunc);
 void menuDraw(SlotBasedMenu_t* sbm);
+void menuMoveCursorUp(SlotBasedMenu_t* sbm);
+void menuMoveCursorDown(SlotBasedMenu_t* sbm);
 
 // user menu specific functions
-void userMenuInit(SlotBasedMenu_t* sbm, int16_t xPos, int16_t yPos, UserMenuActionCallback onAction, UserMenuBackCallback onBack);
+void userMenuInit(SlotBasedMenu_t* pSbm, StackBasedFsm_t* pFsm, int16_t xPos, int16_t yPos, UserMenuActionCallback onAction, UserMenuBackCallback onBack);
 
 // browse menu specific functions
-void browseMenuInit(SlotBasedMenu_t* sbm, int16_t xPos, int16_t yPos, char* filePath, BrowseMenuActionCallback onAction, BrowseMenuBackCallback onBack, BrowseNewPageCallback onNewPage);
+void browseMenuInit(SlotBasedMenu_t* pSbm, StackBasedFsm_t* pFsm, int16_t xPos, int16_t yPos, char* filePath, BrowseMenuActionCallback onAction, BrowseMenuBackCallback onBack, BrowseNewPageCallback onNewPage);
 
 // settings menu specific functions
-void settingsMenuInit(SlotBasedMenu_t* sbm, int16_t xPos, int16_t yPos, SettingsMenuSaveCallback onSave, SettingsMenuCancelCallback onCancel);
+void settingsMenuInit(SlotBasedMenu_t* pSbm, StackBasedFsm_t* pFsm, int16_t xPos, int16_t yPos, SettingsMenuSaveCallback onSave, SettingsMenuCancelCallback onCancel);
 
 #endif // __SLOT_BASED_FSM_H

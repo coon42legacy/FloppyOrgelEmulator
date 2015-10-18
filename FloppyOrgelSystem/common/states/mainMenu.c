@@ -12,38 +12,82 @@
 
 #include "mainMenu.h"
 
-static LockFreeFIFO_t fifoDebugPort;
+static struct {
+  LockFreeFIFO_t fifoDebugPort;
+  SlotBasedMenu_t menu;
+} context;
 
-static void onUserMenuAction(StackBasedFsm_t* fsm, FsmStateFunc curState, FsmStateFunc nextState) {
-  fsmPush(fsm, nextState);
+static void onAction() {
+  printf("onAction!\n");
 }
 
-static void onUserMenuBack(StackBasedFsm_t* fsm, FsmStateFunc curState) {
-  fsmPop(fsm);
+static void onBack() {
+  printf("onBack!\n");
 }
 
-FsmState mainMenu(StackBasedFsm_t* fsm) {
-  static SlotBasedMenu_t menu;
+static void onEnter(void* pArgs) {
+  StackBasedFsm_t* pFsm = pArgs;
 
-  static bool firstRun = true;
-  if (firstRun) {
-    hal_rs485init(&fifoDebugPort);
+  hal_rs485init(&context.fifoDebugPort); // TODO: move to live mode state?
+  userMenuInit(&context.menu, pFsm, 3, 45, onAction, onBack);
+  menuAddSlot(&context.menu, "Button Test", buttonTest);
+  menuAddSlot(&context.menu, "Play MIDI File", playlist);
+  menuAddSlot(&context.menu, "Live Mode", liveMode);
+  menuAddSlot(&context.menu, "Settings", settings);
+  menuAddSlot(&context.menu, "About", about);
 
-    userMenuInit(&menu, 3, 45, onUserMenuAction, onUserMenuBack);
-    menuAddSlot(&menu, "Button Test", buttonTest);
-    menuAddSlot(&menu, "Play MIDI File", playlist);
-    menuAddSlot(&menu, "Live Mode", liveMode);
-    menuAddSlot(&menu, "Settings", settings);
-    menuAddSlot(&menu, "About", about);
-      
-    firstRun = false;
-  }
-  
   canvas_clear(0x00, 0x00, 0x00);
   canvas_drawText(CENTER, 0, "Use the game pad to navigate", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
   canvas_drawText(CENTER, 18, "Press A button to select", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
 
-  menuTick(&menu, fsm);
-  menuDraw(&menu);
+  menuTick(&context.menu);
+  menuDraw(&context.menu);
   display_redraw();
+}
+
+static void onLeaveState() {
+
+}
+
+static void onTick() {
+  
+}
+
+static void onDirection(bool south, bool north, bool west, bool east) {
+  printf("onDirection()");
+
+  if (south) {
+    printf("south");
+    menuMoveCursorDown(&context.menu);
+  }
+
+  if (north) {
+    printf("north");
+    menuMoveCursorUp(&context.menu);
+  }
+
+  if (west)
+    printf("west");
+
+  if (east)
+    printf("east");
+
+  printf("\n");
+
+  canvas_clear(0x00, 0x00, 0x00);
+  menuDraw(&context.menu);
+  display_redraw();
+
+  // TODO: redraw cursor area
+}
+
+void mainMenu(FsmState* state, void* pArgs) {
+  state->onAction = onAction;
+  state->onBack = onBack;
+  state->onDirection = onDirection;
+  state->onEnterState = onEnter;
+  state->onLeaveState = onLeaveState;
+  state->onTick = onTick;
+ 
+  state->onEnterState(pArgs);
 }

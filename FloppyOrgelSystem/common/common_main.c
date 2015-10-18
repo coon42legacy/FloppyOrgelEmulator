@@ -13,7 +13,7 @@ void common_main() {
   hal_printf("################################");
 
   fsmInit(&fsm);
-  fsmPush(&fsm, mainMenu);
+  fsmPush(&fsm, mainMenu, &fsm);
 
   while (1) {
     fsmTick(&fsm);

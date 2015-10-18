@@ -27,5 +27,5 @@ FsmState liveMode(StackBasedFsm_t* fsm) {
   canvas_drawText(CENTER, 18, "Now receiving MIDI-Data on debug port...", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
   display_redraw();
 
-  fsmPush(fsm, liveReceiving);
+  fsmPush(fsm, liveReceiving, NULL);
 }

@@ -3,7 +3,7 @@
 
 #include "../StackBasedFsm.h"
 
-FsmState playlist(StackBasedFsm_t* fsm);
+FsmState playlist(StackBasedFsm_t* pFsm);
 static FsmState startPlayBack(StackBasedFsm_t* fsm);
 static FsmState playing(StackBasedFsm_t* fsm);
 static FsmState playbackAborted(StackBasedFsm_t* fsm);
