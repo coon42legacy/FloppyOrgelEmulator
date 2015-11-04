@@ -8,6 +8,7 @@
 typedef void(*OnActionCallback)();
 typedef void(*OnBackCallback)();
 typedef void(*OnEnterStateCallback)(void* pParams);
+typedef void(*OnReenterStateCallback)();
 typedef void(*OnLeaveStateCallback)();
 typedef void(*OnTickCallback)();
 typedef void(*OnDirectionCallback)(bool south, bool north, bool west, bool east);
@@ -16,6 +17,7 @@ typedef struct {
   OnActionCallback onAction;
   OnBackCallback onBack;
   OnEnterStateCallback onEnterState;
+  OnReenterStateCallback onReenterState;
   OnLeaveStateCallback onLeaveState;
   OnTickCallback onTick;
   OnDirectionCallback onDirection;
@@ -29,7 +31,7 @@ typedef struct {
 } StackBasedFsm_t;
 
 void fsmInit(StackBasedFsm_t* fsm);
-bool fsmPush(StackBasedFsm_t* fsm, TransitionFunc* newStateFunc, void* pArgs);
+bool fsmPush(StackBasedFsm_t* fsm, TransitionFunc newStateFunc, void* pArgs);
 bool fsmPop(StackBasedFsm_t* fsm);
 FsmState* fsmGetCurrentState(StackBasedFsm_t* fsm);
 void fsmTick(StackBasedFsm_t* fsm);

@@ -3,7 +3,7 @@
 
 #include "../StackBasedFsm.h"
 
-FsmState floppyTest(StackBasedFsm_t* pFsm);
+void floppyTest(FsmState* state, void* pArgs);
 
 #endif // __FLOPPYTEST_H__
 

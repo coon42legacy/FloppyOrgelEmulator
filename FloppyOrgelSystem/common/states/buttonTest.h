@@ -3,7 +3,7 @@
 
 #include "../StackBasedFsm.h"
 
-FsmState buttonTest(StackBasedFsm_t* fsm);
+void buttonTest(FsmState* state, void* pArgs);
 
 #endif // __BUTTONTEST_H__
 

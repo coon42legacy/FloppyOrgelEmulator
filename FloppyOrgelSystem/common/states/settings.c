@@ -4,15 +4,7 @@
 #include "../../hal/hal_display.h"
 #include "settings.h"
 
-void onSettingsMenuAction(StackBasedFsm_t* fsm) {
-  
-}
-
-void onSettingsMenuBack(StackBasedFsm_t* fsm) {
-  fsmPop(fsm);
-}
-
-FsmState settings(StackBasedFsm_t* pFsm) {
+void settings(FsmState* state, void* pArgs) {
   static SlotBasedMenu_t menu;
 
   canvas_clear(0, 0, 0);
@@ -20,7 +12,7 @@ FsmState settings(StackBasedFsm_t* pFsm) {
 
   static bool firstRun = true;
   if (firstRun) {
-    settingsMenuInit(&menu, pFsm, 25, 45, onSettingsMenuAction, onSettingsMenuBack);
+    // settingsMenuInit(&menu, pFsm, 25, 45);
     // menuAddSlot(&menu, "BG Red: [0x00]", NULL);
     // menuAddSlot(&menu, "BG Green: [0x00]", NULL);
     // menuAddSlot(&menu, "BG Blue: [0x00]", NULL);
@@ -28,7 +20,7 @@ FsmState settings(StackBasedFsm_t* pFsm) {
     firstRun = false;
   }
 
-  menuTick(&menu, pFsm);
+  // menuTick(&menu, pFsm);
   menuDraw(&menu);
   display_redraw();
 }

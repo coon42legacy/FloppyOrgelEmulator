@@ -3,7 +3,7 @@
 
 #include "../StackBasedFsm.h"
 
-FsmState settings(StackBasedFsm_t* pFsm);
+void settings(FsmState* state, void* pArgs);
 
 #endif // __SETTINGS_H__
 

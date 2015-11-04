@@ -3,6 +3,7 @@
 #include "../canvas/canvas.h"
 #include "../../hal/hal_mididevice.h"
 #include "../../hal/hal_display.h"
+#include "../../hal/hal_misc.h"
 
 #include "../states/buttonTest.h"
 #include "../states/playlist.h"
@@ -18,18 +19,23 @@ static struct {
 } context;
 
 static void onAction() {
-  printf("onAction!\n");
+  hal_printf("mainMenu::onAction()");
+
+  userMenuTransitToSelectedSlot(&context.menu);
 }
 
 static void onBack() {
-  printf("onBack!\n");
+  hal_printf("mainMenu::onBack!()");
+
+  userMenuTransitBack(&context.menu);
 }
 
 static void onEnter(void* pArgs) {
   StackBasedFsm_t* pFsm = pArgs;
+  hal_printf("mainMenu::onEnter()");
 
   hal_rs485init(&context.fifoDebugPort); // TODO: move to live mode state?
-  userMenuInit(&context.menu, pFsm, 3, 45, onAction, onBack);
+  userMenuInit(&context.menu, pFsm, 3, 45);
   menuAddSlot(&context.menu, "Button Test", buttonTest);
   menuAddSlot(&context.menu, "Play MIDI File", playlist);
   menuAddSlot(&context.menu, "Live Mode", liveMode);
@@ -45,40 +51,33 @@ static void onEnter(void* pArgs) {
   display_redraw();
 }
 
-static void onLeaveState() {
+static void onReenter() {
+  hal_printf("mainMenu::onReenter()");
 
+}
+
+static void onLeaveState() {
+  hal_printf("mainMenu::onLeaveState()");
 }
 
 static void onTick() {
-  
-}
-
-static void onDirection(bool south, bool north, bool west, bool east) {
-  printf("onDirection()");
-
-  if (south) {
-    printf("south");
-    menuMoveCursorDown(&context.menu);
-  }
-
-  if (north) {
-    printf("north");
-    menuMoveCursorUp(&context.menu);
-  }
-
-  if (west)
-    printf("west");
-
-  if (east)
-    printf("east");
-
-  printf("\n");
-
   canvas_clear(0x00, 0x00, 0x00);
   menuDraw(&context.menu);
   display_redraw();
+}
 
-  // TODO: redraw cursor area
+static void onDirection(bool south, bool north, bool west, bool east) {
+  // hal_printf("mainMenu::onDirection()");
+
+  if (south)
+    menuMoveCursorDown(&context.menu);
+
+  if (north)
+    menuMoveCursorUp(&context.menu);
+  
+  canvas_clear(0x00, 0x00, 0x00); // TODO: only clear cursor
+  menuDraw(&context.menu); // TODO: only redraw cursor
+  display_redraw();
 }
 
 void mainMenu(FsmState* state, void* pArgs) {
@@ -86,6 +85,7 @@ void mainMenu(FsmState* state, void* pArgs) {
   state->onBack = onBack;
   state->onDirection = onDirection;
   state->onEnterState = onEnter;
+  state->onReenterState = onReenter;
   state->onLeaveState = onLeaveState;
   state->onTick = onTick;
  

@@ -3,11 +3,11 @@
 
 #include "../StackBasedFsm.h"
 
-FsmState playlist(StackBasedFsm_t* pFsm);
-static FsmState startPlayBack(StackBasedFsm_t* fsm);
-static FsmState playing(StackBasedFsm_t* fsm);
-static FsmState playbackAborted(StackBasedFsm_t* fsm);
-static FsmState playbackFinished(StackBasedFsm_t* fsm);
+void playlist(FsmState* state, void* pArgs);
+static void startPlayBack(FsmState* state, void* pArgs);
+static void playing(FsmState* state, void* pArgs);
+static void playbackAborted(FsmState* state, void* pArgs);
+static void playbackFinished(FsmState* state, void* pArgs);
 
 #endif // __PLAYLIST_H__
 

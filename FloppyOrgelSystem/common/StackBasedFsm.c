@@ -2,13 +2,20 @@
 #include <stdio.h>
 #include "StackBasedFsm.h"
 #include "../hal/hal_inputdevice.h" // TODO: decouple somehow?
+#include "../hal/hal_misc.h"
 
 void fsmInit(StackBasedFsm_t* fsm) {
   fsm->stackSize_ = 0;
 }
 
 bool fsmPush(StackBasedFsm_t* fsm, TransitionFunc pFunc, void* pArgs) {
+  FsmState* pState;
+
   if (fsm->stackSize_ < FSM_STACK_SIZE) {
+    pState = fsmGetCurrentState(fsm);
+    if (pState)
+      pState->onLeaveState();
+
     pFunc(&fsm->stack[fsm->stackSize_++], pArgs);
     return true;
   }
@@ -17,8 +24,19 @@ bool fsmPush(StackBasedFsm_t* fsm, TransitionFunc pFunc, void* pArgs) {
 }
 
 bool fsmPop(StackBasedFsm_t* fsm) {
+  FsmState* pState;
+
   if (fsm->stackSize_ > 1) {
+    pState = fsmGetCurrentState(fsm);
+    if (pState)
+      pState->onLeaveState();
+    
     fsm->stackSize_--;
+
+    pState = fsmGetCurrentState(fsm);
+    if (pState)
+      pState->onReenterState();
+
     return true;
   }
   else
