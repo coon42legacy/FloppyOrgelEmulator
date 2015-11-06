@@ -11,6 +11,12 @@ static struct {
 
 } context;
 
+static void draw() {
+  canvas_clear(0x00, 0x00, 0x00);
+  canvas_drawText(CENTER, CENTER, "Version: " VERSION, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
+  display_redraw();
+}
+
 static void onAction() {
   hal_printf("about::onAction()");
 }
@@ -24,11 +30,14 @@ static void onBack() {
 static void onEnter(void* pArgs) {
   hal_printf("about::onEnter()");
   context.pFsm = pArgs;
+
+  draw();
 }
 
 static void onReenter() {
   hal_printf("about::onReenter()");
 
+  draw();
 }
 
 static void onLeaveState() {
@@ -36,12 +45,12 @@ static void onLeaveState() {
 }
 
 static void onTick() {
-  canvas_clear(0x00, 0x00, 0x00);
-  canvas_drawText(CENTER, CENTER, "Version: " VERSION, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
-  display_redraw();
+  
 }
 
 static void onDirection(bool south, bool north, bool west, bool east) {
+  draw();
+
   // hal_printf("onDirection()");
 
   // TODO: redraw cursor area

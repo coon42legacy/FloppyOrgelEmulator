@@ -1,4 +1,5 @@
 #include "../StackBasedFsm.h"
+#include "../../hal/hal_misc.h"
 
 #include "_example.h"
 
