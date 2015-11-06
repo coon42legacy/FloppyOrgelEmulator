@@ -25,7 +25,7 @@ static void onAction() {
 }
 
 static void onBack() {
-  hal_printf("mainMenu::onBack!()");
+  hal_printf("mainMenu::onBack()");
 
   userMenuTransitBack(&context.menu);
 }

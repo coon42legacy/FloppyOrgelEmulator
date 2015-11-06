@@ -7,7 +7,6 @@
 #include "about.h"
 
 static struct {
-  // TODO: add variables here
   StackBasedFsm_t* pFsm;
 
 } context;

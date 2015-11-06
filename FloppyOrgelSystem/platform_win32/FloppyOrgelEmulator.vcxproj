@@ -27,6 +27,7 @@
     <ClCompile Include="..\common\states\mainMenu.c" />
     <ClCompile Include="..\common\states\playlist.c" />
     <ClCompile Include="..\common\states\settings.c" />
+    <ClCompile Include="..\common\states\_example.c" />
     <ClCompile Include="..\hal\hal_mididevice_win32.c" />
     <ClCompile Include="..\hal\hal_misc_win32.c" />
     <ClCompile Include="guicon.cpp" />
@@ -55,6 +56,7 @@
     <ClInclude Include="..\common\states\mainMenu.h" />
     <ClInclude Include="..\common\states\playlist.h" />
     <ClInclude Include="..\common\states\settings.h" />
+    <ClInclude Include="..\common\states\_example.h" />
     <ClInclude Include="..\hal\hal_mididevice.h" />
     <ClInclude Include="..\hal\hal_misc.h" />
     <ClInclude Include="guicon.h" />

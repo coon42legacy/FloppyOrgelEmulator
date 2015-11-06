@@ -58,6 +58,4 @@ void settingsMenuInit(SlotBasedMenu_t* pSbm, StackBasedFsm_t* pFsm, int16_t xPos
 // browse menu specific functions
 void browseMenuInit(SlotBasedMenu_t* pSbm, StackBasedFsm_t* pFsm, int16_t xPos, int16_t yPos, char* filePath, BrowseNewPageCallback onNewPage);
 
-
-
 #endif // __SLOT_BASED_FSM_H
