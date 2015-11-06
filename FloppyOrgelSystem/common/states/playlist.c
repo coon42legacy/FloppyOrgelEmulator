@@ -8,6 +8,7 @@
 #include "../../hal/hal_mididevice.h"
 #include "../../hal/hal_display.h"
 #include "../../hal/hal_misc.h"
+#include "../../hal/hal_filesystem.h"
 #include "../embedded-midilib/midiutil.h"
 #include "../embedded-midilib/midiplayer.h"
 #include "playlist.h"
@@ -223,38 +224,11 @@ void startPlayBack(FsmState* state, void* pArgs) {
 // playlist
 // ------------------------------------------------------------------------------------------------------------
 
-static void onAction(FsmState* state, void* pArgs) {
-//  strcpy(filePathOfSongToPlay, filePath);
-//  hal_printf("Playing: %s\r\n", filePath);
-//  fsmPush(fsm, startPlayBack, NULL);
-}
-
-static void onBack(FsmState* state, void* pArgs) {
-//  fsmPop(fsm);
-}
-
 static void onBrowseNewPage(int currentPage, int totalPages) {
   char pageText[32];
   sprintf(pageText, "%2d / %2d", currentPage, totalPages); // TODO: hal_sprintf?
 
   canvas_drawText(255, 220, pageText, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
-}
-
-void playlist(FsmState* state, void* pArgs) {
-//  static SlotBasedMenu_t menu;
-//
-//  static bool firstRun = true;
-//  if (firstRun) {
-//    browseMenuInit(&menu, pFsm, 3, 50, MIDI_PATH, onAction, onBack, onBrowseNewPage);
-//    firstRun = false;
-//  }
-//
-//  canvas_clear(0x00, 0x00, 0x00);
-//  canvas_drawText(CENTER, 0, "Use the game pad to select a song", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
-//  canvas_drawText(CENTER, 18, "Press A button to start", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
-//
-//  menuTick(&menu, pFsm);
-//  display_redraw();
 }
 
 // ------------------------------------------------------------------------------------------------------------
@@ -281,4 +255,100 @@ void playbackAborted(FsmState* state, void* pArgs) {
 //
 //  fsmPop(fsm);
 //  fsmPush(fsm, playlist, NULL);
+}
+
+static struct {
+  StackBasedFsm_t* pFsm;
+  SlotBasedMenu_t menu;
+  char filePath[256];
+  FO_FIND_DATA findData;
+} context;
+
+static void draw() {
+  canvas_clear(0x00, 0x00, 0x00);
+  canvas_drawText(CENTER, 0, "Use the game pad to select a song", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
+  canvas_drawText(CENTER, 18, "Press A button to start", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
+
+  int numPages = getNumPages(getNumFiles(context.filePath), MENU_FILES_PER_PAGE);
+  int page = context.menu.cursorPos / MENU_FILES_PER_PAGE + 1;
+
+  // Draw tracks of current page
+  context.menu.numSlots = getNumFiles(context.filePath);
+  bool endOfDirectory = !hal_findInit(context.filePath, &context.findData);
+  int i = 0;
+  int itemCount = 0;
+
+  while (!endOfDirectory) {
+    if (context.findData.fileName[0] != '.')
+      if (context.findData.fileName[1] != '.')
+        if (i++ >= (page - 1) * MENU_FILES_PER_PAGE)
+          canvas_drawText(context.menu.xPos + 27, context.menu.yPos - 5 + 18 * itemCount++, context.findData.fileName, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
+
+    if (!hal_findNext(&context.findData) || i >= (page - 1) * MENU_FILES_PER_PAGE + MENU_FILES_PER_PAGE)
+      endOfDirectory = true;
+  }
+  hal_findFree();
+  // menuDrawCursor(); // TODO: remove?
+  onBrowseNewPage(page, numPages); // FIXME: implement correctly!
+
+//  menuDraw(&context.menu);
+  display_redraw();
+}
+
+static void onAction() {
+  hal_printf("playlist::onAction()");
+
+  //  strcpy(filePathOfSongToPlay, filePath);
+  //  hal_printf("Playing: %s\r\n", filePath);
+  //  fsmPush(fsm, startPlayBack, NULL);
+}
+
+static void onBack() {
+  hal_printf("playlist::onBack()");
+
+  fsmPop(context.pFsm);
+}
+
+static void onEnter(void* pArgs) {
+  hal_printf("playlist::onEnter()");
+  context.pFsm = pArgs;
+
+  browseMenuInit(&context.menu, context.pFsm, 3, 50, MIDI_PATH, onBrowseNewPage);
+
+  draw();
+}
+
+static void onReenter() {
+  hal_printf("playlist::onReenter()");
+
+  draw();
+}
+
+static void onLeaveState() {
+  hal_printf("playlist::onLeaveState()");
+}
+
+static void onTick() {
+  // hal_printf("playlist::onTick()");
+
+
+}
+
+static void onDirection(bool south, bool north, bool west, bool east) {
+  hal_printf("playlist::onDirection()");
+
+  draw();
+}
+
+// Do not change the following implementation! Just copy it unchanged and always as last function of the state.
+void playlist(FsmState* state, void* pArgs) {
+  state->onAction = onAction;
+  state->onBack = onBack;
+  state->onDirection = onDirection;
+  state->onEnterState = onEnter;
+  state->onReenterState = onReenter;
+  state->onLeaveState = onLeaveState;
+  state->onTick = onTick;
+
+  state->onEnterState(pArgs);
 }

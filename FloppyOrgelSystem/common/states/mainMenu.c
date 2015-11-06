@@ -23,7 +23,7 @@ static void draw() {
   canvas_clear(0x00, 0x00, 0x00);
   canvas_drawText(CENTER, 0, "Use the game pad to navigate", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
   canvas_drawText(CENTER, 18, "Press A button to select", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
-
+  
   menuDraw(&context.menu);
   display_redraw();
 }

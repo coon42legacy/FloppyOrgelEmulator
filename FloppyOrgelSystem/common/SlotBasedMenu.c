@@ -124,7 +124,6 @@ void menuTick(SlotBasedMenu_t* sbm) {
 
     case BROWSE_MENU: {
       static char fileNameOnCursor[256];
-      static FO_FIND_DATA findData;
 
       // if (buttonPressed.Action) {
       //   getFileNameFromCursorPos(sbm->browseMenu.filePath, fileNameOnCursor, sbm->cursorPos);
@@ -133,31 +132,7 @@ void menuTick(SlotBasedMenu_t* sbm) {
       // else if (buttonPressed.Back)
       //   sbm->browseMenu.onBack();
 
-      // int numPages = getNumPages(getNumFiles(sbm->browseMenu.filePath), MENU_FILES_PER_PAGE);
-      // int page = sbm->cursorPos / MENU_FILES_PER_PAGE + 1;
-      // 
-      // // Draw tracks of current page
-      // sbm->numSlots = getNumFiles(sbm->browseMenu.filePath);
-      // bool endOfDirectory = !hal_findInit(sbm->browseMenu.filePath, &findData);
-      // int i = 0;
-      // int itemCount = 0;
-      // 
-      // while (!endOfDirectory) {
-      //   if (findData.fileName[0] != '.')
-      //     if (findData.fileName[1] != '.')
-      //       if (i++ >= (page - 1) * MENU_FILES_PER_PAGE)
-      //         canvas_drawText(sbm->xPos + 27, sbm->yPos - 5 + 18 * itemCount++, findData.fileName, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
-      // 
-      //   if (!hal_findNext(&findData) || i >= (page - 1) * MENU_FILES_PER_PAGE + MENU_FILES_PER_PAGE)
-      //     endOfDirectory = true;
-      // }
-      // hal_findFree();
-      // menuDrawCursor(sbm);
-      // 
-      // sbm->browseMenu.onNewPage(page, numPages); // FIXME: implement correctly!
-      // //
-      // 
-      // break;
+      
     }
   }
 }
@@ -176,7 +151,7 @@ void menuAddSettingsSlot(SlotBasedMenu_t* sbm, char* label) {
 }
 
 void menuDraw(SlotBasedMenu_t* sbm) {
-  for (int i = 0; i < sbm->numSlots; i++) 
+  for (int i = 0; i < sbm->numSlots; i++)
     canvas_drawText(sbm->xPos + 28, sbm->yPos - 5 + 18 * i, sbm->slot[i].pLabel, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
 
   menuDrawCursor(sbm);

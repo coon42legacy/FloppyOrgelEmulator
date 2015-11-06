@@ -79,6 +79,7 @@ void fsmTick(StackBasedFsm_t* fsm) {
     if (pState->onBack)
       pState->onBack();
 
+  // Cursor delay and repetition, when holding direction button
   if (anyDirectionIsPressed(buttonPressed)) {
     if (isLastDirectionEqual(buttonPressed, lastState)) {
       if (isInRepetitionMode) {
