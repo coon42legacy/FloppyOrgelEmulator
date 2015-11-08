@@ -45,7 +45,7 @@ static void onEnter(void* pArgs) {
   hal_printf("mainMenu::onEnter()");
 
   hal_rs485init(&context.fifoDebugPort); // TODO: move to live mode state?
-  userMenuInit(&context.menu, pFsm, 3, 45);
+  menuInit(&context.menu, pFsm, 3, 45);
   menuAddSlot(&context.menu, "Button Test", buttonTest);
   menuAddSlot(&context.menu, "Play MIDI File", playlist);
   menuAddSlot(&context.menu, "Live Mode", liveMode);

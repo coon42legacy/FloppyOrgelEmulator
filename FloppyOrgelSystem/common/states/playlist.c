@@ -264,6 +264,50 @@ static struct {
   FO_FIND_DATA findData;
 } context;
 
+static void getFileNameFromCursorPos(char* srcPath, char* dstFilePath, int cursorPos) {
+  static FO_FIND_DATA findData;
+
+  strcpy(dstFilePath, srcPath);
+  bool endOfDirectory = !hal_findInit(dstFilePath, &findData);
+  int itemCount = 0;
+
+  while (!endOfDirectory) {
+    if (findData.fileName[0] != '.' && findData.fileName[1] != '.')
+    if (itemCount++ == cursorPos) {
+      strcat(dstFilePath, "/");
+      strcat(dstFilePath, findData.fileName);
+      break;
+    }
+
+    if (!hal_findNext(&findData))
+      endOfDirectory = true;
+  }
+
+  hal_findFree();
+}
+
+static uint32_t getNumFiles(char* filePath) {
+  static FO_FIND_DATA findData;
+  bool endOfDirectory = !hal_findInit(filePath, &findData);
+  int numFiles = 0;
+
+  while (!endOfDirectory) {
+    if (findData.fileName[0] != '.')
+    if (findData.fileName[1] != '.')
+      numFiles++;
+
+    if (!hal_findNext(&findData))
+      endOfDirectory = true;
+  }
+  hal_findFree();
+
+  return numFiles;
+}
+
+static uint32_t getNumPages(uint32_t numFiles, uint32_t filesPerPage) {
+  return numFiles % filesPerPage == 0 ? numFiles / filesPerPage : numFiles / filesPerPage + 1;
+}
+
 static void draw() {
   canvas_clear(0x00, 0x00, 0x00);
   canvas_drawText(CENTER, 0, "Use the game pad to select a song", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
@@ -284,10 +328,10 @@ static void draw() {
         if (i++ >= (page - 1) * MENU_FILES_PER_PAGE)
           canvas_drawText(context.menu.xPos + 27, context.menu.yPos - 5 + 18 * itemCount++, context.findData.fileName, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
 
-    if (!hal_findNext(&context.findData) || i >= (page - 1) * MENU_FILES_PER_PAGE + MENU_FILES_PER_PAGE)
-      endOfDirectory = true;
+    endOfDirectory = !hal_findNext(&context.findData) || i >= (page - 1) * MENU_FILES_PER_PAGE + MENU_FILES_PER_PAGE;
   }
   hal_findFree();
+  
   // menuDrawCursor(); // TODO: remove?
   onBrowseNewPage(page, numPages); // FIXME: implement correctly!
 
@@ -313,7 +357,8 @@ static void onEnter(void* pArgs) {
   hal_printf("playlist::onEnter()");
   context.pFsm = pArgs;
 
-  browseMenuInit(&context.menu, context.pFsm, 3, 50, MIDI_PATH, onBrowseNewPage);
+  menuInit(&context.menu, context.pFsm, 3, 50);  
+  strcpy(context.filePath, MIDI_PATH);
 
   draw();
 }
@@ -330,8 +375,6 @@ static void onLeaveState() {
 
 static void onTick() {
   // hal_printf("playlist::onTick()");
-
-
 }
 
 static void onDirection(bool south, bool north, bool west, bool east) {
@@ -340,7 +383,6 @@ static void onDirection(bool south, bool north, bool west, bool east) {
   draw();
 }
 
-// Do not change the following implementation! Just copy it unchanged and always as last function of the state.
 void playlist(FsmState* state, void* pArgs) {
   state->onAction = onAction;
   state->onBack = onBack;
