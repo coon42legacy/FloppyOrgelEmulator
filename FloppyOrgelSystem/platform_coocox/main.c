@@ -2,7 +2,7 @@
 #include "stm32f4xx.h"
 #include "LCD/SSD1289.h"
 #include "NesGamePad/NesGamePad.h"
-#include "floppyorgel_system.h"
+#include "common_main.h"
 #include "../hal/hal_filesystem.h"
 
 void enableDelayTimer() {
@@ -170,7 +170,7 @@ int main(void) {
     SSD1289_Init();
     SSD1289_Clear(Black);
     hal_fileSystemInit();
-    system_main();
+    common_main();
 }
 
 
