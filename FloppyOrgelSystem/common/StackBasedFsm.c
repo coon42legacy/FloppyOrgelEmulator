@@ -4,7 +4,7 @@
 #include "../hal/hal_inputdevice.h" // TODO: decouple somehow?
 #include "../hal/hal_misc.h"
 
-static void initState(FsmState* pState) {
+static void initStateCallBacks(FsmState* pState) {
   pState->onAction       = NULL;
   pState->onBack         = NULL;
   pState->onDirection    = NULL;
@@ -14,7 +14,7 @@ static void initState(FsmState* pState) {
   pState->onTick         = NULL;
 }
 
-static bool checkCallBack(void* pCallBack, char* pCallBackName) {
+static bool isCallbackDefined(void* pCallBack, char* pCallBackName) {
   if (!pCallBack) {
     hal_printfError("Error on state transition: '%s' callback not set!", pCallBackName);
     return false;
@@ -24,17 +24,17 @@ static bool checkCallBack(void* pCallBack, char* pCallBackName) {
 }
 
 static bool checkStateCallbacks(FsmState* pState) {
-  bool success = true;
+  bool callBacksOk = true;
 
-  success &= checkCallBack(pState->onAction,       "onAction");
-  success &= checkCallBack(pState->onBack,         "onBack");
-  success &= checkCallBack(pState->onDirection,    "onDirection");
-  success &= checkCallBack(pState->onEnterState,   "onEnterState");
-  success &= checkCallBack(pState->onLeaveState,   "onLeaveState");
-  success &= checkCallBack(pState->onReenterState, "onReenterState");
-  success &= checkCallBack(pState->onTick,         "onTick");
+  callBacksOk &= isCallbackDefined(pState->onAction,       "onAction");
+  callBacksOk &= isCallbackDefined(pState->onBack,         "onBack");
+  callBacksOk &= isCallbackDefined(pState->onDirection,    "onDirection");
+  callBacksOk &= isCallbackDefined(pState->onEnterState,   "onEnterState");
+  callBacksOk &= isCallbackDefined(pState->onLeaveState,   "onLeaveState");
+  callBacksOk &= isCallbackDefined(pState->onReenterState, "onReenterState");
+  callBacksOk &= isCallbackDefined(pState->onTick,         "onTick");
 
-  return success;
+  return callBacksOk;
 }
 
 void fsmInit(StackBasedFsm_t* fsm) {
@@ -51,7 +51,7 @@ bool fsmPush(StackBasedFsm_t* fsm, TransitionFunc pFunc, void* pArgs) {
     if (pCurrentState)
       pCurrentState->onLeaveState();
     
-    initState(pNextState);
+    initStateCallBacks(pNextState);
     pFunc(pNextState, pArgs);
 
     if (!checkStateCallbacks(pNextState)) {
