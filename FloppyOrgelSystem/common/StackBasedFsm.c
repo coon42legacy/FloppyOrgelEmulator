@@ -4,19 +4,62 @@
 #include "../hal/hal_inputdevice.h" // TODO: decouple somehow?
 #include "../hal/hal_misc.h"
 
+static void initState(FsmState* pState) {
+  pState->onAction       = NULL;
+  pState->onBack         = NULL;
+  pState->onDirection    = NULL;
+  pState->onEnterState   = NULL;
+  pState->onLeaveState   = NULL;
+  pState->onReenterState = NULL;
+  pState->onTick         = NULL;
+}
+
+static void callBackMissingError(char* callBackName) {
+  hal_printfError("Error on state transition: '%s' callback not set!");
+}
+
+static void checkState(FsmState* pState) {
+  if (!pState->onAction) 
+    callBackMissingError("onAction");
+
+  if(!pState->onBack)
+    callBackMissingError("onBack");
+
+  if (!pState->onDirection)
+    callBackMissingError("onDirection");
+
+  if (!pState->onEnterState)
+    callBackMissingError("onEnterState");
+
+  if (!pState->onLeaveState)
+    callBackMissingError("onLeaveState");
+    
+  if (!pState->onReenterState)
+    callBackMissingError("onReenterState");
+
+  if(!pState->onTick)
+    callBackMissingError("onTick");
+}
+
 void fsmInit(StackBasedFsm_t* fsm) {
   fsm->stackSize_ = 0;
 }
 
 bool fsmPush(StackBasedFsm_t* fsm, TransitionFunc pFunc, void* pArgs) {
-  FsmState* pState;
+  FsmState* pCurrentState = fsmGetCurrentState(fsm);
 
   if (fsm->stackSize_ < FSM_STACK_SIZE) {
-    pState = fsmGetCurrentState(fsm);
-    if (pState)
-      pState->onLeaveState();
+    FsmState* pNextState = &fsm->stack[fsm->stackSize_];
+    fsm->stackSize_++;
 
-    pFunc(&fsm->stack[fsm->stackSize_++], pArgs);
+    if (pCurrentState)
+      pCurrentState->onLeaveState();
+    
+    initState(pNextState);            
+    pFunc(pNextState, pArgs);
+
+
+
     return true;
   }
   else
@@ -79,6 +122,7 @@ void fsmTick(StackBasedFsm_t* fsm) {
     if (pState->onBack)
       pState->onBack();
 
+  // TODO: simplify
   // Cursor delay and repetition, when holding direction button
   if (anyDirectionIsPressed(buttonPressed)) {
     if (isLastDirectionEqual(buttonPressed, lastState)) {

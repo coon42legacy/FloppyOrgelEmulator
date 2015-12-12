@@ -12,10 +12,11 @@ void menuInit(SlotBasedMenu_t* pSbm, StackBasedFsm_t* pFsm, int16_t xPos, int16_
   pSbm->cursorPos = 0;
   pSbm->numSlots = 0;
   pSbm->pFsm = pFsm;
+
   memset(pSbm->slot, 0, sizeof(pSbm->slot));
 }
 
-void userMenuTransitToSelectedSlot(SlotBasedMenu_t* pMenu) {
+void userMenuTransitToSelectedSlot(SlotBasedMenu_t* pMenu) {  
   fsmPush(pMenu->pFsm, pMenu->slot[pMenu->cursorPos].pNextStateTransitionFunc, pMenu->pFsm);
 }
 
@@ -25,17 +26,17 @@ void userMenuTransitBack(SlotBasedMenu_t* pMenu) {
 
 static void menuDrawCursor(SlotBasedMenu_t* pSbm) {
   switch (pSbm->type) {
-  case USER_MENU:
-    canvas_drawImage(pSbm->xPos, pSbm->yPos + 18 * pSbm->cursorPos, cursorImg);
-    break;
+    case USER_MENU:
+      canvas_drawImage(pSbm->xPos, pSbm->yPos + 18 * pSbm->cursorPos, cursorImg);
+      break;
 
-  case BROWSE_MENU:
-    canvas_drawImage(pSbm->xPos, pSbm->yPos + 18 * (pSbm->cursorPos % MENU_FILES_PER_PAGE), cursorImg);
-    break;
+    case BROWSE_MENU:
+      canvas_drawImage(pSbm->xPos, pSbm->yPos + 18 * (pSbm->cursorPos % MENU_FILES_PER_PAGE), cursorImg);
+      break;
 
-  case SETTINGS_MENU:    
-    canvas_drawImage(pSbm->xPos, pSbm->yPos + 18 * pSbm->cursorPos, cursorImg);
-    break;
+    case SETTINGS_MENU:    
+      canvas_drawImage(pSbm->xPos, pSbm->yPos + 18 * pSbm->cursorPos, cursorImg);
+      break;
   }
 }
 

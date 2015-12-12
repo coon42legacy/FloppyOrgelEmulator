@@ -12,3 +12,4 @@ desktop.ini
 *.comarker
 *.opensdf
 *.suo
+/FloppyOrgelSystem/platform_win32/*.opendb
