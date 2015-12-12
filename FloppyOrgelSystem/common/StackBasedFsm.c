@@ -14,31 +14,27 @@ static void initState(FsmState* pState) {
   pState->onTick         = NULL;
 }
 
-static void callBackMissingError(char* callBackName) {
-  hal_printfError("Error on state transition: '%s' callback not set!");
+static bool checkCallBack(void* pCallBack, char* pCallBackName) {
+  if (!pCallBack) {
+    hal_printfError("Error on state transition: '%s' callback not set!", pCallBackName);
+    return false;
+  }
+
+  return true;
 }
 
-static void checkState(FsmState* pState) {
-  if (!pState->onAction) 
-    callBackMissingError("onAction");
+static bool checkStateCallbacks(FsmState* pState) {
+  bool success = true;
 
-  if(!pState->onBack)
-    callBackMissingError("onBack");
+  success &= checkCallBack(pState->onAction,       "onAction");
+  success &= checkCallBack(pState->onBack,         "onBack");
+  success &= checkCallBack(pState->onDirection,    "onDirection");
+  success &= checkCallBack(pState->onEnterState,   "onEnterState");
+  success &= checkCallBack(pState->onLeaveState,   "onLeaveState");
+  success &= checkCallBack(pState->onReenterState, "onReenterState");
+  success &= checkCallBack(pState->onTick,         "onTick");
 
-  if (!pState->onDirection)
-    callBackMissingError("onDirection");
-
-  if (!pState->onEnterState)
-    callBackMissingError("onEnterState");
-
-  if (!pState->onLeaveState)
-    callBackMissingError("onLeaveState");
-    
-  if (!pState->onReenterState)
-    callBackMissingError("onReenterState");
-
-  if(!pState->onTick)
-    callBackMissingError("onTick");
+  return success;
 }
 
 void fsmInit(StackBasedFsm_t* fsm) {
@@ -55,10 +51,15 @@ bool fsmPush(StackBasedFsm_t* fsm, TransitionFunc pFunc, void* pArgs) {
     if (pCurrentState)
       pCurrentState->onLeaveState();
     
-    initState(pNextState);            
+    initState(pNextState);
     pFunc(pNextState, pArgs);
 
+    if (!checkStateCallbacks(pNextState)) {
+      hal_printfWarning("Please define missing callbacks! Going back to previous state.");
 
+      fsmPop(fsm);
+      return false;
+    }
 
     return true;
   }
@@ -71,13 +72,13 @@ bool fsmPop(StackBasedFsm_t* fsm) {
 
   if (fsm->stackSize_ > 1) {
     pState = fsmGetCurrentState(fsm);
-    if (pState)
+    if (pState && pState->onLeaveState)
       pState->onLeaveState();
     
     fsm->stackSize_--;
 
     pState = fsmGetCurrentState(fsm);
-    if (pState)
+    if (pState && pState->onReenterState)
       pState->onReenterState();
 
     return true;
@@ -159,8 +160,6 @@ void fsmTick(StackBasedFsm_t* fsm) {
   if (pState)
     if (pState->onTick)
       pState->onTick(NULL);
-    else
-      hal_printf("onTick() callback not defined!");
 
   lastState = buttonPressed;
 }
