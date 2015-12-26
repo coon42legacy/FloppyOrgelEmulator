@@ -37,27 +37,27 @@ static bool checkStateCallbacks(FsmState* pState) {
   return callBacksOk;
 }
 
-void fsmInit(StackBasedFsm_t* fsm) {
-  fsm->stackSize_ = 0;
+void fsmInit(StackBasedFsm_t* pFsm) {
+  pFsm->stackSize_ = 0;
 }
 
-bool fsmPush(StackBasedFsm_t* fsm, TransitionFunc pFunc, void* pArgs) {
-  FsmState* pCurrentState = fsmGetCurrentState(fsm);
+bool fsmPush(StackBasedFsm_t* pFsm, TransitionFunc pFunc, void* pArgs) {
+  FsmState* pCurrentState = fsmGetCurrentState(pFsm);
 
-  if (fsm->stackSize_ < FSM_STACK_SIZE) {
-    FsmState* pNextState = &fsm->stack[fsm->stackSize_];
-    fsm->stackSize_++;
+  if (pFsm->stackSize_ < FSM_STACK_SIZE) {
+    FsmState* pNextState = &pFsm->stack[pFsm->stackSize_];
+    pFsm->stackSize_++;
 
     if (pCurrentState)
       pCurrentState->onLeaveState();
     
     initStateCallBacks(pNextState);
-    pFunc(pNextState, pArgs);
+    pFunc(pFsm, pNextState, pArgs);
 
     if (!checkStateCallbacks(pNextState)) {
       hal_printfWarning("Please define missing callbacks! Going back to previous state.");
 
-      fsmPop(fsm);
+      fsmPop(pFsm);
       return false;
     }
 
@@ -67,17 +67,17 @@ bool fsmPush(StackBasedFsm_t* fsm, TransitionFunc pFunc, void* pArgs) {
     return false;
 }
 
-bool fsmPop(StackBasedFsm_t* fsm) {
+bool fsmPop(StackBasedFsm_t* pFsm) {
   FsmState* pState;
 
-  if (fsm->stackSize_ > 1) {
-    pState = fsmGetCurrentState(fsm);
+  if (pFsm->stackSize_ > 1) {
+    pState = fsmGetCurrentState(pFsm);
     if (pState && pState->onLeaveState)
       pState->onLeaveState();
     
-    fsm->stackSize_--;
+    pFsm->stackSize_--;
 
-    pState = fsmGetCurrentState(fsm);
+    pState = fsmGetCurrentState(pFsm);
     if (pState && pState->onReenterState)
       pState->onReenterState();
 
@@ -87,9 +87,9 @@ bool fsmPop(StackBasedFsm_t* fsm) {
     return false;
 }
 
-FsmState* fsmGetCurrentState(StackBasedFsm_t* fsm) {
-  if (fsm->stackSize_ > 0)
-    return &fsm->stack[fsm->stackSize_ - 1];
+FsmState* fsmGetCurrentState(StackBasedFsm_t* pFsm) {
+  if (pFsm->stackSize_ > 0)
+    return &pFsm->stack[pFsm->stackSize_ - 1];
   else
     return NULL;
 }
@@ -107,8 +107,8 @@ static bool isLastDirectionEqual(InputDeviceStates_t currentState, InputDeviceSt
   return currentDirectionCode == lastDirectionCode;
 }
 
-void fsmTick(StackBasedFsm_t* fsm) {
-  FsmState* pState = fsmGetCurrentState(fsm);
+void fsmTick(StackBasedFsm_t* pFsm) {
+  FsmState* pState = fsmGetCurrentState(pFsm);
   InputDeviceStates_t buttonPressed = getInputDeviceState();
   static InputDeviceStates_t lastState = { 0 };
   static uint32_t timeOnLastDirectionPress = 0;

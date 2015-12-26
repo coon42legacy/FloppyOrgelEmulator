@@ -36,11 +36,11 @@ static void onBack() {
   fsmPop(context.pFsm);
 }
 
-static void onEnter(void* pArgs) {
+static void onEnter(struct StackBasedFsm_t* pFsm, void* pParams) {
   hal_printf("example::onEnter()");
 
   // This function is called, when the state is entered for the first time.
-  context.pFsm = pArgs;
+  context.pFsm = pFsm;
 }
 
 static void onReenter() {
@@ -70,15 +70,17 @@ static void onDirection(bool south, bool north, bool west, bool east) {
   // This function is called, if the user presses one of the direction buttons on the game pad.
 }
 
-// Do not change the following implementation! Just copy it unchanged and always as last function of the state.
-void example(FsmState* state, void* pArgs) {
-  state->onAction = onAction;
-  state->onBack = onBack;
-  state->onDirection = onDirection;
-  state->onEnterState = onEnter;
-  state->onReenterState = onReenter;
-  state->onLeaveState = onLeaveState;
-  state->onTick = onTick;
+// Do not change the following implementation! Just change the function name to the name of your state and 
+// copy the code unchanged and always as last function of the file:
 
-  state->onEnterState(pArgs);
+void example(StackBasedFsm_t* pFsm, FsmState* pState, void* pArgs) {
+  pState->onAction = onAction;
+  pState->onBack = onBack;
+  pState->onDirection = onDirection;
+  pState->onEnterState = onEnter;
+  pState->onReenterState = onReenter;
+  pState->onLeaveState = onLeaveState;
+  pState->onTick = onTick;
+
+  pState->onEnterState(pFsm, pArgs);
 }

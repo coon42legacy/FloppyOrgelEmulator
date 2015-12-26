@@ -3,8 +3,8 @@
 
 #include "../StackBasedFsm.h"
 
-void liveMode(FsmState* state, void* pArgs);
-void liveReceiving(FsmState* state, void* pArgs);
+void liveMode(StackBasedFsm_t* pFsm, FsmState* state, void* pArgs);
+void liveReceiving(StackBasedFsm_t* pFsm, FsmState* state, void* pArgs);
 
 #endif // __LIVEMODE_H__
 

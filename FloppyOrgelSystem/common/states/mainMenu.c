@@ -39,8 +39,7 @@ static void onBack() {
   userMenuTransitBack(&context.menu);
 }
 
-static void onEnter(void* pArgs) {
-  StackBasedFsm_t* pFsm = pArgs;
+static void onEnter(StackBasedFsm_t* pFsm, void* pParams) {
   hal_printf("mainMenu::onEnter()");
 
   hal_rs485init(&context.fifoDebugPort); // TODO: move to live mode state?
@@ -80,7 +79,7 @@ static void onDirection(bool south, bool north, bool west, bool east) {
   draw();
 }
 
-void mainMenu(FsmState* state, void* pArgs) {
+void mainMenu(StackBasedFsm_t* pFsm, FsmState* state, void* pArgs) {
   state->onAction = onAction;
   state->onBack = onBack;
   state->onDirection = onDirection;

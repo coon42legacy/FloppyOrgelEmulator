@@ -3,7 +3,7 @@
 #include "../../hal/hal_display.h"
 #include "../../hal/hal_inputdevice.h"
 
-void buttonTest(FsmState* state, void* pArgs) {
+void buttonTest(StackBasedFsm_t* pFsm, FsmState* state, void* pArgs) {
   // InputDeviceStates_t buttonPressed = getInputDeviceState();
   
   canvas_clear(0x00, 0x00, 0x00);

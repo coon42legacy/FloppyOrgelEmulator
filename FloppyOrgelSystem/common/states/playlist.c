@@ -182,7 +182,7 @@ static void stopAllDrives() {
 // playing
 // ------------------------------------------------------------------------------------------------------------
 
-void playing(FsmState* state, void* pArgs) {
+void playing(StackBasedFsm_t* pFsm, FsmState* state, void* pArgs) {
   // InputDeviceStates_t buttonPressed = getInputDeviceState();
 
   // if (buttonPressed.Back) {
@@ -200,7 +200,7 @@ void playing(FsmState* state, void* pArgs) {
 // startPlayBack
 // ------------------------------------------------------------------------------------------------------------
 
-void startPlayBack(FsmState* state, void* pArgs) {
+void startPlayBack(StackBasedFsm_t* pFsm, FsmState* state, void* pArgs) {
 //  hal_midiDeviceInit();
 //  midiplayer_init(&mpl, onNoteOff, onNoteOn, onNoteKeyPressure, onSetParameter, onSetProgram, onChangePressure,
 //    onSetPitchWheel, onMetaMIDIPort, onMetaSequenceNumber, onMetaTextEvent, onMetaCopyright, onMetaTrackName,
@@ -235,7 +235,7 @@ static void onBrowseNewPage(int currentPage, int totalPages) {
 // playbackFinished
 // ------------------------------------------------------------------------------------------------------------
 
-void playbackFinished(FsmState* state, void* pArgs) {
+void playbackFinished(StackBasedFsm_t* pFsm, FsmState* state, void* pArgs) {
 //  hal_printfSuccess("Playback finished!");
 //  stopAllDrives();
 //  hal_midiDeviceFree();
@@ -248,7 +248,7 @@ void playbackFinished(FsmState* state, void* pArgs) {
 // playbackAborted
 // ------------------------------------------------------------------------------------------------------------
 
-void playbackAborted(FsmState* state, void* pArgs) {
+void playbackAborted(StackBasedFsm_t* pFsm, FsmState* state, void* pArgs) {
 //  hal_printfSuccess("Playback aborted by user.");
 //  stopAllDrives();
 //  hal_midiDeviceFree();
@@ -383,7 +383,7 @@ static void onDirection(bool south, bool north, bool west, bool east) {
   draw();
 }
 
-void playlist(FsmState* state, void* pArgs) {
+void playlist(StackBasedFsm_t* pFsm, FsmState* state, void* pArgs) {
   state->onAction = onAction;
   state->onBack = onBack;
   state->onDirection = onDirection;

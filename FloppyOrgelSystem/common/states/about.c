@@ -56,7 +56,7 @@ static void onDirection(bool south, bool north, bool west, bool east) {
   // TODO: redraw cursor area
 }
 
-void about(FsmState* state, void* pArgs) {
+void about(StackBasedFsm_t* pFsm, FsmState* state, void* pArgs) {
   state->onAction = onAction;
   state->onBack = onBack;
   state->onDirection = onDirection;

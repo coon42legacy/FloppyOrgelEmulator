@@ -4,10 +4,12 @@
 #include <stdbool.h>
 #include "config.h"
 
+typedef struct StackBasedFsm_t;
+
 // Callback function pointer typedefs
 typedef void(*OnActionCallback)();
 typedef void(*OnBackCallback)();
-typedef void(*OnEnterStateCallback)(void* pParams);
+typedef void(*OnEnterStateCallback)(struct StackBasedFsm_t* pFsm, void* pParams);
 typedef void(*OnReenterStateCallback)();
 typedef void(*OnLeaveStateCallback)();
 typedef void(*OnTickCallback)();
@@ -23,17 +25,17 @@ typedef struct {
   OnDirectionCallback onDirection;
 } FsmState;
 
-typedef void(*TransitionFunc)(FsmState* state, void* args);
-
 typedef struct {
   FsmState stack[FSM_STACK_SIZE];
   int stackSize_;
 } StackBasedFsm_t;
 
-void fsmInit(StackBasedFsm_t* fsm);
-bool fsmPush(StackBasedFsm_t* fsm, TransitionFunc newStateFunc, void* pArgs);
-bool fsmPop(StackBasedFsm_t* fsm);
-FsmState* fsmGetCurrentState(StackBasedFsm_t* fsm);
-void fsmTick(StackBasedFsm_t* fsm);
+typedef void(*TransitionFunc)(StackBasedFsm_t* pFsm, FsmState* pState, void* pArgs);
+
+void fsmInit(StackBasedFsm_t* pFsm);
+bool fsmPush(StackBasedFsm_t* pFsm, TransitionFunc pFunc, void* pArgs);
+bool fsmPop(StackBasedFsm_t* pFsm);
+FsmState* fsmGetCurrentState(StackBasedFsm_t* pFsm);
+void fsmTick(StackBasedFsm_t* pFsm);
 
 #endif
