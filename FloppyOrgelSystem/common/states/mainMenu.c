@@ -18,7 +18,6 @@ static struct {
   SlotBasedMenu_t menu;
 } context;
 
-
 static void draw() {
   canvas_clear(0x00, 0x00, 0x00);
   canvas_drawText(CENTER, 0, "Use the game pad to navigate", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
@@ -31,7 +30,7 @@ static void draw() {
 static void onAction() {
   hal_printf("mainMenu::onAction()");
 
-  userMenuTransitToSelectedSlot(&context.menu);
+  userMenuTransitToSelectedSlot(&context.menu, context.menu.pFsm);
 }
 
 static void onBack() {

@@ -13,3 +13,4 @@ desktop.ini
 *.opensdf
 *.suo
 /FloppyOrgelSystem/platform_win32/*.opendb
+/FloppyOrgelSystem/platform_win32/*.user

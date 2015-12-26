@@ -49,7 +49,7 @@ void menuMoveCursorUp(SlotBasedMenu_t* sbm);
 void menuMoveCursorDown(SlotBasedMenu_t* sbm);
 
 // user menu specific functions
-void userMenuTransitToSelectedSlot(SlotBasedMenu_t* pMenu);
+void userMenuTransitToSelectedSlot(SlotBasedMenu_t* pMenu, void* pArgs);
 void userMenuTransitBack(SlotBasedMenu_t* pMenu);
 
 #endif // __SLOT_BASED_FSM_H

@@ -16,8 +16,8 @@ void menuInit(SlotBasedMenu_t* pSbm, StackBasedFsm_t* pFsm, int16_t xPos, int16_
   memset(pSbm->slot, 0, sizeof(pSbm->slot));
 }
 
-void userMenuTransitToSelectedSlot(SlotBasedMenu_t* pMenu) {  
-  fsmPush(pMenu->pFsm, pMenu->slot[pMenu->cursorPos].pNextStateTransitionFunc, pMenu->pFsm);
+void userMenuTransitToSelectedSlot(SlotBasedMenu_t* pMenu, void* pArgs) {
+  fsmPush(pMenu->pFsm, pMenu->slot[pMenu->cursorPos].pNextStateTransitionFunc, pArgs);
 }
 
 void userMenuTransitBack(SlotBasedMenu_t* pMenu) {
