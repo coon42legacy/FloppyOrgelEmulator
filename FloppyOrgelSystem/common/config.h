@@ -1,7 +1,7 @@
 #ifndef __FO_CONFIG_H
 #define __FO_CONFIG_H
 
-#define VERSION "0.8.1"
+#define VERSION "0.8.2"
 
 #ifdef _WIN32
   #define DONT_DEFINE_COMMON_MAIN

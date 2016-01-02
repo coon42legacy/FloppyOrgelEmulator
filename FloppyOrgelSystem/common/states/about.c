@@ -7,7 +7,8 @@
 #include "about.h"
 
 static struct {
-  StackBasedFsm_t* pFsm;
+  // put your local variables here!
+  int some_local_variable;
 
 } context;
 
@@ -24,12 +25,11 @@ static void onAction(StackBasedFsm_t* pFsm) {
 static void onBack(StackBasedFsm_t* pFsm) {
   hal_printf("about::onBack()");
 
-  fsmPop(context.pFsm);
+  fsmPop(pFsm);
 }
 
 static void onEnter(StackBasedFsm_t* pFsm, void* pParams) {
   hal_printf("about::onEnter()");
-  context.pFsm = pParams;
 
   draw();
 }

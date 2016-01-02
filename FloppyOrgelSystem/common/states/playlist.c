@@ -257,8 +257,7 @@ void playbackAborted(StackBasedFsm_t* pFsm, FsmState* state, void* pArgs) {
 //  fsmPush(fsm, playlist, NULL);
 }
 
-static struct {
-  StackBasedFsm_t* pFsm;
+static struct {  
   SlotBasedMenu_t menu;
   char filePath[256];
   FO_FIND_DATA findData;
@@ -350,14 +349,13 @@ static void onAction(StackBasedFsm_t* pFsm) {
 static void onBack(StackBasedFsm_t* pFsm) {
   hal_printf("playlist::onBack()");
 
-  fsmPop(context.pFsm);
+  fsmPop(pFsm);
 }
 
 static void onEnter(StackBasedFsm_t* pFsm, void* pParams) {
-  hal_printf("playlist::onEnter()");
-  context.pFsm = pParams;
+  hal_printf("playlist::onEnter()");  
 
-  menuInit(&context.menu, context.pFsm, 3, 50);  
+  menuInit(&context.menu, pFsm, 3, 50);  
   strcpy(context.filePath, MIDI_PATH);
 
   draw();
