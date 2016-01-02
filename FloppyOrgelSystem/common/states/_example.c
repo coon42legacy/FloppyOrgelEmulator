@@ -36,7 +36,7 @@ static void onBack() {
   fsmPop(context.pFsm);
 }
 
-static void onEnter(struct StackBasedFsm_t* pFsm, void* pParams) {
+static void onEnter(StackBasedFsm_t* pFsm, void* pParams) {
   hal_printf("example::onEnter()");
 
   // This function is called, when the state is entered for the first time.

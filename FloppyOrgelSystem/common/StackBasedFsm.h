@@ -4,18 +4,19 @@
 #include <stdbool.h>
 #include "config.h"
 
-typedef struct StackBasedFsm_t;
+typedef struct FsmState FsmState;
+typedef struct StackBasedFsm_t StackBasedFsm_t;
 
 // Callback function pointer typedefs
 typedef void(*OnActionCallback)();
 typedef void(*OnBackCallback)();
-typedef void(*OnEnterStateCallback)(struct StackBasedFsm_t* pFsm, void* pParams);
+typedef void(*OnEnterStateCallback)(StackBasedFsm_t* pFsm, void* pParams);
 typedef void(*OnReenterStateCallback)();
 typedef void(*OnLeaveStateCallback)();
 typedef void(*OnTickCallback)();
 typedef void(*OnDirectionCallback)(bool south, bool north, bool west, bool east);
 
-typedef struct {
+struct FsmState {
   OnActionCallback onAction;
   OnBackCallback onBack;
   OnEnterStateCallback onEnterState;
@@ -23,12 +24,12 @@ typedef struct {
   OnLeaveStateCallback onLeaveState;
   OnTickCallback onTick;
   OnDirectionCallback onDirection;
-} FsmState;
+};
 
-typedef struct {
+struct StackBasedFsm_t {
   FsmState stack[FSM_STACK_SIZE];
   int stackSize_;
-} StackBasedFsm_t;
+};
 
 typedef void(*TransitionFunc)(StackBasedFsm_t* pFsm, FsmState* pState, void* pArgs);
 

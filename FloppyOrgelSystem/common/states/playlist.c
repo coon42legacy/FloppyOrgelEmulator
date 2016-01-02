@@ -353,9 +353,9 @@ static void onBack() {
   fsmPop(context.pFsm);
 }
 
-static void onEnter(void* pArgs) {
+static void onEnter(StackBasedFsm_t* pFsm, void* pParams) {
   hal_printf("playlist::onEnter()");
-  context.pFsm = pArgs;
+  context.pFsm = pParams;
 
   menuInit(&context.menu, context.pFsm, 3, 50);  
   strcpy(context.filePath, MIDI_PATH);
@@ -383,14 +383,14 @@ static void onDirection(bool south, bool north, bool west, bool east) {
   draw();
 }
 
-void playlist(StackBasedFsm_t* pFsm, FsmState* state, void* pArgs) {
-  state->onAction = onAction;
-  state->onBack = onBack;
-  state->onDirection = onDirection;
-  state->onEnterState = onEnter;
-  state->onReenterState = onReenter;
-  state->onLeaveState = onLeaveState;
-  state->onTick = onTick;
+void playlist(StackBasedFsm_t* pFsm, FsmState* pState, void* pParams) {
+  pState->onAction = onAction;
+  pState->onBack = onBack;
+  pState->onDirection = onDirection;
+  pState->onEnterState = onEnter;
+  pState->onReenterState = onReenter;
+  pState->onLeaveState = onLeaveState;
+  pState->onTick = onTick;
 
-  state->onEnterState(pArgs);
+  pState->onEnterState(pFsm, pParams);
 }

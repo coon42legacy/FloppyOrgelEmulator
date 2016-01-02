@@ -79,14 +79,14 @@ static void onDirection(bool south, bool north, bool west, bool east) {
   draw();
 }
 
-void mainMenu(StackBasedFsm_t* pFsm, FsmState* state, void* pArgs) {
-  state->onAction = onAction;
-  state->onBack = onBack;
-  state->onDirection = onDirection;
-  state->onEnterState = onEnter;
-  state->onReenterState = onReenter;
-  state->onLeaveState = onLeaveState;
-  state->onTick = onTick;
- 
-  state->onEnterState(pArgs);
+void mainMenu(StackBasedFsm_t* pFsm, FsmState* pState, void* pParams) {
+  pState->onAction = onAction;
+  pState->onBack = onBack;
+  pState->onDirection = onDirection;
+  pState->onEnterState = onEnter;
+  pState->onReenterState = onReenter;
+  pState->onLeaveState = onLeaveState;
+  pState->onTick = onTick;
+
+  pState->onEnterState(pFsm, pParams);
 }
