@@ -339,7 +339,7 @@ static void draw() {
   display_redraw();
 }
 
-static void onAction() {
+static void onAction(StackBasedFsm_t* pFsm) {
   hal_printf("playlist::onAction()");
 
   //  strcpy(filePathOfSongToPlay, filePath);
@@ -347,7 +347,7 @@ static void onAction() {
   //  fsmPush(fsm, startPlayBack, NULL);
 }
 
-static void onBack() {
+static void onBack(StackBasedFsm_t* pFsm) {
   hal_printf("playlist::onBack()");
 
   fsmPop(context.pFsm);
@@ -363,21 +363,21 @@ static void onEnter(StackBasedFsm_t* pFsm, void* pParams) {
   draw();
 }
 
-static void onReenter() {
+static void onReenter(StackBasedFsm_t* pFsm) {
   hal_printf("playlist::onReenter()");
 
   draw();
 }
 
-static void onLeaveState() {
+static void onLeaveState(StackBasedFsm_t* pFsm) {
   hal_printf("playlist::onLeaveState()");
 }
 
-static void onTick() {
+static void onTick(StackBasedFsm_t* pFsm) {
   // hal_printf("playlist::onTick()");
 }
 
-static void onDirection(bool south, bool north, bool west, bool east) {
+static void onDirection(StackBasedFsm_t* pFsm, bool south, bool north, bool west, bool east) {
   hal_printf("playlist::onDirection()");
 
   draw();

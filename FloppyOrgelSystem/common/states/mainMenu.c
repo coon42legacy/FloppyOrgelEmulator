@@ -27,13 +27,13 @@ static void draw() {
   display_redraw();
 }
 
-static void onAction() {
+static void onAction(StackBasedFsm_t* pFsm) {
   hal_printf("mainMenu::onAction()");
 
   userMenuTransitToSelectedSlot(&context.menu, context.menu.pFsm);
 }
 
-static void onBack() {
+static void onBack(StackBasedFsm_t* pFsm) {
   hal_printf("mainMenu::onBack()");
 
   userMenuTransitBack(&context.menu);
@@ -53,21 +53,21 @@ static void onEnter(StackBasedFsm_t* pFsm, void* pParams) {
   draw();
 }
 
-static void onReenter() {
+static void onReenter(StackBasedFsm_t* pFsm) {
   hal_printf("mainMenu::onReenter()");
 
   draw();
 }
 
-static void onLeaveState() {
+static void onLeaveState(StackBasedFsm_t* pFsm) {
   hal_printf("mainMenu::onLeaveState()");
 }
 
-static void onTick() {
+static void onTick(StackBasedFsm_t* pFsm) {
 
 }
 
-static void onDirection(bool south, bool north, bool west, bool east) {
+static void onDirection(StackBasedFsm_t* pFsm, bool south, bool north, bool west, bool east) {
   // hal_printf("mainMenu::onDirection()");
 
   if (south)

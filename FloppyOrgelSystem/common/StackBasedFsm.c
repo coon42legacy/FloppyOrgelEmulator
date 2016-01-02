@@ -49,7 +49,7 @@ bool fsmPush(StackBasedFsm_t* pFsm, TransitionFunc pFunc, void* pArgs) {
     pFsm->stackSize_++;
 
     if (pCurrentState)
-      pCurrentState->onLeaveState();
+      pCurrentState->onLeaveState(pFsm);
     
     initStateCallBacks(pNextState);
     pFunc(pFsm, pNextState, pArgs);
@@ -73,13 +73,13 @@ bool fsmPop(StackBasedFsm_t* pFsm) {
   if (pFsm->stackSize_ > 1) {
     pState = fsmGetCurrentState(pFsm);
     if (pState && pState->onLeaveState)
-      pState->onLeaveState();
+      pState->onLeaveState(pFsm);
     
     pFsm->stackSize_--;
 
     pState = fsmGetCurrentState(pFsm);
     if (pState && pState->onReenterState)
-      pState->onReenterState();
+      pState->onReenterState(pFsm);
 
     return true;
   }
@@ -117,11 +117,11 @@ void fsmTick(StackBasedFsm_t* pFsm) {
 
   if (buttonPressed.Action && !lastState.Action)
     if (pState->onAction)
-      pState->onAction();
+      pState->onAction(pFsm);
 
   if (buttonPressed.Back && !lastState.Back)
     if (pState->onBack)
-      pState->onBack();
+      pState->onBack(pFsm);
 
   // TODO: simplify
   // Cursor delay and repetition, when holding direction button
@@ -131,7 +131,7 @@ void fsmTick(StackBasedFsm_t* pFsm) {
         if (hal_clock() > timeOnLastDirectionPress + CURSOR_DELAY_MS_BEFORE_REPEAT) {
           if (hal_clock() > timeOnLastRepetition + 1000 / CURSOR_SPEED_ITEMS_PER_SECOND) {
             if (pState->onDirection)
-              pState->onDirection(buttonPressed.South, buttonPressed.North, buttonPressed.West, buttonPressed.East);
+              pState->onDirection(pFsm, buttonPressed.South, buttonPressed.North, buttonPressed.West, buttonPressed.East);
 
             // hal_printf("timeOnLastRepetition: %d, repeat on: %d", timeOnLastRepetition, timeOnLastRepetition + 1000 / CURSOR_SPEED_ITEMS_PER_SECOND);
 
@@ -146,7 +146,7 @@ void fsmTick(StackBasedFsm_t* pFsm) {
 
         // hal_printf("In repetition mode");
         if (pState->onDirection)
-          pState->onDirection(buttonPressed.South, buttonPressed.North, buttonPressed.West, buttonPressed.East);
+          pState->onDirection(pFsm, buttonPressed.South, buttonPressed.North, buttonPressed.West, buttonPressed.East);
       }
     }
   }
@@ -159,7 +159,7 @@ void fsmTick(StackBasedFsm_t* pFsm) {
   
   if (pState)
     if (pState->onTick)
-      pState->onTick(NULL);
+      pState->onTick(pFsm);
 
   lastState = buttonPressed;
 }
