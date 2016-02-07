@@ -304,7 +304,10 @@ static uint32_t getNumFiles(char* filePath) {
 }
 
 static uint32_t getNumPages(uint32_t numFiles, uint32_t filesPerPage) {
-  return numFiles % filesPerPage == 0 ? numFiles / filesPerPage : numFiles / filesPerPage + 1;
+  bool isPageCountEven = numFiles % filesPerPage == 0;
+  int pageCount = isPageCountEven ? numFiles / filesPerPage : numFiles / filesPerPage + 1;
+
+  return pageCount;
 }
 
 static void draw() {
@@ -312,29 +315,35 @@ static void draw() {
   canvas_drawText(CENTER, 0, "Use the game pad to select a song", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
   canvas_drawText(CENTER, 18, "Press A button to start", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
 
-  int numPages = getNumPages(getNumFiles(context.filePath), MENU_FILES_PER_PAGE);
-  int page = context.menu.cursorPos / MENU_FILES_PER_PAGE + 1;
+  int numFiles = getNumFiles(context.filePath);
+  int numPages = getNumPages(numFiles, MENU_FILES_PER_PAGE);
+  int curPage = numPages > 0 ? context.menu.cursorPos / MENU_FILES_PER_PAGE + 1 : 0;
 
-  // Draw tracks of current page
-  context.menu.numSlots = getNumFiles(context.filePath);
-  bool endOfDirectory = !hal_findInit(context.filePath, &context.findData);
-  int i = 0;
-  int itemCount = 0;
+  if (numFiles > 0) {
+    // Draw tracks of current page
+    context.menu.numSlots = getNumFiles(context.filePath);
+    bool endOfDirectory = !hal_findInit(context.filePath, &context.findData);
+    int i = 0;
+    int itemCount = 0;
 
-  while (!endOfDirectory) {
-    if (context.findData.fileName[0] != '.')
-      if (context.findData.fileName[1] != '.')
-        if (i++ >= (page - 1) * MENU_FILES_PER_PAGE)
-          canvas_drawText(context.menu.xPos + 27, context.menu.yPos - 5 + 18 * itemCount++, context.findData.fileName, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
+    while (!endOfDirectory) {
+      if (context.findData.fileName[0] != '.')
+        if (context.findData.fileName[1] != '.')
+          if (i++ >= (curPage - 1) * MENU_FILES_PER_PAGE)
+            canvas_drawText(context.menu.xPos + 27, context.menu.yPos - 5 + 18 * itemCount++, context.findData.fileName, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
 
-    endOfDirectory = !hal_findNext(&context.findData) || i >= (page - 1) * MENU_FILES_PER_PAGE + MENU_FILES_PER_PAGE;
+      endOfDirectory = !hal_findNext(&context.findData) || i >= (curPage - 1) * MENU_FILES_PER_PAGE + MENU_FILES_PER_PAGE;
+    }
+    hal_findFree();
   }
-  hal_findFree();
-  
-  // menuDrawCursor(); // TODO: remove?
-  onBrowseNewPage(page, numPages); // FIXME: implement correctly!
+  else {
+    canvas_drawText(CENTER, context.menu.yPos - 5 + 3 * 18, "No tracks available!", 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00);
+    canvas_drawText(CENTER, context.menu.yPos - 5 + 4 * 18, "SD-Card missing?", 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00);
+  }
 
-//  menuDraw(&context.menu);
+  if(numPages > 0)
+    onBrowseNewPage(curPage, numPages); // FIXME: implement correctly!
+
   display_redraw();
 }
 
