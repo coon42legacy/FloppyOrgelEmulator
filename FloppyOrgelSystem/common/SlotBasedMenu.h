@@ -26,12 +26,6 @@ typedef void(*SettingsMenuCancelCallback)();
 
 typedef struct {
   MenuType_t type;
-   
-  // struct {
-  //   int curPage;
-  //   BrowseNewPageCallback onNewPage;
-  // } browseMenu;
-
   uint16_t xPos;
   uint16_t yPos;
   uint8_t numSlots;

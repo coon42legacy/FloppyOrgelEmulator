@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Project version="2G - 1.7.8" name="FloppyOrgelEmulator">
+  <Target name="FloppyOrgelEmulator" isCurrent="1">
+    <Device manufacturerId="9" manufacturerName="ST" chipId="344" chipName="STM32F407VG" boardId="" boardName=""/>
+    <BuildOption>
+      <Compile>
+        <Option name="OptimizationLevel" value="0"/>
+        <Option name="UseFPU" value="0"/>
+        <Option name="UserEditCompiler" value="-std=c99"/>
+        <Option name="SupportCPlusplus" value="0"/>
+        <Includepaths>
+          <Includepath path="."/>
+        </Includepaths>
+        <DefinedSymbols>
+          <Define name="STM32F407VG"/>
+          <Define name="STM32F4XX"/>
+          <Define name="USE_STDPERIPH_DRIVER"/>
+          <Define name="__ASSEMBLY__"/>
+        </DefinedSymbols>
+      </Compile>
+      <Link useDefault="0">
+        <Option name="DiscardUnusedSection" value="0"/>
+        <Option name="UserEditLinkder" value=""/>
+        <Option name="UseMemoryLayout" value="1"/>
+        <Option name="nostartfiles" value="1"/>
+        <Option name="LTO" value="0"/>
+        <Option name="IsNewStartupCode" value="1"/>
+        <Option name="Library" value="Semihosting"/>
+        <Option name="UserEditLinker" value=""/>
+        <LinkedLibraries/>
+        <MemoryAreas debugInFlashNotRAM="1">
+          <Memory name="IROM1" type="ReadOnly" size="0x00100000" startValue="0x08000000"/>
+          <Memory name="IRAM1" type="ReadWrite" size="0x00020000" startValue="0x20000000"/>
+          <Memory name="IROM2" type="ReadOnly" size="" startValue=""/>
+          <Memory name="IRAM2" type="ReadWrite" size="0x00010000" startValue="0x10000000"/>
+        </MemoryAreas>
+        <LocateLinkFile path="../../../../../../coocox/coide/configuration/programdata/floppyorgelemulator/arm-gcc-link.ld" type="0"/>
+      </Link>
+      <Output>
+        <Option name="OutputFileType" value="0"/>
+        <Option name="Path" value="./"/>
+        <Option name="Name" value="FloppyOrgelEmulator"/>
+        <Option name="HEX" value="1"/>
+        <Option name="BIN" value="1"/>
+      </Output>
+      <User>
+        <UserRun name="Run#1" type="Before" checked="0" value=""/>
+        <UserRun name="Run#1" type="After" checked="0" value=""/>
+      </User>
+    </BuildOption>
+    <DebugOption>
+      <Option name="org.coocox.codebugger.gdbjtag.core.adapter" value="ST-Link"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.debugMode" value="SWD"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.clockDiv" value="1M"/>
+      <Option name="org.coocox.codebugger.gdbjtag.corerunToMain" value="1"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.jlinkgdbserver" value=""/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.userDefineGDBScript" value=""/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.targetEndianess" value="0"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.jlinkResetMode" value="Type 0: Normal"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.resetMode" value="SYSRESETREQ"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.ifSemihost" value="0"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.ifCacheRom" value="1"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.ipAddress" value="127.0.0.1"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.portNumber" value="2009"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.autoDownload" value="1"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.verify" value="1"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.downloadFuction" value="Erase Effected"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.defaultAlgorithm" value="STM32F4xx_1024.elf"/>
+    </DebugOption>
+    <ExcludeFile/>
+  </Target>
+  <Components path="./">
+    <Component id="54" name="M4 CMSIS Core" path="" type="2"/>
+    <Component id="500" name="CMSIS BOOT" path="" type="2"/>
+    <Component id="501" name="RCC" path="" type="2"/>
+    <Component id="504" name="GPIO" path="" type="2"/>
+    <Component id="505" name="EXTI" path="" type="2"/>
+    <Component id="509" name="SPI" path="" type="2"/>
+    <Component id="511" name="DMA" path="" type="2"/>
+    <Component id="513" name="TIM" path="" type="2"/>
+    <Component id="516" name="FSMC" path="" type="2"/>
+    <Component id="517" name="USART" path="" type="2"/>
+    <Component id="518" name="RNG" path="" type="2"/>
+    <Component id="520" name="SDIO" path="" type="2"/>
+    <Component id="524" name="MISC" path="" type="2"/>
+    <Component id="526" name="SYSCFG" path="" type="2"/>
+  </Components>
+  <Files>
+    <File name="Filesystem/attributes.h" path="Filesystem/attributes.h" type="1"/>
+    <File name="Filesystem/tm_stm32f4_gpio.c" path="Filesystem/tm_stm32f4_gpio.c" type="1"/>
+    <File name="cmsis_lib/source/stm32f4xx_usart.c" path="cmsis_lib/source/stm32f4xx_usart.c" type="1"/>
+    <File name="Filesystem/tm_stm32f4_timer_properties.h" path="Filesystem/tm_stm32f4_timer_properties.h" type="1"/>
+    <File name="Filesystem/fatfs/diskio.c" path="Filesystem/fatfs/diskio.c" type="1"/>
+    <File name="common/states/about.c" path="../common/states/about.c" type="1"/>
+    <File name="common/states/mainMenu.c" path="../common/states/mainMenu.c" type="1"/>
+    <File name="common/states" path="" type="2"/>
+    <File name="common/StackBasedFsm.c" path="../common/StackBasedFsm.c" type="1"/>
+    <File name="Filesystem/defines.h" path="Filesystem/defines.h" type="1"/>
+    <File name="NesGamePad" path="" type="2"/>
+    <File name="cmsis_lib/include/stm32f4xx_usart.h" path="cmsis_lib/include/stm32f4xx_usart.h" type="1"/>
+    <File name="cmsis/core_cm4_simd.h" path="cmsis/core_cm4_simd.h" type="1"/>
+    <File name="cmsis_boot/stm32f4xx.h" path="cmsis_boot/stm32f4xx.h" type="1"/>
+    <File name="cmsis_lib/source/stm32f4xx_spi.c" path="cmsis_lib/source/stm32f4xx_spi.c" type="1"/>
+    <File name="cmsis/core_cmFunc.h" path="cmsis/core_cmFunc.h" type="1"/>
+    <File name="common/canvas/images.h" path="../common/canvas/images.h" type="1"/>
+    <File name="common/AsciiLib/AsciiLib.h" path="../common/AsciiLib/AsciiLib.h" type="1"/>
+    <File name="Filesystem/tm_stm32f4_delay.c" path="Filesystem/tm_stm32f4_delay.c" type="1"/>
+    <File name="LCD" path="" type="2"/>
+    <File name="common/states/liveMode.h" path="../common/states/liveMode.h" type="1"/>
+    <File name="Filesystem/fatfs/ffconf.h" path="Filesystem/fatfs/ffconf.h" type="1"/>
+    <File name="common/AsciiLib" path="" type="2"/>
+    <File name="common/StackBasedFsm.h" path="../common/StackBasedFsm.h" type="1"/>
+    <File name="common/canvas/canvas.h" path="../common/canvas/canvas.h" type="1"/>
+    <File name="Filesystem/tm_stm32f4_gpio.h" path="Filesystem/tm_stm32f4_gpio.h" type="1"/>
+    <File name="Filesystem/fatfs/ff.c" path="Filesystem/fatfs/ff.c" type="1"/>
+    <File name="common/config.h" path="../common/config.h" type="1"/>
+    <File name="Filesystem/fatfs/drivers/fatfs_sd_sdio.h" path="Filesystem/fatfs/drivers/fatfs_sd_sdio.h" type="1"/>
+    <File name="cmsis_lib/include/stm32f4xx_rcc.h" path="cmsis_lib/include/stm32f4xx_rcc.h" type="1"/>
+    <File name="cmsis_lib/source/stm32f4xx_syscfg.c" path="cmsis_lib/source/stm32f4xx_syscfg.c" type="1"/>
+    <File name="NesGamePad/NesGamePad.c" path="NesGamePad/NesGamePad.c" type="1"/>
+    <File name="hal/hal_display.h" path="../hal/hal_display.h" type="1"/>
+    <File name="hal/hal_misc_stm32f4.c" path="../hal/hal_misc_stm32f4.c" type="1"/>
+    <File name="cmsis_boot/startup/startup_stm32f4xx.c" path="cmsis_boot/startup/startup_stm32f4xx.c" type="1"/>
+    <File name="cmsis_lib/source/stm32f4xx_rcc.c" path="cmsis_lib/source/stm32f4xx_rcc.c" type="1"/>
+    <File name="cmsis/core_cmInstr.h" path="cmsis/core_cmInstr.h" type="1"/>
+    <File name="common" path="" type="2"/>
+    <File name="hal" path="" type="2"/>
+    <File name="common/states/mainMenu.h" path="../common/states/mainMenu.h" type="1"/>
+    <File name="hal/hal_misc.h" path="../hal/hal_misc.h" type="1"/>
+    <File name="cmsis_boot/system_stm32f4xx.c" path="cmsis_boot/system_stm32f4xx.c" type="1"/>
+    <File name="common/canvas/canvas.c" path="../common/canvas/canvas.c" type="1"/>
+    <File name="cmsis_lib/source/stm32f4xx_rng.c" path="cmsis_lib/source/stm32f4xx_rng.c" type="1"/>
+    <File name="cmsis_lib/include/stm32f4xx_spi.h" path="cmsis_lib/include/stm32f4xx_spi.h" type="1"/>
+    <File name="Filesystem" path="" type="2"/>
+    <File name="misc/delay.c" path="misc/delay.c" type="1"/>
+    <File name="common/canvas" path="" type="2"/>
+    <File name="common/LockFreeFIFO.c" path="../common/LockFreeFIFO.c" type="1"/>
+    <File name="Filesystem/option/ccsbcs.c" path="Filesystem/fatfs/option/ccsbcs.c" type="1"/>
+    <File name="cmsis" path="" type="2"/>
+    <File name="cmsis_lib" path="" type="2"/>
+    <File name="Filesystem/fatfs/diskio.h" path="Filesystem/fatfs/diskio.h" type="1"/>
+    <File name="hal/hal_inputdevice.h" path="../hal/hal_inputdevice.h" type="1"/>
+    <File name="Filesystem/fatfs/drivers" path="" type="2"/>
+    <File name="cmsis_lib/include/misc.h" path="cmsis_lib/include/misc.h" type="1"/>
+    <File name="Filesystem/fatfs" path="" type="2"/>
+    <File name="common/LockFreeFIFO.h" path="../common/LockFreeFIFO.h" type="1"/>
+    <File name="Filesystem/fatfs/ff.h" path="Filesystem/fatfs/ff.h" type="1"/>
+    <File name="hal/hal_mididevice_stm32f4.c" path="../hal/hal_mididevice_stm32f4.c" type="1"/>
+    <File name="hal/hal_display_stm32f4.c" path="../hal/hal_display_stm32f4.c" type="1"/>
+    <File name="main.c" path="main.c" type="1"/>
+    <File name="Filesystem/tm_stm32f4_fatfs.c" path="Filesystem/tm_stm32f4_fatfs.c" type="1"/>
+    <File name="cmsis_lib/source/stm32f4xx_gpio.c" path="cmsis_lib/source/stm32f4xx_gpio.c" type="1"/>
+    <File name="cmsis_lib/source/stm32f4xx_dma.c" path="cmsis_lib/source/stm32f4xx_dma.c" type="1"/>
+    <File name="common/SlotBasedMenu.h" path="../common/SlotBasedMenu.h" type="1"/>
+    <File name="cmsis_boot" path="" type="2"/>
+    <File name="cmsis_lib/include/stm32f4xx_syscfg.h" path="cmsis_lib/include/stm32f4xx_syscfg.h" type="1"/>
+    <File name="cmsis_lib/source/stm32f4xx_fsmc.c" path="cmsis_lib/source/stm32f4xx_fsmc.c" type="1"/>
+    <File name="common/states/floppyTest.c" path="../common/states/floppyTest.c" type="1"/>
+    <File name="cmsis_boot/startup" path="" type="2"/>
+    <File name="cmsis/core_cm4.h" path="cmsis/core_cm4.h" type="1"/>
+    <File name="common/states/playlist.h" path="../common/states/playlist.h" type="1"/>
+    <File name="common/states/settings.h" path="../common/states/settings.h" type="1"/>
+    <File name="hal/hal_mididevice.h" path="../hal/hal_mididevice.h" type="1"/>
+    <File name="misc/delay.h" path="misc/delay.h" type="1"/>
+    <File name="cmsis_lib/source/misc.c" path="cmsis_lib/source/misc.c" type="1"/>
+    <File name="common/states/playlist.c" path="../common/states/playlist.c" type="1"/>
+    <File name="cmsis_lib/include/stm32f4xx_tim.h" path="cmsis_lib/include/stm32f4xx_tim.h" type="1"/>
+    <File name="LCD/SSD1289.h" path="LCD/SSD1289.h" type="1"/>
+    <File name="common/states/buttonTest.c" path="../common/states/buttonTest.c" type="1"/>
+    <File name="cmsis_lib/source" path="" type="2"/>
+    <File name="common/states/floppyTest.h" path="../common/states/floppyTest.h" type="1"/>
+    <File name="Filesystem/tm_stm32f4_fatfs.h" path="Filesystem/tm_stm32f4_fatfs.h" type="1"/>
+    <File name="common/states/settings.c" path="../common/states/settings.c" type="1"/>
+    <File name="common/SlotBasedMenu.c" path="../common/SlotBasedMenu.c" type="1"/>
+    <File name="cmsis_boot/stm32f4xx_conf.h" path="cmsis_boot/stm32f4xx_conf.h" type="1"/>
+    <File name="cmsis_boot/system_stm32f4xx.h" path="cmsis_boot/system_stm32f4xx.h" type="1"/>
+    <File name="Filesystem/option" path="" type="2"/>
+    <File name="common/states/liveMode.c" path="../common/states/liveMode.c" type="1"/>
+    <File name="NesGamePad/NesGamePad.h" path="NesGamePad/NesGamePad.h" type="1"/>
+    <File name="common/states/_example.c" path="../common/states/_example.c" type="1"/>
+    <File name="common/embedded-midilib" path="" type="2"/>
+    <File name="cmsis_lib/include/stm32f4xx_sdio.h" path="cmsis_lib/include/stm32f4xx_sdio.h" type="1"/>
+    <File name="cmsis_lib/source/stm32f4xx_sdio.c" path="cmsis_lib/source/stm32f4xx_sdio.c" type="1"/>
+    <File name="hal/hal_inputdevice_stm32f4.c" path="../hal/hal_inputdevice_stm32f4.c" type="1"/>
+    <File name="Filesystem/fatfs/drivers/fatfs_sd_sdio.c" path="Filesystem/fatfs/drivers/fatfs_sd_sdio.c" type="1"/>
+    <File name="cmsis_lib/include/stm32f4xx_exti.h" path="cmsis_lib/include/stm32f4xx_exti.h" type="1"/>
+    <File name="cmsis_lib/source/stm32f4xx_exti.c" path="cmsis_lib/source/stm32f4xx_exti.c" type="1"/>
+    <File name="common/common_main.c" path="../common/common_main.c" type="1"/>
+    <File name="LCD/SSD1289.c" path="LCD/SSD1289.c" type="1"/>
+    <File name="Filesystem/tm_stm32f4_timer_properties.c" path="Filesystem/tm_stm32f4_timer_properties.c" type="1"/>
+    <File name="common/states/_example.h" path="../common/states/_example.h" type="1"/>
+    <File name="cmsis_lib/include/stm32f4xx_dma.h" path="cmsis_lib/include/stm32f4xx_dma.h" type="1"/>
+    <File name="cmsis_lib/source/stm32f4xx_tim.c" path="cmsis_lib/source/stm32f4xx_tim.c" type="1"/>
+    <File name="cmsis_lib/include/stm32f4xx_gpio.h" path="cmsis_lib/include/stm32f4xx_gpio.h" type="1"/>
+    <File name="common/AsciiLib/AsciiLib.c" path="../common/AsciiLib/AsciiLib.c" type="1"/>
+    <File name="common/states/about.h" path="../common/states/about.h" type="1"/>
+    <File name="misc" path="" type="2"/>
+    <File name="cmsis_lib/include/stm32f4xx_fsmc.h" path="cmsis_lib/include/stm32f4xx_fsmc.h" type="1"/>
+    <File name="hal/hal_filesystem.h" path="../hal/hal_filesystem.h" type="1"/>
+    <File name="cmsis_lib/include/stm32f4xx_rng.h" path="cmsis_lib/include/stm32f4xx_rng.h" type="1"/>
+    <File name="cmsis_lib/include" path="" type="2"/>
+    <File name="Filesystem/fatfs/integer.h" path="Filesystem/fatfs/integer.h" type="1"/>
+    <File name="hal/hal_filesystem_stm32f4.c" path="../hal/hal_filesystem_stm32f4.c" type="1"/>
+    <File name="Filesystem/tm_stm32f4_delay.h" path="Filesystem/tm_stm32f4_delay.h" type="1"/>
+    <File name="common/states/buttonTest.h" path="../common/states/buttonTest.h" type="1"/>
+    <File name="common/common_main.h" path="../common/common_main.h" type="1"/>
+    <File name="Filesystem/option/syscall.c" path="Filesystem/fatfs/option/syscall.c" type="1"/>
+  </Files>
+</Project>

@@ -224,7 +224,37 @@ void startPlayBack(StackBasedFsm_t* pFsm, FsmState* state, void* pArgs) {
 // playlist
 // ------------------------------------------------------------------------------------------------------------
 
+static struct {  
+  SlotBasedMenu_t menu;
+  char filePath[256];
+  FO_FIND_DATA findData;
+} context;
+
 static void onBrowseNewPage(int currentPage, int totalPages) {
+  hal_printf("playlist::onBrowseNewPage()");
+
+  // Set tracks of current page
+  bool endOfDirectory = !hal_findInit(context.filePath, &context.findData);
+  int curFileIndex = 0;
+  
+  while (!endOfDirectory) {
+    if (context.findData.fileName[0] != '.' && context.findData.fileName[1] != '.') {
+      if (curFileIndex >= (currentPage - 1) * MENU_FILES_PER_PAGE) {
+        //context.menu.slot[curFileIndex].pLabel = context.findData.fileName;
+        context.menu.slot[curFileIndex].pLabel = "Blub"; // TODO: change pLabel to array?
+        context.menu.slot[curFileIndex].pNextStateTransitionFunc = startPlayBack;
+
+        curFileIndex++;
+      }
+    }
+
+    endOfDirectory = !hal_findNext(&context.findData) || curFileIndex >= (currentPage - 1) * MENU_FILES_PER_PAGE + MENU_FILES_PER_PAGE;
+  }
+  hal_findFree();
+
+  context.menu.numSlots = curFileIndex + 1;
+
+  // Update page number
   char pageText[32];
   sprintf(pageText, "%2d / %2d", currentPage, totalPages); // TODO: hal_sprintf?
 
@@ -256,12 +286,6 @@ void playbackAborted(StackBasedFsm_t* pFsm, FsmState* state, void* pArgs) {
 //  fsmPop(fsm);
 //  fsmPush(fsm, playlist, NULL);
 }
-
-static struct {  
-  SlotBasedMenu_t menu;
-  char filePath[256];
-  FO_FIND_DATA findData;
-} context;
 
 static void getFileNameFromCursorPos(char* srcPath, char* dstFilePath, int cursorPos) {
   static FO_FIND_DATA findData;
@@ -320,29 +344,17 @@ static void draw() {
   int curPage = numPages > 0 ? context.menu.cursorPos / MENU_FILES_PER_PAGE + 1 : 0;
 
   if (numFiles > 0) {
-    // Draw tracks of current page
-    context.menu.numSlots = getNumFiles(context.filePath);
-    bool endOfDirectory = !hal_findInit(context.filePath, &context.findData);
-    int i = 0;
-    int itemCount = 0;
+    onBrowseNewPage(curPage, numPages); // FIXME: implement correctly!
+    // draw all tracks of current page
 
-    while (!endOfDirectory) {
-      if (context.findData.fileName[0] != '.')
-        if (context.findData.fileName[1] != '.')
-          if (i++ >= (curPage - 1) * MENU_FILES_PER_PAGE)
-            canvas_drawText(context.menu.xPos + 27, context.menu.yPos - 5 + 18 * itemCount++, context.findData.fileName, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
-
-      endOfDirectory = !hal_findNext(&context.findData) || i >= (curPage - 1) * MENU_FILES_PER_PAGE + MENU_FILES_PER_PAGE;
+    for (int i = 0; i < context.menu.numSlots; i++) {
+      canvas_drawText(CENTER, context.menu.yPos - 5 + i * 18, context.menu.slot[i].pLabel, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00);
     }
-    hal_findFree();
   }
   else {
     canvas_drawText(CENTER, context.menu.yPos - 5 + 3 * 18, "No tracks available!", 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00);
     canvas_drawText(CENTER, context.menu.yPos - 5 + 4 * 18, "SD-Card missing?", 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00);
   }
-
-  if(numPages > 0)
-    onBrowseNewPage(curPage, numPages); // FIXME: implement correctly!
 
   display_redraw();
 }
@@ -364,7 +376,7 @@ static void onBack(StackBasedFsm_t* pFsm) {
 static void onEnter(StackBasedFsm_t* pFsm, void* pParams) {
   hal_printf("playlist::onEnter()");  
 
-  menuInit(&context.menu, pFsm, 3, 50);  
+  menuInit(&context.menu, pFsm, 3, 50);
   strcpy(context.filePath, MIDI_PATH);
 
   draw();
