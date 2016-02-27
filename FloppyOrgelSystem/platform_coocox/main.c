@@ -151,14 +151,12 @@ void initializeBusUart(uint32_t baudrate) {
 
 // This will print on usart 1 (the original function has been commented out in printf.c !!!
 signed int fputc(signed int c, FILE *pStream) {
-  /*
   // Wait until transmit finishes
   while (USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET);
 
   // Transmit the character using USART1
   USART_SendData(USART1, (u8) c);
   return c;
-  */
 }
 
 int main(void) {

@@ -115,11 +115,13 @@
     <File name="Filesystem/fatfs/ff.c" path="Filesystem/fatfs/ff.c" type="1"/>
     <File name="common/config.h" path="../common/config.h" type="1"/>
     <File name="Filesystem/fatfs/drivers/fatfs_sd_sdio.h" path="Filesystem/fatfs/drivers/fatfs_sd_sdio.h" type="1"/>
+    <File name="stdio/printf.c" path="stdio/printf.c" type="1"/>
     <File name="cmsis_lib/include/stm32f4xx_rcc.h" path="cmsis_lib/include/stm32f4xx_rcc.h" type="1"/>
     <File name="cmsis_lib/source/stm32f4xx_syscfg.c" path="cmsis_lib/source/stm32f4xx_syscfg.c" type="1"/>
     <File name="NesGamePad/NesGamePad.c" path="NesGamePad/NesGamePad.c" type="1"/>
     <File name="hal/hal_display.h" path="../hal/hal_display.h" type="1"/>
     <File name="hal/hal_misc_stm32f4.c" path="../hal/hal_misc_stm32f4.c" type="1"/>
+    <File name="stdio" path="" type="2"/>
     <File name="cmsis_boot/startup/startup_stm32f4xx.c" path="cmsis_boot/startup/startup_stm32f4xx.c" type="1"/>
     <File name="cmsis_lib/source/stm32f4xx_rcc.c" path="cmsis_lib/source/stm32f4xx_rcc.c" type="1"/>
     <File name="cmsis/core_cmInstr.h" path="cmsis/core_cmInstr.h" type="1"/>
@@ -132,8 +134,8 @@
     <File name="cmsis_lib/source/stm32f4xx_rng.c" path="cmsis_lib/source/stm32f4xx_rng.c" type="1"/>
     <File name="cmsis_lib/include/stm32f4xx_spi.h" path="cmsis_lib/include/stm32f4xx_spi.h" type="1"/>
     <File name="Filesystem" path="" type="2"/>
-    <File name="misc/delay.c" path="misc/delay.c" type="1"/>
     <File name="common/canvas" path="" type="2"/>
+    <File name="misc/delay.c" path="misc/delay.c" type="1"/>
     <File name="common/LockFreeFIFO.c" path="../common/LockFreeFIFO.c" type="1"/>
     <File name="Filesystem/option/ccsbcs.c" path="Filesystem/fatfs/option/ccsbcs.c" type="1"/>
     <File name="cmsis" path="" type="2"/>
