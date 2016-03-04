@@ -107,31 +107,23 @@ static bool isLastDirectionEqual(InputDeviceStates_t currentState, InputDeviceSt
   return currentDirectionCode == lastDirectionCode;
 }
 
-void fsmTick(StackBasedFsm_t* pFsm) {
-  FsmState* pState = fsmGetCurrentState(pFsm);
-  InputDeviceStates_t buttonPressed = getInputDeviceState();
-  static InputDeviceStates_t lastState = { 0 };
+void processCursorButtons(StackBasedFsm_t* pFsm, FsmState* pState, InputDeviceStates_t* pButtonStates, 
+    InputDeviceStates_t* pLastButtonStates, uint32_t* pTimeOnLastButtonPress) {
+
+  static bool isInRepetitionMode = false;
   static uint32_t timeOnLastDirectionPress = 0;
   static uint32_t timeOnLastRepetition = 0;
-  static bool isInRepetitionMode = false;
-
-  if (buttonPressed.Action && !lastState.Action)
-    if (pState->onAction)
-      pState->onAction(pFsm);
-
-  if (buttonPressed.Back && !lastState.Back)
-    if (pState->onBack)
-      pState->onBack(pFsm);
 
   // TODO: simplify
   // Cursor delay and repetition, when holding direction button
-  if (anyDirectionIsPressed(buttonPressed)) {
-    if (isLastDirectionEqual(buttonPressed, lastState)) {
+  if (anyDirectionIsPressed(*pButtonStates)) {
+    if (isLastDirectionEqual(*pButtonStates, *pLastButtonStates)) {
       if (isInRepetitionMode) {
         if (hal_clock() > timeOnLastDirectionPress + CURSOR_DELAY_MS_BEFORE_REPEAT) {
           if (hal_clock() > timeOnLastRepetition + 1000 / CURSOR_SPEED_ITEMS_PER_SECOND) {
             if (pState->onDirection)
-              pState->onDirection(pFsm, buttonPressed.South, buttonPressed.North, buttonPressed.West, buttonPressed.East);
+              pState->onDirection(pFsm, pButtonStates->South, pButtonStates->North, pButtonStates->West, 
+                  pButtonStates->East);
 
             // hal_printf("timeOnLastRepetition: %d, repeat on: %d", timeOnLastRepetition, timeOnLastRepetition + 1000 / CURSOR_SPEED_ITEMS_PER_SECOND);
 
@@ -140,13 +132,15 @@ void fsmTick(StackBasedFsm_t* pFsm) {
         }
       }
       else {
+        *pTimeOnLastButtonPress = hal_clock();
         timeOnLastDirectionPress = hal_clock();
         timeOnLastRepetition = hal_clock();
         isInRepetitionMode = true;
 
         // hal_printf("In repetition mode");
         if (pState->onDirection)
-          pState->onDirection(pFsm, buttonPressed.South, buttonPressed.North, buttonPressed.West, buttonPressed.East);
+          pState->onDirection(pFsm, pButtonStates->South, pButtonStates->North, pButtonStates->West,
+              pButtonStates->East);
       }
     }
   }
@@ -155,11 +149,53 @@ void fsmTick(StackBasedFsm_t* pFsm) {
       isInRepetitionMode = false;
       // hal_printf("End of repetition mode");
     }
-  }    
+  }
+}
+
+void processActionButtons(StackBasedFsm_t* pFsm, FsmState* pState, InputDeviceStates_t* pButtonStates,
+    InputDeviceStates_t* pLastButtonStates, uint32_t* pTimeOnLastButtonPress) {
+
+  // Force user to press button again after entering a menu
+  if (pButtonStates->Action && !pLastButtonStates->Action) {
+    if (pState->onAction)
+      pState->onAction(pFsm);
+
+    *pTimeOnLastButtonPress = hal_clock();
+  }
+
+  if (pButtonStates->Back && !pLastButtonStates->Back) {
+    if (pState->onBack)
+      pState->onBack(pFsm);
+
+    *pTimeOnLastButtonPress = hal_clock();
+  }
+}
+
+bool isDebouncing(uint32_t timeOnLastButtonPress) {
+  return hal_clock() > timeOnLastButtonPress + INPUT_DEVICE_DEBOUNCE_MS ? false : true;
+}
+
+void processInputDevice(StackBasedFsm_t* pFsm) {
+  FsmState* pState = fsmGetCurrentState(pFsm);
+  InputDeviceStates_t buttonStates = getInputDeviceState();
+  static InputDeviceStates_t lastButtonStates = { 0 };
+  static uint32_t timeOnLastButtonPress = 0;
+
+  // TODO: do deboucing here!
+  if (!isDebouncing(timeOnLastButtonPress)) {
+    processCursorButtons(pFsm, pState, &buttonStates, &lastButtonStates, &timeOnLastButtonPress);
+    processActionButtons(pFsm, pState, &buttonStates, &lastButtonStates, &timeOnLastButtonPress);
+
+    lastButtonStates = buttonStates;
+  }
+}
+
+void fsmTick(StackBasedFsm_t* pFsm) {
+  FsmState* pState = fsmGetCurrentState(pFsm);
+
+  processInputDevice(pFsm);
   
   if (pState)
     if (pState->onTick)
       pState->onTick(pFsm);
-
-  lastState = buttonPressed;
 }

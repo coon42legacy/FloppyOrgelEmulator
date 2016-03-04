@@ -347,7 +347,7 @@ static void draw() {
     onBrowseNewPage(curPage, numPages); // FIXME: implement correctly!
     // draw all tracks of current page
 
-    for (int i = 0; i < context.menu.numSlots; i++) {
+    for (int i = 0; i < MENU_FILES_PER_PAGE; i++) {
       canvas_drawText(CENTER, context.menu.yPos - 5 + i * 18, context.menu.slot[i].pLabel, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00);
     }
   }
