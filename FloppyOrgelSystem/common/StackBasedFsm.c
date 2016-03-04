@@ -5,13 +5,14 @@
 #include "../hal/hal_misc.h"
 
 static void initStateCallBacks(FsmState* pState) {
-  pState->onAction       = NULL;
-  pState->onBack         = NULL;
-  pState->onDirection    = NULL;
-  pState->onEnterState   = NULL;
-  pState->onLeaveState   = NULL;
-  pState->onReenterState = NULL;
-  pState->onTick         = NULL;
+  pState->onActionPress   = NULL;
+  pState->onActionRelease = NULL;
+  pState->onBack          = NULL;
+  pState->onDirection     = NULL;
+  pState->onEnterState    = NULL;
+  pState->onLeaveState    = NULL;
+  pState->onReenterState  = NULL;
+  pState->onTick          = NULL;
 }
 
 static bool isCallbackDefined(void* pCallBack, char* pCallBackName) {
@@ -26,13 +27,14 @@ static bool isCallbackDefined(void* pCallBack, char* pCallBackName) {
 static bool checkStateCallbacks(FsmState* pState) {
   bool callBacksOk = true;
 
-  callBacksOk &= isCallbackDefined(pState->onAction,       "onAction");
-  callBacksOk &= isCallbackDefined(pState->onBack,         "onBack");
-  callBacksOk &= isCallbackDefined(pState->onDirection,    "onDirection");
-  callBacksOk &= isCallbackDefined(pState->onEnterState,   "onEnterState");
-  callBacksOk &= isCallbackDefined(pState->onLeaveState,   "onLeaveState");
-  callBacksOk &= isCallbackDefined(pState->onReenterState, "onReenterState");
-  callBacksOk &= isCallbackDefined(pState->onTick,         "onTick");
+  callBacksOk &= isCallbackDefined(pState->onActionPress,   "onActionPress");
+  // callBacksOk &= isCallbackDefined(pState->onActionRelease, "onActionRelease"); // TODO: make optional?
+  callBacksOk &= isCallbackDefined(pState->onBack,          "onBack");
+  callBacksOk &= isCallbackDefined(pState->onDirection,     "onDirection");
+  callBacksOk &= isCallbackDefined(pState->onEnterState,    "onEnterState");
+  callBacksOk &= isCallbackDefined(pState->onLeaveState,    "onLeaveState");
+  callBacksOk &= isCallbackDefined(pState->onReenterState,  "onReenterState");
+  callBacksOk &= isCallbackDefined(pState->onTick,          "onTick");
 
   return callBacksOk;
 }
@@ -156,9 +158,17 @@ void processActionButtons(StackBasedFsm_t* pFsm, FsmState* pState, InputDeviceSt
     InputDeviceStates_t* pLastButtonStates, uint32_t* pTimeOnLastButtonPress) {
 
   // Force user to press button again after entering a menu
+  // TODO: DRY!
   if (pButtonStates->Action && !pLastButtonStates->Action) {
-    if (pState->onAction)
-      pState->onAction(pFsm);
+    if (pState->onActionPress)
+      pState->onActionPress(pFsm);
+
+    *pTimeOnLastButtonPress = hal_clock();
+  }
+
+  if (!pButtonStates->Action && pLastButtonStates->Action) {
+    if (pState->onActionRelease)
+      pState->onActionRelease(pFsm);
 
     *pTimeOnLastButtonPress = hal_clock();
   }
@@ -182,7 +192,7 @@ void processInputDevice(StackBasedFsm_t* pFsm) {
   static uint32_t timeOnLastButtonPress = 0;
 
   // TODO: do deboucing here!
-  if (!isDebouncing(timeOnLastButtonPress)) {
+  if (!isDebouncing(timeOnLastButtonPress)) { // CHECKME: it may be neccesarry to debounce each button individually
     processCursorButtons(pFsm, pState, &buttonStates, &lastButtonStates, &timeOnLastButtonPress);
     processActionButtons(pFsm, pState, &buttonStates, &lastButtonStates, &timeOnLastButtonPress);
 

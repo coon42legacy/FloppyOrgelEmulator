@@ -74,7 +74,7 @@ static void onDirection(StackBasedFsm_t* pFsm, bool south, bool north, bool west
 // copy the code unchanged and always as last function of the file:
 
 void example(StackBasedFsm_t* pFsm, FsmState* pState, void* pArgs) {
-  pState->onAction = onAction;
+  pState->onActionPress = onAction;
   pState->onBack = onBack;
   pState->onDirection = onDirection;
   pState->onEnterState = onEnter;

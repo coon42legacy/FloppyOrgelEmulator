@@ -403,7 +403,7 @@ static void onDirection(StackBasedFsm_t* pFsm, bool south, bool north, bool west
 }
 
 void playlist(StackBasedFsm_t* pFsm, FsmState* pState, void* pParams) {
-  pState->onAction = onAction;
+  pState->onActionPress = onAction;
   pState->onBack = onBack;
   pState->onDirection = onDirection;
   pState->onEnterState = onEnter;

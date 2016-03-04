@@ -18,8 +18,12 @@ static void draw() {
   display_redraw();
 }
 
-static void onAction(StackBasedFsm_t* pFsm) {
-  hal_printf("about::onAction()");
+static void onActionPress(StackBasedFsm_t* pFsm) {
+  hal_printf("about::onActionPress()");
+}
+
+static void onActionRelease(StackBasedFsm_t* pFsm) {
+  hal_printf("about::onActionRelease()");
 }
 
 static void onBack(StackBasedFsm_t* pFsm) {
@@ -57,7 +61,8 @@ static void onDirection(StackBasedFsm_t* pFsm, bool south, bool north, bool west
 }
 
 void about(StackBasedFsm_t* pFsm, FsmState* pState, void* pParams) {
-  pState->onAction = onAction;
+  pState->onActionPress = onActionPress;
+  pState->onActionRelease = onActionRelease;
   pState->onBack = onBack;
   pState->onDirection = onDirection;
   pState->onEnterState = onEnter;
