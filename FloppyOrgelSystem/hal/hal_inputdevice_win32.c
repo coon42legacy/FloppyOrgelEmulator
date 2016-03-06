@@ -4,17 +4,16 @@
 
 extern HWND g_hEmuWnd;
 
-#define KEY_ACTION VK_RETURN
-#define KEY_BACK   VK_BACK
-#define KEY_NORTH  'W'
-#define KEY_WEST   'A'
-#define KEY_SOUTH  'S'
-#define KEY_EAST   'D'
+#define KEY_ACTION  VK_RETURN
+#define KEY_BACK    VK_BACK
+#define KEY_NORTH   'W'
+#define KEY_WEST    'A'
+#define KEY_SOUTH   'S'
+#define KEY_EAST    'D'
+#define KEY_START   VK_SPACE
+#define KEY_SELECT 'X'
 #define KEY_SIMULATE_DISCONNECTED VK_TAB
 
-// Optional
-#define KEY_START VK_SPACE
-#define KEY_SELECT 'X'
 
 void setupInputDevice() {
 
@@ -31,12 +30,14 @@ InputDeviceStates_t getInputDeviceState() {
   InputDeviceStates_t states;
 
   states.Connected = !getButtonStateEmu(KEY_SIMULATE_DISCONNECTED);
-  states.Action = getButtonStateEmu(KEY_ACTION);
-  states.Back   = getButtonStateEmu(KEY_BACK);
-  states.North  = getButtonStateEmu(KEY_NORTH) || getButtonStateEmu(VK_UP);
-  states.West   = getButtonStateEmu(KEY_WEST)  || getButtonStateEmu(VK_LEFT);
-  states.South  = getButtonStateEmu(KEY_SOUTH) || getButtonStateEmu(VK_DOWN);
-  states.East   = getButtonStateEmu(KEY_EAST)  || getButtonStateEmu(VK_RIGHT);
+  states.Action    = getButtonStateEmu(KEY_ACTION);
+  states.Back      = getButtonStateEmu(KEY_BACK);
+  states.North     = getButtonStateEmu(KEY_NORTH) || getButtonStateEmu(VK_UP);
+  states.West      = getButtonStateEmu(KEY_WEST)  || getButtonStateEmu(VK_LEFT);
+  states.South     = getButtonStateEmu(KEY_SOUTH) || getButtonStateEmu(VK_DOWN);
+  states.East      = getButtonStateEmu(KEY_EAST)  || getButtonStateEmu(VK_RIGHT);
+  states.Start     = getButtonStateEmu(KEY_START);
+  states.Select    = getButtonStateEmu(KEY_SELECT);
     
   return states;
 }
@@ -48,6 +49,8 @@ void debugPrintInputDeviceState() {
   else {
     printf("Action: "); if (state.Action) printf(" ON"); else printf("OFF"); printf(" | ");
     printf("Back: ");   if (state.Back)   printf(" ON"); else printf("OFF"); printf(" | ");
+    printf("Start: ");  if (state.Start)  printf(" ON"); else printf("OFF"); printf(" | ");
+    printf("Select: "); if (state.Select) printf(" ON"); else printf("OFF"); printf(" | ");
     printf("UP: ");     if (state.North)  printf(" ON"); else printf("OFF"); printf(" | ");
     printf("DOWN: ");   if (state.South)  printf(" ON"); else printf("OFF"); printf(" | ");
     printf("LEFT: ");   if (state.West)   printf(" ON"); else printf("OFF"); printf(" | ");

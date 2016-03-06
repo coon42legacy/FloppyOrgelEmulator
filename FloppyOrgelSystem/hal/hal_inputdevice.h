@@ -9,8 +9,8 @@ typedef struct {
   West   : 1,
   South  : 1,
   North  : 1,
-         : 1, // reserved
-         : 1, // reserved
+  Start  : 1,
+  Select : 1,
   Back   : 1,
   Action : 1,
   Connected : 1;

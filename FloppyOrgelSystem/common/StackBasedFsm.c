@@ -7,7 +7,12 @@
 static void initStateCallBacks(FsmState* pState) {
   pState->onActionPress   = NULL;
   pState->onActionRelease = NULL;
-  pState->onBackPress          = NULL;
+  pState->onBackPress     = NULL;
+  pState->onBackRelease   = NULL;
+  pState->onStartPress    = NULL;
+  pState->onStartRelease  = NULL;
+  pState->onSelectPress   = NULL;
+  pState->onSelectRelease = NULL;
   pState->onDirection     = NULL;
   pState->onEnterState    = NULL;
   pState->onLeaveState    = NULL;
@@ -33,6 +38,10 @@ static bool checkStateCallbacks(FsmState* pState) {
   // callBacksOk &= isCallbackDefined(pState->onActionRelease, "onActionRelease"); // TODO: make optional?
   callBacksOk &= isCallbackDefined(pState->onBackPress,     "onBackPress");
   // callBacksOk &= isCallbackDefined(pState->onBackRelease,   "onBackRelease");
+  callBacksOk &= isCallbackDefined(pState->onStartPress,     "onStartPress");
+  // callBacksOk &= isCallbackDefined(pState->onStartRelease,   "onStartRelease");
+  callBacksOk &= isCallbackDefined(pState->onSelectPress,    "onSelectPress");
+  // callBacksOk &= isCallbackDefined(pState->onSelectRelease,  "onSelectRelease");
   callBacksOk &= isCallbackDefined(pState->onDirection,     "onDirection");
   callBacksOk &= isCallbackDefined(pState->onEnterState,    "onEnterState");
   callBacksOk &= isCallbackDefined(pState->onLeaveState,    "onLeaveState");
@@ -189,6 +198,36 @@ void processActionButtons(StackBasedFsm_t* pFsm, FsmState* pState, InputDeviceSt
   if (!pButtonStates->Back && pLastButtonStates->Back) {
     if (pState->onBackRelease)
       pState->onBackRelease(pFsm);
+
+    *pTimeOnLastButtonPress = hal_clock(); // CHECKME: Is this also needed on release for debouce?
+  }
+
+  // Start button
+  if (pButtonStates->Start && !pLastButtonStates->Start) {
+    if (pState->onStartPress)
+      pState->onStartPress(pFsm);
+
+    *pTimeOnLastButtonPress = hal_clock();
+  }
+
+  if (!pButtonStates->Start && pLastButtonStates->Start) {
+    if (pState->onStartRelease)
+      pState->onStartRelease(pFsm);
+
+    *pTimeOnLastButtonPress = hal_clock(); // CHECKME: Is this also needed on release for debouce?
+  }
+
+  // Select button
+  if (pButtonStates->Select && !pLastButtonStates->Select) {
+    if (pState->onSelectPress)
+      pState->onSelectPress(pFsm);
+
+    *pTimeOnLastButtonPress = hal_clock();
+  }
+
+  if (!pButtonStates->Select && pLastButtonStates->Select) {
+    if (pState->onSelectRelease)
+      pState->onSelectRelease(pFsm);
 
     *pTimeOnLastButtonPress = hal_clock(); // CHECKME: Is this also needed on release for debouce?
   }

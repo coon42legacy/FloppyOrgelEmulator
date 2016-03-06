@@ -26,10 +26,26 @@ static void onActionRelease(StackBasedFsm_t* pFsm) {
   hal_printf("about::onActionRelease()");
 }
 
-static void onBack(StackBasedFsm_t* pFsm) {
-  hal_printf("about::onBack()");
+static void onBackPress(StackBasedFsm_t* pFsm) {
+  hal_printf("about::onBackPress()");
 
   fsmPop(pFsm);
+}
+
+static void onStartPress(StackBasedFsm_t* pFsm) {
+  hal_printf("about::onStartPress()");
+}
+
+static void onStartRelease(StackBasedFsm_t* pFsm) {
+  hal_printf("about::onStartRelease()");
+}
+
+static void onSelectPress(StackBasedFsm_t* pFsm) {
+  hal_printf("about::onSelectPress()");
+}
+
+static void onSelectRelease(StackBasedFsm_t* pFsm) {
+  hal_printf("about::onSelectRelease()");
 }
 
 static void onEnter(StackBasedFsm_t* pFsm, void* pParams) {
@@ -61,14 +77,18 @@ static void onDirection(StackBasedFsm_t* pFsm, bool south, bool north, bool west
 }
 
 void about(StackBasedFsm_t* pFsm, FsmState* pState, void* pParams) {
-  pState->onActionPress = onActionPress;
+  pState->onActionPress   = onActionPress;
   pState->onActionRelease = onActionRelease;
-  pState->onBackPress = onBack;
-  pState->onDirection = onDirection;
-  pState->onEnterState = onEnter;
-  pState->onReenterState = onReenter;
-  pState->onLeaveState = onLeaveState;
-  pState->onTick = onTick;
+  pState->onBackPress     = onBackPress;
+  pState->onStartPress    = onStartPress;
+  pState->onStartRelease  = onStartRelease;
+  pState->onSelectPress   = onSelectPress;
+  pState->onSelectRelease = onSelectRelease;
+  pState->onDirection     = onDirection;
+  pState->onEnterState    = onEnter;
+  pState->onReenterState  = onReenter;
+  pState->onLeaveState    = onLeaveState;
+  pState->onTick          = onTick;
 
   pState->onEnterState(pFsm, pParams);
 }
