@@ -40,8 +40,8 @@ static void onBackPress(StackBasedFsm_t* pFsm) {
   // This function is called, when the player presses the back button on the Gamepad.
   // On the NES game pad this is the 'B' button.
 
-  // In most cases you want to go to the previous screen. This is done by executing 'fsmPop(context.pFsm);'
-  fsmPop(pFsm);
+  // In most cases you want to go to the previous screen. This is done by calling 'leaveState(pFsm)'.
+  leaveState(pFsm);
 }
 
 static void onBackRelease(StackBasedFsm_t* pFsm) {

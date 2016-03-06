@@ -370,7 +370,7 @@ static void onAction(StackBasedFsm_t* pFsm) {
 static void onBack(StackBasedFsm_t* pFsm) {
   hal_printf("playlist::onBack()");
 
-  fsmPop(pFsm);
+  leaveState(pFsm);
 }
 
 static void onEnter(StackBasedFsm_t* pFsm, void* pParams) {

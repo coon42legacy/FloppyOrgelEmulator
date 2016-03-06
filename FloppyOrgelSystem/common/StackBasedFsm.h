@@ -51,4 +51,6 @@ bool fsmPop(StackBasedFsm_t* pFsm);
 FsmState* fsmGetCurrentState(StackBasedFsm_t* pFsm);
 void fsmTick(StackBasedFsm_t* pFsm);
 
+bool leaveState(StackBasedFsm_t* pFsm);
+
 #endif

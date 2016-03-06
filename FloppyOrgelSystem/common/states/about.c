@@ -29,7 +29,7 @@ static void onActionRelease(StackBasedFsm_t* pFsm) {
 static void onBackPress(StackBasedFsm_t* pFsm) {
   hal_printf("about::onBackPress()");
 
-  fsmPop(pFsm);
+  leaveState(pFsm);
 }
 
 static void onStartPress(StackBasedFsm_t* pFsm) {

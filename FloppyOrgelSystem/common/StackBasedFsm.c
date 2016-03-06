@@ -101,6 +101,10 @@ bool fsmPop(StackBasedFsm_t* pFsm) {
     return false;
 }
 
+bool leaveState(StackBasedFsm_t* pFsm) {
+  return fsmPop(pFsm);
+}
+
 FsmState* fsmGetCurrentState(StackBasedFsm_t* pFsm) {
   if (pFsm->stackSize_ > 0)
     return &pFsm->stack[pFsm->stackSize_ - 1];
