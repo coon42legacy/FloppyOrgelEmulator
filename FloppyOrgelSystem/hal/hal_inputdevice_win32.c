@@ -44,6 +44,7 @@ InputDeviceStates_t getInputDeviceState() {
 
 void debugPrintInputDeviceState() {
   InputDeviceStates_t state = getInputDeviceState();
+
   if (!state.Connected)
     printf("Game pad is not plugged in");
   else {
@@ -56,5 +57,6 @@ void debugPrintInputDeviceState() {
     printf("LEFT: ");   if (state.West)   printf(" ON"); else printf("OFF"); printf(" | ");
     printf("RIGHT: ");  if (state.East)   printf(" ON"); else printf("OFF"); printf(" | ");
   }
+
   printf("\n\r");
 }

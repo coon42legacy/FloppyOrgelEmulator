@@ -11,11 +11,14 @@ InputDeviceStates_t getInputDeviceState() {
   union NesGamePadStates_t nesStates = getNesGamepadState();
 
   states.Action = nesStates.states.A;
-  states.Back = nesStates.states.B;
-  states.East = nesStates.states.East;
-  states.West = nesStates.states.West;
-  states.North = nesStates.states.North;
-  states.South = nesStates.states.South;
+  states.Back   = nesStates.states.B;
+  states.East   = nesStates.states.East;
+  states.West   = nesStates.states.West;
+  states.North  = nesStates.states.North;
+  states.South  = nesStates.states.South;
+  states.Start  = nesStates.states.Start;
+  states.Select = nesStates.states.Select;
+
   states.Connected = nesStates.code != 0xFF;
 
   return states;
@@ -23,15 +26,19 @@ InputDeviceStates_t getInputDeviceState() {
 
 void debugPrintInputDeviceState() {
   InputDeviceStates_t state = getInputDeviceState();
+
   if (!state.Connected)
     printf("Game pad is not plugged in");
   else {
     printf("Action: "); if (state.Action) printf(" ON"); else printf("OFF"); printf(" | ");
     printf("Back: ");   if (state.Back)   printf(" ON"); else printf("OFF"); printf(" | ");
+    printf("Start: ");  if (state.Start)  printf(" ON"); else printf("OFF"); printf(" | ");
+    printf("Select: "); if (state.Select) printf(" ON"); else printf("OFF"); printf(" | ");
     printf("UP: ");     if (state.North)  printf(" ON"); else printf("OFF"); printf(" | ");
     printf("DOWN: ");   if (state.South)  printf(" ON"); else printf("OFF"); printf(" | ");
     printf("LEFT: ");   if (state.West)   printf(" ON"); else printf("OFF"); printf(" | ");
     printf("RIGHT: ");  if (state.East)   printf(" ON"); else printf("OFF"); printf(" | ");
   }
+
   printf("\n\r");
 }
