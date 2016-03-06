@@ -63,7 +63,7 @@ static void onDirection(StackBasedFsm_t* pFsm, bool south, bool north, bool west
 void about(StackBasedFsm_t* pFsm, FsmState* pState, void* pParams) {
   pState->onActionPress = onActionPress;
   pState->onActionRelease = onActionRelease;
-  pState->onBack = onBack;
+  pState->onBackPress = onBack;
   pState->onDirection = onDirection;
   pState->onEnterState = onEnter;
   pState->onReenterState = onReenter;

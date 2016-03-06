@@ -7,7 +7,7 @@
 static void initStateCallBacks(FsmState* pState) {
   pState->onActionPress   = NULL;
   pState->onActionRelease = NULL;
-  pState->onBack          = NULL;
+  pState->onBackPress          = NULL;
   pState->onDirection     = NULL;
   pState->onEnterState    = NULL;
   pState->onLeaveState    = NULL;
@@ -27,9 +27,12 @@ static bool isCallbackDefined(void* pCallBack, char* pCallBackName) {
 static bool checkStateCallbacks(FsmState* pState) {
   bool callBacksOk = true;
 
+  // TODO: make all callbacks optional and print warning instead?
+
   callBacksOk &= isCallbackDefined(pState->onActionPress,   "onActionPress");
   // callBacksOk &= isCallbackDefined(pState->onActionRelease, "onActionRelease"); // TODO: make optional?
-  callBacksOk &= isCallbackDefined(pState->onBack,          "onBack");
+  callBacksOk &= isCallbackDefined(pState->onBackPress,     "onBackPress");
+  // callBacksOk &= isCallbackDefined(pState->onBackRelease,   "onBackRelease");
   callBacksOk &= isCallbackDefined(pState->onDirection,     "onDirection");
   callBacksOk &= isCallbackDefined(pState->onEnterState,    "onEnterState");
   callBacksOk &= isCallbackDefined(pState->onLeaveState,    "onLeaveState");
@@ -159,6 +162,8 @@ void processActionButtons(StackBasedFsm_t* pFsm, FsmState* pState, InputDeviceSt
 
   // Force user to press button again after entering a menu
   // TODO: DRY!
+
+  // Action button
   if (pButtonStates->Action && !pLastButtonStates->Action) {
     if (pState->onActionPress)
       pState->onActionPress(pFsm);
@@ -170,14 +175,22 @@ void processActionButtons(StackBasedFsm_t* pFsm, FsmState* pState, InputDeviceSt
     if (pState->onActionRelease)
       pState->onActionRelease(pFsm);
 
+    *pTimeOnLastButtonPress = hal_clock(); // CHECKME: Is this also needed on release for debouce?
+  }
+
+  // Back button
+  if (pButtonStates->Back && !pLastButtonStates->Back) {
+    if (pState->onBackPress)
+      pState->onBackPress(pFsm);
+
     *pTimeOnLastButtonPress = hal_clock();
   }
 
-  if (pButtonStates->Back && !pLastButtonStates->Back) {
-    if (pState->onBack)
-      pState->onBack(pFsm);
+  if (!pButtonStates->Back && pLastButtonStates->Back) {
+    if (pState->onBackRelease)
+      pState->onBackRelease(pFsm);
 
-    *pTimeOnLastButtonPress = hal_clock();
+    *pTimeOnLastButtonPress = hal_clock(); // CHECKME: Is this also needed on release for debouce?
   }
 }
 

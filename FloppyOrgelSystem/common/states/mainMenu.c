@@ -33,10 +33,14 @@ static void onAction(StackBasedFsm_t* pFsm) {
   userMenuTransitToSelectedSlot(&context.menu, context.menu.pFsm);
 }
 
-static void onBack(StackBasedFsm_t* pFsm) {
-  hal_printf("mainMenu::onBack()");
+static void onBackPress(StackBasedFsm_t* pFsm) {
+  hal_printf("mainMenu::onBackPress()");
 
   userMenuTransitBack(&context.menu);
+}
+
+static void onBackRelease(StackBasedFsm_t* pFsm) {
+  hal_printf("mainMenu::onBackRelease()");
 }
 
 static void onEnter(StackBasedFsm_t* pFsm, void* pParams) {
@@ -81,7 +85,8 @@ static void onDirection(StackBasedFsm_t* pFsm, bool south, bool north, bool west
 
 void mainMenu(StackBasedFsm_t* pFsm, FsmState* pState, void* pParams) {
   pState->onActionPress = onAction;
-  pState->onBack = onBack;
+  pState->onBackPress = onBackPress;
+  pState->onBackRelease = onBackRelease;
   pState->onDirection = onDirection;
   pState->onEnterState = onEnter;
   pState->onReenterState = onReenter;

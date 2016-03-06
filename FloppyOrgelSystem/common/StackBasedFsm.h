@@ -10,7 +10,8 @@ typedef struct StackBasedFsm_t StackBasedFsm_t;
 // Callback function pointer typedefs
 typedef void(*OnActionPressCallback)(StackBasedFsm_t* pFsm);
 typedef void(*OnActionReleaseCallback)(StackBasedFsm_t* pFsm);
-typedef void(*OnBackCallback)(StackBasedFsm_t* pFsm);
+typedef void(*OnBackPressCallback)(StackBasedFsm_t* pFsm);
+typedef void(*OnBackReleaseCallback)(StackBasedFsm_t* pFsm);
 typedef void(*OnEnterStateCallback)(StackBasedFsm_t* pFsm, void* pParams);
 typedef void(*OnReenterStateCallback)(StackBasedFsm_t* pFsm);
 typedef void(*OnLeaveStateCallback)(StackBasedFsm_t* pFsm);
@@ -18,14 +19,15 @@ typedef void(*OnTickCallback)(StackBasedFsm_t* pFsm);
 typedef void(*OnDirectionCallback)(StackBasedFsm_t* pFsm, bool south, bool north, bool west, bool east);
 
 struct FsmState {
-  OnActionPressCallback onActionPress;
+  OnActionPressCallback   onActionPress;
   OnActionReleaseCallback onActionRelease;
-  OnBackCallback onBack;
-  OnEnterStateCallback onEnterState;
-  OnReenterStateCallback onReenterState;
-  OnLeaveStateCallback onLeaveState;
-  OnTickCallback onTick;
-  OnDirectionCallback onDirection;
+  OnBackPressCallback     onBackPress;
+  OnBackReleaseCallback   onBackRelease;
+  OnEnterStateCallback    onEnterState;
+  OnReenterStateCallback  onReenterState;
+  OnLeaveStateCallback    onLeaveState;
+  OnTickCallback          onTick;
+  OnDirectionCallback     onDirection;
 };
 
 struct StackBasedFsm_t {
