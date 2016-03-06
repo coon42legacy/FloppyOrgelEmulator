@@ -61,6 +61,16 @@ static void processCursorButtons(StackBasedFsm_t* pFsm, FsmState* pState, InputD
   }
 }
 
+// static void checkButtonPressCondition(uint16_t currentButtonState, uint16_t lastButtonState) {
+// 
+//   if (pButtonStates->Action && !pLastButtonStates->Action) {
+//     if (pState->onActionPress)
+//       pState->onActionPress(pFsm);
+// 
+//     *pTimeOnLastButtonPress = hal_clock();
+//   }
+// }
+
 static void processActionButtons(StackBasedFsm_t* pFsm, FsmState* pState, InputDeviceStates_t* pButtonStates,
     InputDeviceStates_t* pLastButtonStates, uint32_t* pTimeOnLastButtonPress) {
 
@@ -71,8 +81,6 @@ static void processActionButtons(StackBasedFsm_t* pFsm, FsmState* pState, InputD
   if (pButtonStates->Action && !pLastButtonStates->Action) {
     if (pState->onActionPress)
       pState->onActionPress(pFsm);
-
-    *pTimeOnLastButtonPress = hal_clock();
   }
 
   if (!pButtonStates->Action && pLastButtonStates->Action) {

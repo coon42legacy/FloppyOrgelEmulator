@@ -4,6 +4,8 @@
 #include "../hal/hal_misc.h"
 #include "StackBasedFsm.h"
 
+// CHECKME: decouple state handling from fsm?
+
 static void initStateCallBacks(FsmState* pState) {
   pState->onActionPress   = NULL;
   pState->onActionRelease = NULL;
@@ -38,9 +40,9 @@ static bool checkStateCallbacks(FsmState* pState) {
   // callBacksOk &= isCallbackDefined(pState->onActionRelease, "onActionRelease"); // TODO: make optional?
   callBacksOk &= isCallbackDefined(pState->onBackPress,     "onBackPress");
   // callBacksOk &= isCallbackDefined(pState->onBackRelease,   "onBackRelease");
-  callBacksOk &= isCallbackDefined(pState->onStartPress,     "onStartPress");
+  callBacksOk &= isCallbackDefined(pState->onStartPress,    "onStartPress");
   // callBacksOk &= isCallbackDefined(pState->onStartRelease,   "onStartRelease");
-  callBacksOk &= isCallbackDefined(pState->onSelectPress,    "onSelectPress");
+  callBacksOk &= isCallbackDefined(pState->onSelectPress,   "onSelectPress");
   // callBacksOk &= isCallbackDefined(pState->onSelectRelease,  "onSelectRelease");
   callBacksOk &= isCallbackDefined(pState->onDirection,     "onDirection");
   callBacksOk &= isCallbackDefined(pState->onEnterState,    "onEnterState");
