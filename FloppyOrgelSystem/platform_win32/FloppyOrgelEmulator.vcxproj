@@ -17,6 +17,7 @@
     <ClCompile Include="..\common\embedded-midilib\midiplayer.c" />
     <ClCompile Include="..\common\embedded-midilib\midiutil.c" />
     <ClCompile Include="..\common\common_main.c" />
+    <ClCompile Include="..\common\InputDevice.c" />
     <ClCompile Include="..\common\LockFreeFifo.c" />
     <ClCompile Include="..\common\SlotBasedMenu.c" />
     <ClCompile Include="..\common\StackBasedFsm.c" />
@@ -46,6 +47,7 @@
     <ClInclude Include="..\common\embedded-midilib\midiplayer.h" />
     <ClInclude Include="..\common\embedded-midilib\midiutil.h" />
     <ClInclude Include="..\common\common_main.h" />
+    <ClInclude Include="..\common\InputDevice.h" />
     <ClInclude Include="..\common\LockFreeFifo.h" />
     <ClInclude Include="..\common\SlotBasedMenu.h" />
     <ClInclude Include="..\common\StackBasedFsm.h" />

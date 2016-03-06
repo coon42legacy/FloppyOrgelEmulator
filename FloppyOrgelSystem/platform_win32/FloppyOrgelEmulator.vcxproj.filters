@@ -126,6 +126,9 @@
     <ClCompile Include="..\common\states\_example.c">
       <Filter>Quelldateien\common\states</Filter>
     </ClCompile>
+    <ClCompile Include="..\common\InputDevice.c">
+      <Filter>Quelldateien\common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\common\AsciiLib\AsciiLib.h">
@@ -211,6 +214,9 @@
     </ClInclude>
     <ClInclude Include="..\common\states\_example.h">
       <Filter>Headerdateien\common\states</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\InputDevice.h">
+      <Filter>Headerdateien\common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
