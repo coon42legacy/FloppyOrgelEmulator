@@ -61,79 +61,33 @@ static void processCursorButtons(StackBasedFsm_t* pFsm, FsmState* pState, InputD
   }
 }
 
-// static void checkButtonPressCondition(uint16_t currentButtonState, uint16_t lastButtonState) {
-// 
-//   if (pButtonStates->Action && !pLastButtonStates->Action) {
-//     if (pState->onActionPress)
-//       pState->onActionPress(pFsm);
-// 
-//     *pTimeOnLastButtonPress = hal_clock();
-//   }
-// }
+static void processButton(StackBasedFsm_t* pFsm, uint16_t currentButtonState, uint16_t lastButtonState, 
+    OnButtonPressCallback onButtonPress, OnButtonReleaseCallback onButtonRelease, 
+    uint32_t* pTimeOnLastButtonPress) {
+
+  if (currentButtonState && !lastButtonState) {
+    if (onButtonPress)
+      onButtonPress(pFsm);
+
+    *pTimeOnLastButtonPress = hal_clock();
+  }
+
+  if (!currentButtonState && lastButtonState) {
+    if (onButtonRelease)
+      onButtonRelease(pFsm);
+
+    *pTimeOnLastButtonPress = hal_clock(); // CHECKME: Is this also needed on release for debouce?
+  }
+}
 
 static void processActionButtons(StackBasedFsm_t* pFsm, FsmState* pState, InputDeviceStates_t* pButtonStates,
     InputDeviceStates_t* pLastButtonStates, uint32_t* pTimeOnLastButtonPress) {
 
-  // Force user to press button again after entering a menu
-  // TODO: DRY!
-
-  // Action button
-  if (pButtonStates->Action && !pLastButtonStates->Action) {
-    if (pState->onActionPress)
-      pState->onActionPress(pFsm);
-  }
-
-  if (!pButtonStates->Action && pLastButtonStates->Action) {
-    if (pState->onActionRelease)
-      pState->onActionRelease(pFsm);
-
-    *pTimeOnLastButtonPress = hal_clock(); // CHECKME: Is this also needed on release for debouce?
-  }
-
-  // Back button
-  if (pButtonStates->Back && !pLastButtonStates->Back) {
-    if (pState->onBackPress)
-      pState->onBackPress(pFsm);
-
-    *pTimeOnLastButtonPress = hal_clock();
-  }
-
-  if (!pButtonStates->Back && pLastButtonStates->Back) {
-    if (pState->onBackRelease)
-      pState->onBackRelease(pFsm);
-
-    *pTimeOnLastButtonPress = hal_clock(); // CHECKME: Is this also needed on release for debouce?
-  }
-
-  // Start button
-  if (pButtonStates->Start && !pLastButtonStates->Start) {
-    if (pState->onStartPress)
-      pState->onStartPress(pFsm);
-
-    *pTimeOnLastButtonPress = hal_clock();
-  }
-
-  if (!pButtonStates->Start && pLastButtonStates->Start) {
-    if (pState->onStartRelease)
-      pState->onStartRelease(pFsm);
-
-    *pTimeOnLastButtonPress = hal_clock(); // CHECKME: Is this also needed on release for debouce?
-  }
-
-  // Select button
-  if (pButtonStates->Select && !pLastButtonStates->Select) {
-    if (pState->onSelectPress)
-      pState->onSelectPress(pFsm);
-
-    *pTimeOnLastButtonPress = hal_clock();
-  }
-
-  if (!pButtonStates->Select && pLastButtonStates->Select) {
-    if (pState->onSelectRelease)
-      pState->onSelectRelease(pFsm);
-
-    *pTimeOnLastButtonPress = hal_clock(); // CHECKME: Is this also needed on release for debouce?
-  }
+  // Force user to press button again after entering a menu 
+  processButton(pFsm, pButtonStates->Action, pLastButtonStates->Action, pState->onActionPress, pState->onActionRelease, pTimeOnLastButtonPress); // Action button
+  processButton(pFsm, pButtonStates->Back,   pLastButtonStates->Back,   pState->onBackPress,   pState->onBackRelease,   pTimeOnLastButtonPress); // Back button
+  processButton(pFsm, pButtonStates->Start,  pLastButtonStates->Start,  pState->onStartPress,  pState->onStartRelease,  pTimeOnLastButtonPress); // Start button
+  processButton(pFsm, pButtonStates->Select, pLastButtonStates->Select, pState->onSelectPress, pState->onSelectRelease, pTimeOnLastButtonPress); // Select button
 }
 
 static bool isDebouncing(uint32_t timeOnLastButtonPress) {
