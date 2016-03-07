@@ -51,6 +51,30 @@ static void onBackRelease(StackBasedFsm_t* pFsm) {
   // On the NES game pad this is the 'B' button.
 }
 
+static void onStartPress(StackBasedFsm_t* pFsm) {
+  hal_printf("example::onStartPress()");
+
+  // This function is called, when the player presses the Start button on the Gamepad.
+}
+
+static void onStartRelease(StackBasedFsm_t* pFsm) {
+  hal_printf("example::onStartRelease()");
+
+  // This function is called, when the player releases the Start button on the Gamepad.
+}
+
+static void onSelectPress(StackBasedFsm_t* pFsm) {
+  hal_printf("example::onSelectPress()");
+
+  // This function is called, when the player presses the Select button on the Gamepad.
+}
+
+static void onSelectRelease(StackBasedFsm_t* pFsm) {
+  hal_printf("example::onSelectRelease()");
+
+  // This function is called, when the player releases the Select button on the Gamepad.
+}
+
 static void onEnter(StackBasedFsm_t* pFsm, void* pParams) {
   hal_printf("example::onEnter()");
 
@@ -98,5 +122,5 @@ void example(StackBasedFsm_t* pFsm, FsmState* pState, void* pArgs) {
   pState->onLeaveState    = onLeaveState;
   pState->onTick          = onTick;
 
-  pState->onEnterState(pFsm, pArgs);
+  pState->onEnterState(pFsm, pArgs); // TODO: force user to define onEnterState and do onEnterState() in fsm
 }

@@ -36,19 +36,19 @@ static bool checkStateCallbacks(FsmState* pState) {
 
   // TODO: make all callbacks optional and print warning instead?
 
-  callBacksOk &= isCallbackDefined(pState->onActionPress,   "onActionPress");
+  // callBacksOk &= isCallbackDefined(pState->onActionPress,   "onActionPress");
   // callBacksOk &= isCallbackDefined(pState->onActionRelease, "onActionRelease"); // TODO: make optional?
-  callBacksOk &= isCallbackDefined(pState->onBackPress,     "onBackPress");
+  // callBacksOk &= isCallbackDefined(pState->onBackPress,     "onBackPress");
   // callBacksOk &= isCallbackDefined(pState->onBackRelease,   "onBackRelease");
-  callBacksOk &= isCallbackDefined(pState->onStartPress,    "onStartPress");
+  // callBacksOk &= isCallbackDefined(pState->onStartPress,    "onStartPress");
   // callBacksOk &= isCallbackDefined(pState->onStartRelease,   "onStartRelease");
-  callBacksOk &= isCallbackDefined(pState->onSelectPress,   "onSelectPress");
+  // callBacksOk &= isCallbackDefined(pState->onSelectPress,   "onSelectPress");
   // callBacksOk &= isCallbackDefined(pState->onSelectRelease,  "onSelectRelease");
-  callBacksOk &= isCallbackDefined(pState->onDirection,     "onDirection");
-  callBacksOk &= isCallbackDefined(pState->onEnterState,    "onEnterState");
-  callBacksOk &= isCallbackDefined(pState->onLeaveState,    "onLeaveState");
-  callBacksOk &= isCallbackDefined(pState->onReenterState,  "onReenterState");
-  callBacksOk &= isCallbackDefined(pState->onTick,          "onTick");
+  // callBacksOk &= isCallbackDefined(pState->onDirection,     "onDirection");
+  // callBacksOk &= isCallbackDefined(pState->onEnterState,    "onEnterState");
+  // callBacksOk &= isCallbackDefined(pState->onLeaveState,    "onLeaveState");
+  // callBacksOk &= isCallbackDefined(pState->onReenterState,  "onReenterState");
+  // callBacksOk &= isCallbackDefined(pState->onTick,          "onTick");
 
   return callBacksOk;
 }
