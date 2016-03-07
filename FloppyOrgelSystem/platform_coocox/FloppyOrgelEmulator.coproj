@@ -120,8 +120,8 @@
     <File name="cmsis_lib/include/stm32f4xx_rcc.h" path="cmsis_lib/include/stm32f4xx_rcc.h" type="1"/>
     <File name="NesGamePad/NesGamePad.c" path="NesGamePad/NesGamePad.c" type="1"/>
     <File name="cmsis_lib/source/stm32f4xx_syscfg.c" path="cmsis_lib/source/stm32f4xx_syscfg.c" type="1"/>
-    <File name="hal/hal_misc_stm32f4.c" path="../hal/hal_misc_stm32f4.c" type="1"/>
     <File name="hal/hal_display.h" path="../hal/hal_display.h" type="1"/>
+    <File name="hal/hal_misc_stm32f4.c" path="../hal/hal_misc_stm32f4.c" type="1"/>
     <File name="stdio" path="" type="2"/>
     <File name="cmsis_boot/startup/startup_stm32f4xx.c" path="cmsis_boot/startup/startup_stm32f4xx.c" type="1"/>
     <File name="cmsis_lib/source/stm32f4xx_rcc.c" path="cmsis_lib/source/stm32f4xx_rcc.c" type="1"/>
@@ -129,8 +129,8 @@
     <File name="common" path="" type="2"/>
     <File name="hal" path="" type="2"/>
     <File name="common/states/mainMenu.h" path="../common/states/mainMenu.h" type="1"/>
-    <File name="cmsis_boot/system_stm32f4xx.c" path="cmsis_boot/system_stm32f4xx.c" type="1"/>
     <File name="hal/hal_misc.h" path="../hal/hal_misc.h" type="1"/>
+    <File name="cmsis_boot/system_stm32f4xx.c" path="cmsis_boot/system_stm32f4xx.c" type="1"/>
     <File name="common/canvas/canvas.c" path="../common/canvas/canvas.c" type="1"/>
     <File name="cmsis_lib/source/stm32f4xx_rng.c" path="cmsis_lib/source/stm32f4xx_rng.c" type="1"/>
     <File name="cmsis_lib/include/stm32f4xx_spi.h" path="cmsis_lib/include/stm32f4xx_spi.h" type="1"/>
@@ -181,15 +181,15 @@
     <File name="Filesystem/option" path="" type="2"/>
     <File name="common/states/liveMode.c" path="../common/states/liveMode.c" type="1"/>
     <File name="NesGamePad/NesGamePad.h" path="NesGamePad/NesGamePad.h" type="1"/>
-    <File name="common/embedded-midilib" path="" type="2"/>
     <File name="common/states/_example.c" path="../common/states/_example.c" type="1"/>
+    <File name="common/embedded-midilib" path="" type="2"/>
     <File name="cmsis_lib/include/stm32f4xx_sdio.h" path="cmsis_lib/include/stm32f4xx_sdio.h" type="1"/>
     <File name="cmsis_lib/source/stm32f4xx_sdio.c" path="cmsis_lib/source/stm32f4xx_sdio.c" type="1"/>
     <File name="hal/hal_inputdevice_stm32f4.c" path="../hal/hal_inputdevice_stm32f4.c" type="1"/>
-    <File name="cmsis_lib/source/stm32f4xx_exti.c" path="cmsis_lib/source/stm32f4xx_exti.c" type="1"/>
-    <File name="cmsis_lib/include/stm32f4xx_exti.h" path="cmsis_lib/include/stm32f4xx_exti.h" type="1"/>
-    <File name="common/common_main.c" path="../common/common_main.c" type="1"/>
     <File name="Filesystem/fatfs/drivers/fatfs_sd_sdio.c" path="Filesystem/fatfs/drivers/fatfs_sd_sdio.c" type="1"/>
+    <File name="cmsis_lib/include/stm32f4xx_exti.h" path="cmsis_lib/include/stm32f4xx_exti.h" type="1"/>
+    <File name="cmsis_lib/source/stm32f4xx_exti.c" path="cmsis_lib/source/stm32f4xx_exti.c" type="1"/>
+    <File name="common/common_main.c" path="../common/common_main.c" type="1"/>
     <File name="LCD/SSD1289.c" path="LCD/SSD1289.c" type="1"/>
     <File name="Filesystem/tm_stm32f4_timer_properties.c" path="Filesystem/tm_stm32f4_timer_properties.c" type="1"/>
     <File name="common/states/_example.h" path="../common/states/_example.h" type="1"/>
@@ -204,8 +204,8 @@
     <File name="cmsis_lib/include/stm32f4xx_rng.h" path="cmsis_lib/include/stm32f4xx_rng.h" type="1"/>
     <File name="cmsis_lib/include" path="" type="2"/>
     <File name="Filesystem/fatfs/integer.h" path="Filesystem/fatfs/integer.h" type="1"/>
-    <File name="hal/hal_filesystem_stm32f4.c" path="../hal/hal_filesystem_stm32f4.c" type="1"/>
     <File name="Filesystem/tm_stm32f4_delay.h" path="Filesystem/tm_stm32f4_delay.h" type="1"/>
+    <File name="hal/hal_filesystem_stm32f4.c" path="../hal/hal_filesystem_stm32f4.c" type="1"/>
     <File name="common/states/buttonTest.h" path="../common/states/buttonTest.h" type="1"/>
     <File name="common/common_main.h" path="../common/common_main.h" type="1"/>
     <File name="Filesystem/option/syscall.c" path="Filesystem/fatfs/option/syscall.c" type="1"/>

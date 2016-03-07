@@ -23,7 +23,8 @@ static void processCursorButtons(StackBasedFsm_t* pFsm, FsmState* pState, InputD
   static uint32_t timeOnLastDirectionPress = 0;
   static uint32_t timeOnLastRepetition = 0;
 
-  // TODO: simplify
+  // TODO: this code leads to bouncing behaviour on stm32f4 and meight be refactored.
+
   // Cursor delay and repetition, when holding direction button
   if (anyDirectionIsPressed(*pButtonStates)) {
     if (isLastDirectionEqual(*pButtonStates, *pLastButtonStates)) {
