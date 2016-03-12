@@ -29,7 +29,7 @@ struct FsmState {
   OnReenterStateCallback  onReenterState;
   OnLeaveStateCallback    onLeaveState;
   OnTickCallback          onTick;
-  OnDirectionCallback     onDirection;
+  OnDirectionCallback     onDirectionPress;
 };
 
 struct StackBasedFsm_t {

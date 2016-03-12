@@ -68,7 +68,7 @@ static void onTick(StackBasedFsm_t* pFsm) {
   
 }
 
-static void onDirection(StackBasedFsm_t* pFsm, bool south, bool north, bool west, bool east) {
+static void onDirectionPress(StackBasedFsm_t* pFsm, bool south, bool north, bool west, bool east) {
   draw();
 
   // hal_printf("onDirection()");
@@ -84,11 +84,9 @@ void about(StackBasedFsm_t* pFsm, FsmState* pState, void* pParams) {
   pState->onStartRelease  = onStartRelease;
   pState->onSelectPress   = onSelectPress;
   pState->onSelectRelease = onSelectRelease;
-  pState->onDirection     = onDirection;
+  pState->onDirectionPress     = onDirectionPress;
   pState->onEnterState    = onEnter;
   pState->onReenterState  = onReenter;
   pState->onLeaveState    = onLeaveState;
   pState->onTick          = onTick;
-
-  pState->onEnterState(pFsm, pParams);
 }

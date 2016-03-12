@@ -396,7 +396,7 @@ static void onTick(StackBasedFsm_t* pFsm) {
   // hal_printf("playlist::onTick()");
 }
 
-static void onDirection(StackBasedFsm_t* pFsm, bool south, bool north, bool west, bool east) {
+static void onDirectionPress(StackBasedFsm_t* pFsm, bool south, bool north, bool west, bool east) {
   hal_printf("playlist::onDirection()");
 
   draw();
@@ -405,11 +405,9 @@ static void onDirection(StackBasedFsm_t* pFsm, bool south, bool north, bool west
 void playlist(StackBasedFsm_t* pFsm, FsmState* pState, void* pParams) {
   pState->onActionPress = onAction;
   pState->onBackPress = onBack;
-  pState->onDirection = onDirection;
+  pState->onDirectionPress = onDirectionPress;
   pState->onEnterState = onEnter;
   pState->onReenterState = onReenter;
   pState->onLeaveState = onLeaveState;
   pState->onTick = onTick;
-
-  pState->onEnterState(pFsm, pParams);
 }

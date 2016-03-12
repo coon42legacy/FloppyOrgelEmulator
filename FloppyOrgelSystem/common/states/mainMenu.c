@@ -71,7 +71,7 @@ static void onTick(StackBasedFsm_t* pFsm) {
 
 }
 
-static void onDirection(StackBasedFsm_t* pFsm, bool south, bool north, bool west, bool east) {
+static void onDirectionPress(StackBasedFsm_t* pFsm, bool south, bool north, bool west, bool east) {
   // hal_printf("mainMenu::onDirection()");
 
   if (south)
@@ -87,11 +87,9 @@ void mainMenu(StackBasedFsm_t* pFsm, FsmState* pState, void* pParams) {
   pState->onActionPress = onAction;
   pState->onBackPress = onBackPress;
   pState->onBackRelease = onBackRelease;
-  pState->onDirection = onDirection;
+  pState->onDirectionPress = onDirectionPress;
   pState->onEnterState = onEnter;
   pState->onReenterState = onReenter;
   pState->onLeaveState = onLeaveState;
   pState->onTick = onTick;
-
-  pState->onEnterState(pFsm, pParams);
 }

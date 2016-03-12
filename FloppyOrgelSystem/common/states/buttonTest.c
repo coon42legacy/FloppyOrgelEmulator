@@ -125,7 +125,7 @@ static void onTick(StackBasedFsm_t* pFsm) {
   
 }
 
-static void onDirection(StackBasedFsm_t* pFsm, bool south, bool north, bool west, bool east) {
+static void onDirectionPress(StackBasedFsm_t* pFsm, bool south, bool north, bool west, bool east) {
   hal_printf("buttonTest::onDirection()");
 
   if (south)
@@ -152,7 +152,5 @@ void buttonTest(StackBasedFsm_t* pFsm, FsmState* pState, void* pArgs) {
   pState->onSelectRelease = onSelectRelease;
   pState->onEnterState = onEnter;
   pState->onTick = onTick;
-  pState->onDirection = onDirection;
-
-  pState->onEnterState(pFsm, pArgs);
+  pState->onDirectionPress = onDirectionPress;
 }

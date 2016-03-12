@@ -31,8 +31,8 @@ static void processCursorButtons(StackBasedFsm_t* pFsm, FsmState* pState, InputD
       if (isInRepetitionMode) {
         if (hal_clock() > timeOnLastDirectionPress + CURSOR_DELAY_MS_BEFORE_REPEAT) {
           if (hal_clock() > timeOnLastRepetition + 1000 / CURSOR_SPEED_ITEMS_PER_SECOND) {
-            if (pState->onDirection)
-              pState->onDirection(pFsm, pButtonStates->South, pButtonStates->North, pButtonStates->West, 
+            if (pState->onDirectionPress)
+              pState->onDirectionPress(pFsm, pButtonStates->South, pButtonStates->North, pButtonStates->West, 
                   pButtonStates->East);
 
             // hal_printf("timeOnLastRepetition: %d, repeat on: %d", timeOnLastRepetition, timeOnLastRepetition + 1000 / CURSOR_SPEED_ITEMS_PER_SECOND);
@@ -48,8 +48,8 @@ static void processCursorButtons(StackBasedFsm_t* pFsm, FsmState* pState, InputD
         isInRepetitionMode = true;
 
         // hal_printf("In repetition mode");
-        if (pState->onDirection)
-          pState->onDirection(pFsm, pButtonStates->South, pButtonStates->North, pButtonStates->West,
+        if (pState->onDirectionPress)
+          pState->onDirectionPress(pFsm, pButtonStates->South, pButtonStates->North, pButtonStates->West,
               pButtonStates->East);
       }
     }

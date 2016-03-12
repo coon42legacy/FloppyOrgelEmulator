@@ -7,19 +7,19 @@
 // CHECKME: decouple state handling from fsm?
 
 static void initStateCallBacks(FsmState* pState) {
-  pState->onActionPress   = NULL;
-  pState->onActionRelease = NULL;
-  pState->onBackPress     = NULL;
-  pState->onBackRelease   = NULL;
-  pState->onStartPress    = NULL;
-  pState->onStartRelease  = NULL;
-  pState->onSelectPress   = NULL;
-  pState->onSelectRelease = NULL;
-  pState->onDirection     = NULL;
-  pState->onEnterState    = NULL;
-  pState->onLeaveState    = NULL;
-  pState->onReenterState  = NULL;
-  pState->onTick          = NULL;
+  pState->onActionPress    = NULL;
+  pState->onActionRelease  = NULL;
+  pState->onBackPress      = NULL;
+  pState->onBackRelease    = NULL;
+  pState->onStartPress     = NULL;
+  pState->onStartRelease   = NULL;
+  pState->onSelectPress    = NULL;
+  pState->onSelectRelease  = NULL;
+  pState->onDirectionPress = NULL;
+  pState->onEnterState     = NULL;
+  pState->onLeaveState     = NULL;
+  pState->onReenterState   = NULL;
+  pState->onTick           = NULL;
 }
 
 static bool isCallbackDefined(void* pCallBack, char* pCallBackName) {
@@ -41,11 +41,11 @@ static bool checkStateCallbacks(FsmState* pState) {
   // callBacksOk &= isCallbackDefined(pState->onBackPress,     "onBackPress");
   // callBacksOk &= isCallbackDefined(pState->onBackRelease,   "onBackRelease");
   // callBacksOk &= isCallbackDefined(pState->onStartPress,    "onStartPress");
-  // callBacksOk &= isCallbackDefined(pState->onStartRelease,   "onStartRelease");
+  // callBacksOk &= isCallbackDefined(pState->onStartRelease,  "onStartRelease");
   // callBacksOk &= isCallbackDefined(pState->onSelectPress,   "onSelectPress");
-  // callBacksOk &= isCallbackDefined(pState->onSelectRelease,  "onSelectRelease");
+  // callBacksOk &= isCallbackDefined(pState->onSelectRelease, "onSelectRelease");
   // callBacksOk &= isCallbackDefined(pState->onDirection,     "onDirection");
-  // callBacksOk &= isCallbackDefined(pState->onEnterState,    "onEnterState");
+  callBacksOk &= isCallbackDefined(pState->onEnterState,    "onEnterState");
   // callBacksOk &= isCallbackDefined(pState->onLeaveState,    "onLeaveState");
   // callBacksOk &= isCallbackDefined(pState->onReenterState,  "onReenterState");
   // callBacksOk &= isCallbackDefined(pState->onTick,          "onTick");
@@ -57,7 +57,7 @@ void fsmInit(StackBasedFsm_t* pFsm) {
   pFsm->stackSize_ = 0;
 }
 
-bool fsmPush(StackBasedFsm_t* pFsm, TransitionFunc pFunc, void* pArgs) {
+bool fsmPush(StackBasedFsm_t* pFsm, TransitionFunc pStateFunc, void* pParams) {
   FsmState* pCurrentState = fsmGetCurrentState(pFsm);
 
   if (pFsm->stackSize_ < FSM_STACK_SIZE) {
@@ -68,9 +68,11 @@ bool fsmPush(StackBasedFsm_t* pFsm, TransitionFunc pFunc, void* pArgs) {
       pCurrentState->onLeaveState(pFsm);
     
     initStateCallBacks(pNextState);
-    pFunc(pFsm, pNextState, pArgs);
+    pStateFunc(pFsm, pNextState, pParams);
 
-    if (!checkStateCallbacks(pNextState)) {
+    if (checkStateCallbacks(pNextState))
+      pNextState->onEnterState(pFsm, pParams);
+    else {
       hal_printfWarning("Please define missing callbacks! Going back to previous state.");
 
       fsmPop(pFsm);
