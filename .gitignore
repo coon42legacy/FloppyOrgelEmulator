@@ -14,3 +14,6 @@ desktop.ini
 *.suo
 /FloppyOrgelSystem/platform_win32/*.opendb
 /FloppyOrgelSystem/platform_win32/*.user
+/FloppyOrgelSystem/platform_win32/advapi32.pdb/ED44722B2EF24C32B5421725CD13F4FA2/*.pd_
+/FloppyOrgelSystem/platform_win32/ole32.pdb/87CF3B66EF4E48D0ABA4E93540C5725A2/*.pd_
+*.pd_

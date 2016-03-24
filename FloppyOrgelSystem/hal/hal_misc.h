@@ -13,4 +13,6 @@ void hal_printfWarning(char* format, ...);
 void hal_printfSuccess(char* format, ...);
 void hal_printfInfo(char* format, ...);
 
+void hal_strcpy_s(char* dst, int maxSize, const char* src);
+
 #endif // __HAL_MISC_H

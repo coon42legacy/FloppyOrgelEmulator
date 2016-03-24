@@ -41,8 +41,8 @@ void canvas_putCharFont(uint16_t x, uint16_t y, uint8_t ASCII, uint8_t txtRed, u
   }
 }
 
-void canvas_textFont(uint16_t x, uint16_t y, char* str, uint8_t txtRed, uint8_t txtGreen, uint8_t txtBlue,
-    uint8_t bkRed, uint8_t bkGreen, uint8_t bkBlue, uint16_t FONTx) {
+void canvas_textFont(uint16_t x, uint16_t y, const char* str, uint8_t txtRed, uint8_t txtGreen, uint8_t txtBlue,
+    uint8_t bgRed, uint8_t bgGreen, uint8_t bgBlue, uint16_t FONTx) {
 
   uint8_t TempChar;
   uint8_t delta_x, delta_y;
@@ -71,7 +71,7 @@ void canvas_textFont(uint16_t x, uint16_t y, char* str, uint8_t txtRed, uint8_t 
     TempChar = *str++;
     canvas_putCharFont(x, y, TempChar,
       txtRed, txtGreen, txtBlue,
-      bkRed, bkGreen, bkBlue, FONTx);
+      bgRed, bgGreen, bgBlue, FONTx);
     if (x < DISPLAY_RESOLUTION_X - delta_x) {
       x += delta_x;
     }
@@ -86,10 +86,10 @@ void canvas_textFont(uint16_t x, uint16_t y, char* str, uint8_t txtRed, uint8_t 
   } while (*str != 0);
 }
 
-void canvas_drawText(uint16_t x, uint16_t y, char* str, uint8_t txtRed, uint8_t txtGreen, uint8_t txtBlue,
-    uint8_t bkRed, uint8_t bkGreen, uint8_t bkBlue) {
+void canvas_drawText(uint16_t x, uint16_t y, const char* str, uint8_t txtRed, uint8_t txtGreen, uint8_t txtBlue,
+    uint8_t bgRed, uint8_t bgGreen, uint8_t bgBlue) {
 
-  canvas_textFont(x, y, str, txtRed, txtGreen, txtBlue, bkRed, bkGreen, bkBlue, SYSTEM_8x16);
+  canvas_textFont(x, y, str, txtRed, txtGreen, txtBlue, bgRed, bgGreen, bgBlue, SYSTEM_8x16);
 }
 
 void canvas_clear(uint8_t red, uint8_t green, uint8_t blue) {

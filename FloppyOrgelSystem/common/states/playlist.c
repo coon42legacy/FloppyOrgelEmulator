@@ -240,8 +240,7 @@ static void onBrowseNewPage(int currentPage, int totalPages) {
   while (!endOfDirectory) {
     if (context.findData.fileName[0] != '.' && context.findData.fileName[1] != '.') {
       if (curFileIndex >= (currentPage - 1) * MENU_FILES_PER_PAGE) {
-        //context.menu.slot[curFileIndex].pLabel = context.findData.fileName;
-        context.menu.slot[curFileIndex].pLabel = "Blub"; // TODO: change pLabel to array?
+        hal_strcpy_s(context.menu.slot[curFileIndex].pLabel, MAX_MENU_ITEM_CHARS, context.findData.fileName);
         context.menu.slot[curFileIndex].pNextStateTransitionFunc = startPlayBack;
 
         curFileIndex++;
@@ -339,23 +338,19 @@ static void draw() {
   canvas_drawText(CENTER, 0, "Use the game pad to select a song", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
   canvas_drawText(CENTER, 18, "Press A button to start", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
 
-  int numFiles = getNumFiles(context.filePath);
-  int numPages = getNumPages(numFiles, MENU_FILES_PER_PAGE);
+  int numFilesTotal = getNumFiles(context.filePath);
+  int numPages = getNumPages(numFilesTotal, MENU_FILES_PER_PAGE);
   int curPage = numPages > 0 ? context.menu.cursorPos / MENU_FILES_PER_PAGE + 1 : 0;
+  int numFilesOfCurrentPage = curPage * MENU_FILES_PER_PAGE < numFilesTotal ? MENU_FILES_PER_PAGE : MENU_FILES_PER_PAGE - (curPage * MENU_FILES_PER_PAGE - numFilesTotal); // TODO: simplify
 
-  if (numFiles > 0) {
+  if (numFilesTotal > 0)
     onBrowseNewPage(curPage, numPages); // FIXME: implement correctly!
-    // draw all tracks of current page
-
-    for (int i = 0; i < MENU_FILES_PER_PAGE; i++) {
-      canvas_drawText(CENTER, context.menu.yPos - 5 + i * 18, context.menu.slot[i].pLabel, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00);
-    }
-  }
   else {
     canvas_drawText(CENTER, context.menu.yPos - 5 + 3 * 18, "No tracks available!", 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00);
     canvas_drawText(CENTER, context.menu.yPos - 5 + 4 * 18, "SD-Card missing?", 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00);
   }
 
+  menuDraw(&context.menu);
   display_redraw();
 }
 

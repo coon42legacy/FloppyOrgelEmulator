@@ -70,3 +70,12 @@ void hal_printfInfo(char* format, ...) {
   _printColored(formattedText, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
   va_end(args);
 }
+
+void hal_strcpy_s(char* dst, int maxSize, const char* src) {
+  for (int i = 0; i < maxSize - 1; i++) {
+    dst[i] = src[i];
+
+    if (i == maxSize - 1)
+      dst[i] = 0;
+  }
+}

@@ -13,7 +13,7 @@ typedef enum {
 } MenuType_t;
 
 typedef struct {
-  char* pLabel;
+  char pLabel[MAX_MENU_ITEM_CHARS];
   TransitionFunc pNextStateTransitionFunc;
 } MenuSlot_t;
 
@@ -37,7 +37,7 @@ typedef struct {
 // general menu functions
 void menuInit(SlotBasedMenu_t* pSbm, StackBasedFsm_t* pFsm, int16_t xPos, int16_t yPos);
 void menuTick(SlotBasedMenu_t* sbm);
-void menuAddSlot(SlotBasedMenu_t* pSbm, char* label, TransitionFunc pFunc);
+void menuAddSlot(SlotBasedMenu_t* pSbm, const char* label, TransitionFunc pFunc);
 void menuDraw(SlotBasedMenu_t* sbm);
 void menuMoveCursorUp(SlotBasedMenu_t* sbm);
 void menuMoveCursorDown(SlotBasedMenu_t* sbm);

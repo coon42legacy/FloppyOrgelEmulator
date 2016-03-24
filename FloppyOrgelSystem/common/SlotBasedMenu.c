@@ -4,6 +4,7 @@
 #include "SlotBasedMenu.h"
 #include "../hal/hal_inputdevice.h"
 #include "../hal/hal_filesystem.h"
+#include "../hal/hal_misc.h"
 #include "canvas/canvas.h"
 
 void menuInit(SlotBasedMenu_t* pSbm, StackBasedFsm_t* pFsm, int16_t xPos, int16_t yPos) {
@@ -40,11 +41,11 @@ static void menuDrawCursor(SlotBasedMenu_t* pSbm) {
   }
 }
 
-void menuAddSlot(SlotBasedMenu_t* pSbm, char* label, TransitionFunc pFunc) {
+void menuAddSlot(SlotBasedMenu_t* pSbm, const char* label, TransitionFunc pFunc) {
   if (pSbm->type != USER_MENU || pSbm->numSlots >= MENU_MAX_SLOTS)
     return;
 
-  pSbm->slot[pSbm->numSlots].pLabel = label;
+  hal_strcpy_s(pSbm->slot[pSbm->numSlots].pLabel, MAX_MENU_ITEM_CHARS, label);
   pSbm->slot[pSbm->numSlots].pNextStateTransitionFunc = pFunc;
   pSbm->numSlots++;
 }
