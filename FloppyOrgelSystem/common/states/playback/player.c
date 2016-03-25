@@ -3,12 +3,10 @@
 #include "../../embedded-midilib/midiplayer.h"
 #include "../../../hal/hal_mididevice.h"
 #include "../../../hal/hal_misc.h"
+#include "../../../hal/hal_display.h"
+#include "../../canvas/canvas.h"
 
-#include "startPlayBack.h"
-
-// TODO: put into context
-static char filePathOfSongToPlay[256];
-static MIDI_PLAYER mpl;
+#include "player.h"
 
 // helpers
 static void HexList(uint8_t* pData, int32_t iNumBytes) {
@@ -173,73 +171,54 @@ static void stopAllDrives() {
 }
 
 // ------------------------------------------------------------------------------------------------------------
-// playing
+// player
 // ------------------------------------------------------------------------------------------------------------
 
-void playing(StackBasedFsm_t* pFsm, FsmState* state, void* pArgs) {
-  // InputDeviceStates_t buttonPressed = getInputDeviceState();
+static struct {
+  MIDI_PLAYER mpl;
+} context;
 
-  // if (buttonPressed.Back) {
-  //   fsmPop(fsm);
-  //   fsmPush(fsm, playbackAborted, NULL);
-  // }
-  // 
-  // if (!midiPlayerTick(&mpl)) {
-  //   fsmPop(fsm);
-  //   fsmPush(fsm, playbackFinished, NULL);
-  // }
-}
+static void onEnter(StackBasedFsm_t* pFsm, void* pParams) {
+  hal_printf("midiPlayer::onEnter()");
 
-// ------------------------------------------------------------------------------------------------------------
-// startPlayBack
-// ------------------------------------------------------------------------------------------------------------
-
-void startPlayBack(StackBasedFsm_t* pFsm, FsmState* state, void* pParams) {
   char* pPath = pParams;
-
   hal_printfInfo("Start playback of file: %s", pPath);
 
-//  hal_midiDeviceInit();
-//  midiplayer_init(&mpl, onNoteOff, onNoteOn, onNoteKeyPressure, onSetParameter, onSetProgram, onChangePressure,
-//    onSetPitchWheel, onMetaMIDIPort, onMetaSequenceNumber, onMetaTextEvent, onMetaCopyright, onMetaTrackName,
-//    onMetaInstrument, onMetaLyric, onMetaMarker, onMetaCuePoint, onMetaEndSequence, onMetaSetTempo,
-//    onMetaSMPTEOffset, onMetaTimeSig, onMetaKeySig, onMetaSequencerSpecific, onMetaSysEx);
-//
-//  playMidiFile(&mpl, filePathOfSongToPlay);
-//  static const uint32_t X_OFFSET = 65;
-//  static const uint32_t Y_OFFSET = 240 - 18;
-//
-//  canvas_clear(0x00, 0x00, 0x00);
-//  canvas_drawText(CENTER, 0, "Now Playing!", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
-//  canvas_drawText(CENTER, 18, "Press B to stop playback.", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
-//  display_redraw();
-//
-//  fsmPop(fsm);
-//  fsmPush(fsm, playing, NULL);
+  hal_midiDeviceInit();
+  midiplayer_init(&context.mpl, onNoteOff, onNoteOn, onNoteKeyPressure, onSetParameter, onSetProgram, onChangePressure,
+    onSetPitchWheel, onMetaMIDIPort, onMetaSequenceNumber, onMetaTextEvent, onMetaCopyright, onMetaTrackName,
+    onMetaInstrument, onMetaLyric, onMetaMarker, onMetaCuePoint, onMetaEndSequence, onMetaSetTempo,
+    onMetaSMPTEOffset, onMetaTimeSig, onMetaKeySig, onMetaSequencerSpecific, onMetaSysEx);
+  
+  playMidiFile(&context.mpl, pPath);
+    
+  canvas_clear(0x00, 0x00, 0x00);
+  canvas_drawText(CENTER, 0, "Now Playing!", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
+  canvas_drawText(CENTER, 18, "Press B to stop playback.", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
+  display_redraw();  
 }
 
-// ------------------------------------------------------------------------------------------------------------
-// playbackFinished
-// ------------------------------------------------------------------------------------------------------------
-
-void playbackFinished(StackBasedFsm_t* pFsm, FsmState* state, void* pArgs) {
-  //  hal_printfSuccess("Playback finished!");
-  //  stopAllDrives();
-  //  hal_midiDeviceFree();
-  //
-  //  fsmPop(fsm);
-  //  fsmPush(fsm, playlist, NULL);
+static void onBackPress(StackBasedFsm_t* pFsm) {
+  hal_printf("midiPlayer::onBackPress()");
+  hal_printfSuccess("Playback aborted by user.");
+  stopAllDrives();
+  hal_midiDeviceFree();
+  
+  leaveState(pFsm);
 }
 
-// ------------------------------------------------------------------------------------------------------------
-// playbackAborted
-// ------------------------------------------------------------------------------------------------------------
+static void onTick(StackBasedFsm_t* pFsm) {
+  if (!midiPlayerTick(&context.mpl)) {    
+    hal_printfSuccess("Playback finished!");
+    stopAllDrives();
+    hal_midiDeviceFree();
+    
+    leaveState(pFsm);    
+  }
+}
 
-void playbackAborted(StackBasedFsm_t* pFsm, FsmState* state, void* pArgs) {
-  //  hal_printfSuccess("Playback aborted by user.");
-  //  stopAllDrives();
-  //  hal_midiDeviceFree();
-  //
-  //  fsmPop(fsm);
-  //  fsmPush(fsm, playlist, NULL);
+void player(StackBasedFsm_t* pFsm, FsmState* pState) {
+  pState->onEnterState = onEnter;
+  pState->onBackPress = onBackPress;
+  pState->onTick = onTick;
 }

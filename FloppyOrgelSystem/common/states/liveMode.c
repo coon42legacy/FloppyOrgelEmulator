@@ -21,7 +21,7 @@ void liveReceiving(StackBasedFsm_t* pFsm, FsmState* state, void* pArgs) {
   // }
 }
 
-void liveMode(StackBasedFsm_t* pFsm, FsmState* state, void* pArgs) {
+void liveMode(StackBasedFsm_t* pFsm, FsmState* state) {
 //  canvas_clear(0x00, 0x00, 0x00);
 //  canvas_drawText(CENTER, 0, "--- Live mode ---", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
 //  canvas_drawText(CENTER, 18, "Now receiving MIDI-Data on debug port...", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);

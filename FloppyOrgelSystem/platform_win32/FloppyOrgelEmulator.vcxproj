@@ -27,7 +27,7 @@
     <ClCompile Include="..\common\states\liveMode.c" />
     <ClCompile Include="..\common\states\mainMenu.c" />
     <ClCompile Include="..\common\states\playback\playlist.c" />
-    <ClCompile Include="..\common\states\playback\startPlayBack.c" />
+    <ClCompile Include="..\common\states\playback\player.c" />
     <ClCompile Include="..\common\states\settings.c" />
     <ClCompile Include="..\common\states\_example.c" />
     <ClCompile Include="..\hal\hal_mididevice_win32.c" />
@@ -58,7 +58,7 @@
     <ClInclude Include="..\common\states\liveMode.h" />
     <ClInclude Include="..\common\states\mainMenu.h" />
     <ClInclude Include="..\common\states\playback\playlist.h" />
-    <ClInclude Include="..\common\states\playback\startPlayBack.h" />
+    <ClInclude Include="..\common\states\playback\player.h" />
     <ClInclude Include="..\common\states\settings.h" />
     <ClInclude Include="..\common\states\_example.h" />
     <ClInclude Include="..\hal\hal_mididevice.h" />

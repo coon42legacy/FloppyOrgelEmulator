@@ -68,7 +68,7 @@ bool fsmPush(StackBasedFsm_t* pFsm, TransitionFunc pStateFunc, void* pParams) {
       pCurrentState->onLeaveState(pFsm);
     
     initStateCallBacks(pNextState);
-    pStateFunc(pFsm, pNextState, pParams);
+    pStateFunc(pFsm, pNextState);
 
     if (checkStateCallbacks(pNextState))
       pNextState->onEnterState(pFsm, pParams);

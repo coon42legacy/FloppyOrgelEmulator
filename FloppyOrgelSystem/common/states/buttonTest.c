@@ -143,14 +143,14 @@ static void onDirectionPress(StackBasedFsm_t* pFsm, bool south, bool north, bool
   draw();
 }
 
-void buttonTest(StackBasedFsm_t* pFsm, FsmState* pState, void* pArgs) {
-  pState->onActionPress = onActionPress;
-  pState->onBackPress = onBackPress;
-  pState->onStartPress = onStartPress;
-  pState->onStartRelease = onStartRelease;
-  pState->onSelectPress = onSelectPress;
-  pState->onSelectRelease = onSelectRelease;
-  pState->onEnterState = onEnter;
-  pState->onTick = onTick;
-  pState->onDirectionPress = onDirectionPress;
+void buttonTest(StackBasedFsm_t* pFsm, FsmState* state) {
+  state->onActionPress = onActionPress;
+  state->onBackPress = onBackPress;
+  state->onStartPress = onStartPress;
+  state->onStartRelease = onStartRelease;
+  state->onSelectPress = onSelectPress;
+  state->onSelectRelease = onSelectRelease;
+  state->onEnterState = onEnter;
+  state->onTick = onTick;
+  state->onDirectionPress = onDirectionPress;
 }

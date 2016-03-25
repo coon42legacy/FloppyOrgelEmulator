@@ -3,6 +3,6 @@
 
 #include "../../StackBasedFsm.h"
 
-void startPlayBack(StackBasedFsm_t* pFsm, FsmState* state, void* pParams);
+void player(StackBasedFsm_t* pFsm, FsmState* pState);
 
 #endif // STARTPLAYBACK_H__

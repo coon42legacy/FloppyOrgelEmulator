@@ -4,7 +4,7 @@
 #include "../../hal/hal_display.h"
 #include "settings.h"
 
-void settings(StackBasedFsm_t* pFsm, FsmState* state, void* pArgs) {
+void settings(StackBasedFsm_t* pFsm, FsmState* state) {
   static SlotBasedMenu_t menu;
 
   canvas_clear(0, 0, 0);

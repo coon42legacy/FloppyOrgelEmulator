@@ -135,7 +135,7 @@
     <ClCompile Include="..\common\states\playback\playlist.c">
       <Filter>Quelldateien\common\states\playback</Filter>
     </ClCompile>
-    <ClCompile Include="..\common\states\playback\startPlayBack.c">
+    <ClCompile Include="..\common\states\playback\player.c">
       <Filter>Quelldateien\common\states\playback</Filter>
     </ClCompile>
   </ItemGroup>
@@ -227,7 +227,7 @@
     <ClInclude Include="..\common\states\playback\playlist.h">
       <Filter>Headerdateien\common\states\playback</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\states\playback\startPlayBack.h">
+    <ClInclude Include="..\common\states\playback\player.h">
       <Filter>Headerdateien\common\states\playback</Filter>
     </ClInclude>
   </ItemGroup>

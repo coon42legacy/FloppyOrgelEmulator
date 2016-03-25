@@ -3,6 +3,6 @@
 
 #include "../StackBasedFsm.h"
 
-void mainMenu(StackBasedFsm_t* pFsm, FsmState* state, void* pArgs);
+void mainMenu(StackBasedFsm_t* pFsm, FsmState* pState);
 
 #endif // __MAINMENU_H__

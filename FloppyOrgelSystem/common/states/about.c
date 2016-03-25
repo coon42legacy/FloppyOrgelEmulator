@@ -76,17 +76,17 @@ static void onDirectionPress(StackBasedFsm_t* pFsm, bool south, bool north, bool
   // TODO: redraw cursor area
 }
 
-void about(StackBasedFsm_t* pFsm, FsmState* pState, void* pParams) {
-  pState->onActionPress   = onActionPress;
-  pState->onActionRelease = onActionRelease;
-  pState->onBackPress     = onBackPress;
-  pState->onStartPress    = onStartPress;
-  pState->onStartRelease  = onStartRelease;
-  pState->onSelectPress   = onSelectPress;
-  pState->onSelectRelease = onSelectRelease;
-  pState->onDirectionPress     = onDirectionPress;
-  pState->onEnterState    = onEnter;
-  pState->onReenterState  = onReenter;
-  pState->onLeaveState    = onLeaveState;
-  pState->onTick          = onTick;
+void about(StackBasedFsm_t* pFsm, FsmState* state) {
+  state->onActionPress   = onActionPress;
+  state->onActionRelease = onActionRelease;
+  state->onBackPress     = onBackPress;
+  state->onStartPress    = onStartPress;
+  state->onStartRelease  = onStartRelease;
+  state->onSelectPress   = onSelectPress;
+  state->onSelectRelease = onSelectRelease;
+  state->onDirectionPress     = onDirectionPress;
+  state->onEnterState    = onEnter;
+  state->onReenterState  = onReenter;
+  state->onLeaveState    = onLeaveState;
+  state->onTick          = onTick;
 }

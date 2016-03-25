@@ -37,7 +37,7 @@ struct StackBasedFsm_t {
   int stackSize_;
 };
 
-typedef void(*TransitionFunc)(StackBasedFsm_t* pFsm, FsmState* pState, void* pArgs);
+typedef void(*TransitionFunc)(StackBasedFsm_t* pFsm, FsmState* pState);
 
 void fsmInit(StackBasedFsm_t* pFsm);
 bool fsmPush(StackBasedFsm_t* pFsm, TransitionFunc pFunc, void* pArgs);

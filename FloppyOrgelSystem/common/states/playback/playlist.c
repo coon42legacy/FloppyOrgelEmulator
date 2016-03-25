@@ -11,7 +11,7 @@
 #include "../../../hal/hal_filesystem.h"
 #include "../../embedded-midilib/midiutil.h"
 #include "../../embedded-midilib/midiplayer.h"
-#include "startPlayBack.h"
+#include "player.h"
 #include "playlist.h"
 
 // ------------------------------------------------------------------------------------------------------------
@@ -36,7 +36,7 @@ static void onBrowseNewPage(int currentPage, int totalPages) {
   while (!endOfDirectory) {
     if (context.findData.fileName[0] != '.' && context.findData.fileName[1] != '.') {
       if (curFileIndex >= (currentPage - 1) * MENU_FILES_PER_PAGE) {        
-        menuAddSlot(&context.menu, context.findData.fileName, startPlayBack);
+        menuAddSlot(&context.menu, context.findData.fileName, player);
 
         curFileIndex++;
       }
@@ -170,7 +170,7 @@ static void onDirectionPress(StackBasedFsm_t* pFsm, bool south, bool north, bool
   draw();
 }
 
-void playlist(StackBasedFsm_t* pFsm, FsmState* pState, void* pParams) {
+void playlist(StackBasedFsm_t* pFsm, FsmState* pState) {
   pState->onActionPress = onAction;
   pState->onBackPress = onBack;
   pState->onDirectionPress = onDirectionPress;

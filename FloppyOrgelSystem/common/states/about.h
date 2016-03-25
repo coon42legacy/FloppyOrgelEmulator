@@ -3,7 +3,7 @@
 
 #include "../StackBasedFsm.h"
 
-void about(StackBasedFsm_t* pFsm, FsmState* state, void* pArgs);
+void about(StackBasedFsm_t* pFsm, FsmState* state);
 
 #endif // __ABOUT_H__
 

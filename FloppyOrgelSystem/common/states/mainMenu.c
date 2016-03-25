@@ -83,7 +83,7 @@ static void onDirectionPress(StackBasedFsm_t* pFsm, bool south, bool north, bool
   draw();
 }
 
-void mainMenu(StackBasedFsm_t* pFsm, FsmState* pState, void* pParams) {
+void mainMenu(StackBasedFsm_t* pFsm, FsmState* pState) {
   pState->onActionPress = onAction;
   pState->onBackPress = onBackPress;
   pState->onBackRelease = onBackRelease;
