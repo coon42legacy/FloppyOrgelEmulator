@@ -6,7 +6,7 @@
 #include "../../hal/hal_misc.h"
 
 #include "../states/buttonTest.h"
-#include "../states/playlist.h"
+#include "../states/playback/playlist.h"
 #include "../states/liveMode.h"
 #include "../states/settings.h"
 #include "../states/about.h"
@@ -47,7 +47,7 @@ static void onEnter(StackBasedFsm_t* pFsm, void* pParams) {
   hal_printf("mainMenu::onEnter()");
 
   hal_rs485init(&context.fifoDebugPort); // TODO: move to live mode state?
-  menuInit(&context.menu, pFsm, 3, 45);
+  userMenuInit(&context.menu, pFsm, 3, 45);
   menuAddSlot(&context.menu, "Button Test", buttonTest);
   menuAddSlot(&context.menu, "Play MIDI File", playlist);
   menuAddSlot(&context.menu, "Live Mode", liveMode);

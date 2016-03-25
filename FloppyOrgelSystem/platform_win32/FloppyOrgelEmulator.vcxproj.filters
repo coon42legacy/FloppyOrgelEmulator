@@ -49,6 +49,12 @@
     <Filter Include="Headerdateien\common\states">
       <UniqueIdentifier>{ae6fa622-69d2-416f-a503-9dc44ad2d93d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Quelldateien\common\states\playback">
+      <UniqueIdentifier>{ec3a6b57-d124-496e-b4be-67cb6141475e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\common\states\playback">
+      <UniqueIdentifier>{096d0461-16a5-454d-a3ec-2334a7818c38}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\common\canvas\canvas.c">
@@ -111,9 +117,6 @@
     <ClCompile Include="..\common\states\mainMenu.c">
       <Filter>Quelldateien\common\states</Filter>
     </ClCompile>
-    <ClCompile Include="..\common\states\playlist.c">
-      <Filter>Quelldateien\common\states</Filter>
-    </ClCompile>
     <ClCompile Include="..\common\states\settings.c">
       <Filter>Quelldateien\common\states</Filter>
     </ClCompile>
@@ -128,6 +131,12 @@
     </ClCompile>
     <ClCompile Include="..\common\InputDevice.c">
       <Filter>Quelldateien\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\states\playback\playlist.c">
+      <Filter>Quelldateien\common\states\playback</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\states\playback\startPlayBack.c">
+      <Filter>Quelldateien\common\states\playback</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -203,9 +212,6 @@
     <ClInclude Include="..\common\states\about.h">
       <Filter>Headerdateien\common\states</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\states\playlist.h">
-      <Filter>Headerdateien\common\states</Filter>
-    </ClInclude>
     <ClInclude Include="..\common\states\settings.h">
       <Filter>Headerdateien\common\states</Filter>
     </ClInclude>
@@ -217,6 +223,12 @@
     </ClInclude>
     <ClInclude Include="..\common\InputDevice.h">
       <Filter>Headerdateien\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\states\playback\playlist.h">
+      <Filter>Headerdateien\common\states\playback</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\states\playback\startPlayBack.h">
+      <Filter>Headerdateien\common\states\playback</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

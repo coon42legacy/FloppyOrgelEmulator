@@ -1,18 +1,12 @@
-#include <stdint.h>
-#include <stdio.h>
-#include <string.h>
-#include "../StackBasedFsm.h"
-#include "../SlotBasedMenu.h"
-#include "../canvas/canvas.h"
-#include "../../hal/hal_inputdevice.h"
-#include "../../hal/hal_mididevice.h"
-#include "../../hal/hal_display.h"
-#include "../../hal/hal_misc.h"
-#include "../../hal/hal_filesystem.h"
-#include "../embedded-midilib/midiutil.h"
-#include "../embedded-midilib/midiplayer.h"
-#include "playlist.h"
+#include "../../StackBasedFsm.h"
+#include "../../embedded-midilib/midiutil.h"
+#include "../../embedded-midilib/midiplayer.h"
+#include "../../../hal/hal_mididevice.h"
+#include "../../../hal/hal_misc.h"
 
+#include "startPlayBack.h"
+
+// TODO: put into context
 static char filePathOfSongToPlay[256];
 static MIDI_PLAYER mpl;
 
@@ -53,7 +47,7 @@ static void onNoteKeyPressure(int32_t track, int32_t tick, int32_t channel, int3
 
 static void onSetParameter(int32_t track, int32_t tick, int32_t channel, int32_t control, int32_t parameter) {
   printTrackPrefix(track, tick, "Set Parameter");
-  hal_midiDeviceMessage(msgSetParameter, channel, control, parameter);
+  hal_midiDeviceMessage(msgControlChange, channel, control, parameter);
   printf("(%d) %s -> %d", channel, muGetControlName(control), parameter);
   printf("\r\n");
 }
@@ -200,7 +194,11 @@ void playing(StackBasedFsm_t* pFsm, FsmState* state, void* pArgs) {
 // startPlayBack
 // ------------------------------------------------------------------------------------------------------------
 
-void startPlayBack(StackBasedFsm_t* pFsm, FsmState* state, void* pArgs) {
+void startPlayBack(StackBasedFsm_t* pFsm, FsmState* state, void* pParams) {
+  char* pPath = pParams;
+
+  hal_printfInfo("Start playback of file: %s", pPath);
+
 //  hal_midiDeviceInit();
 //  midiplayer_init(&mpl, onNoteOff, onNoteOn, onNoteKeyPressure, onSetParameter, onSetProgram, onChangePressure,
 //    onSetPitchWheel, onMetaMIDIPort, onMetaSequenceNumber, onMetaTextEvent, onMetaCopyright, onMetaTrackName,
@@ -221,56 +219,16 @@ void startPlayBack(StackBasedFsm_t* pFsm, FsmState* state, void* pArgs) {
 }
 
 // ------------------------------------------------------------------------------------------------------------
-// playlist
-// ------------------------------------------------------------------------------------------------------------
-
-static struct {  
-  SlotBasedMenu_t menu;
-  char filePath[256];
-  FO_FIND_DATA findData;
-} context;
-
-static void onBrowseNewPage(int currentPage, int totalPages) {
-  hal_printf("playlist::onBrowseNewPage()");
-
-  // Set tracks of current page
-  bool endOfDirectory = !hal_findInit(context.filePath, &context.findData);
-  int curFileIndex = 0;
-  
-  while (!endOfDirectory) {
-    if (context.findData.fileName[0] != '.' && context.findData.fileName[1] != '.') {
-      if (curFileIndex >= (currentPage - 1) * MENU_FILES_PER_PAGE) {
-        hal_strcpy_s(context.menu.slot[curFileIndex].pLabel, MAX_MENU_ITEM_CHARS, context.findData.fileName);
-        context.menu.slot[curFileIndex].pNextStateTransitionFunc = startPlayBack;
-
-        curFileIndex++;
-      }
-    }
-
-    endOfDirectory = !hal_findNext(&context.findData) || curFileIndex >= (currentPage - 1) * MENU_FILES_PER_PAGE + MENU_FILES_PER_PAGE;
-  }
-  hal_findFree();
-
-  context.menu.numSlots = curFileIndex + 1;
-
-  // Update page number
-  char pageText[32];
-  sprintf(pageText, "%2d / %2d", currentPage, totalPages); // TODO: hal_sprintf?
-
-  canvas_drawText(255, 220, pageText, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
-}
-
-// ------------------------------------------------------------------------------------------------------------
 // playbackFinished
 // ------------------------------------------------------------------------------------------------------------
 
 void playbackFinished(StackBasedFsm_t* pFsm, FsmState* state, void* pArgs) {
-//  hal_printfSuccess("Playback finished!");
-//  stopAllDrives();
-//  hal_midiDeviceFree();
-//
-//  fsmPop(fsm);
-//  fsmPush(fsm, playlist, NULL);
+  //  hal_printfSuccess("Playback finished!");
+  //  stopAllDrives();
+  //  hal_midiDeviceFree();
+  //
+  //  fsmPop(fsm);
+  //  fsmPush(fsm, playlist, NULL);
 }
 
 // ------------------------------------------------------------------------------------------------------------
@@ -278,131 +236,10 @@ void playbackFinished(StackBasedFsm_t* pFsm, FsmState* state, void* pArgs) {
 // ------------------------------------------------------------------------------------------------------------
 
 void playbackAborted(StackBasedFsm_t* pFsm, FsmState* state, void* pArgs) {
-//  hal_printfSuccess("Playback aborted by user.");
-//  stopAllDrives();
-//  hal_midiDeviceFree();
-//
-//  fsmPop(fsm);
-//  fsmPush(fsm, playlist, NULL);
-}
-
-static void getFileNameFromCursorPos(char* srcPath, char* dstFilePath, int cursorPos) {
-  static FO_FIND_DATA findData;
-
-  strcpy(dstFilePath, srcPath);
-  bool endOfDirectory = !hal_findInit(dstFilePath, &findData);
-  int itemCount = 0;
-
-  while (!endOfDirectory) {
-    if (findData.fileName[0] != '.' && findData.fileName[1] != '.')
-    if (itemCount++ == cursorPos) {
-      strcat(dstFilePath, "/");
-      strcat(dstFilePath, findData.fileName);
-      break;
-    }
-
-    if (!hal_findNext(&findData))
-      endOfDirectory = true;
-  }
-
-  hal_findFree();
-}
-
-static uint32_t getNumFiles(char* filePath) {
-  static FO_FIND_DATA findData;
-  bool endOfDirectory = !hal_findInit(filePath, &findData);
-  int numFiles = 0;
-
-  while (!endOfDirectory) {
-    if (findData.fileName[0] != '.')
-    if (findData.fileName[1] != '.')
-      numFiles++;
-
-    if (!hal_findNext(&findData))
-      endOfDirectory = true;
-  }
-  hal_findFree();
-
-  return numFiles;
-}
-
-static uint32_t getNumPages(uint32_t numFiles, uint32_t filesPerPage) {
-  bool isPageCountEven = numFiles % filesPerPage == 0;
-  int pageCount = isPageCountEven ? numFiles / filesPerPage : numFiles / filesPerPage + 1;
-
-  return pageCount;
-}
-
-static void draw() {
-  canvas_clear(0x00, 0x00, 0x00);
-  canvas_drawText(CENTER, 0, "Use the game pad to select a song", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
-  canvas_drawText(CENTER, 18, "Press A button to start", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
-
-  int numFilesTotal = getNumFiles(context.filePath);
-  int numPages = getNumPages(numFilesTotal, MENU_FILES_PER_PAGE);
-  int curPage = numPages > 0 ? context.menu.cursorPos / MENU_FILES_PER_PAGE + 1 : 0;
-  int numFilesOfCurrentPage = curPage * MENU_FILES_PER_PAGE < numFilesTotal ? MENU_FILES_PER_PAGE : MENU_FILES_PER_PAGE - (curPage * MENU_FILES_PER_PAGE - numFilesTotal); // TODO: simplify
-
-  if (numFilesTotal > 0)
-    onBrowseNewPage(curPage, numPages); // FIXME: implement correctly!
-  else {
-    canvas_drawText(CENTER, context.menu.yPos - 5 + 3 * 18, "No tracks available!", 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00);
-    canvas_drawText(CENTER, context.menu.yPos - 5 + 4 * 18, "SD-Card missing?", 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00);
-  }
-
-  menuDraw(&context.menu);
-  display_redraw();
-}
-
-static void onAction(StackBasedFsm_t* pFsm) {
-  hal_printf("playlist::onAction()");
-
-  //  strcpy(filePathOfSongToPlay, filePath);
-  //  hal_printf("Playing: %s\r\n", filePath);
-  //  fsmPush(fsm, startPlayBack, NULL);
-}
-
-static void onBack(StackBasedFsm_t* pFsm) {
-  hal_printf("playlist::onBack()");
-
-  leaveState(pFsm);
-}
-
-static void onEnter(StackBasedFsm_t* pFsm, void* pParams) {
-  hal_printf("playlist::onEnter()");  
-
-  menuInit(&context.menu, pFsm, 3, 50);
-  strcpy(context.filePath, MIDI_PATH);
-
-  draw();
-}
-
-static void onReenter(StackBasedFsm_t* pFsm) {
-  hal_printf("playlist::onReenter()");
-
-  draw();
-}
-
-static void onLeaveState(StackBasedFsm_t* pFsm) {
-  hal_printf("playlist::onLeaveState()");
-}
-
-static void onTick(StackBasedFsm_t* pFsm) {
-  // hal_printf("playlist::onTick()");
-}
-
-static void onDirectionPress(StackBasedFsm_t* pFsm, bool south, bool north, bool west, bool east) {
-  hal_printf("playlist::onDirection()");
-
-  draw();
-}
-
-void playlist(StackBasedFsm_t* pFsm, FsmState* pState, void* pParams) {
-  pState->onActionPress = onAction;
-  pState->onBackPress = onBack;
-  pState->onDirectionPress = onDirectionPress;
-  pState->onEnterState = onEnter;
-  pState->onReenterState = onReenter;
-  pState->onLeaveState = onLeaveState;
-  pState->onTick = onTick;
+  //  hal_printfSuccess("Playback aborted by user.");
+  //  stopAllDrives();
+  //  hal_midiDeviceFree();
+  //
+  //  fsmPop(fsm);
+  //  fsmPush(fsm, playlist, NULL);
 }

@@ -7,9 +7,10 @@
 #define MENU_FILES_PER_PAGE 10
 
 typedef enum {
-  USER_MENU,
-  SETTINGS_MENU,
-  BROWSE_MENU
+  INVALID_MENU,
+  USER_MENU
+  // SETTINGS_MENU,
+  // BROWSE_MENU
 } MenuType_t;
 
 typedef struct {
@@ -23,7 +24,6 @@ typedef void (*BrowseNewPageCallback)(int currentPage, int totalPages);
 typedef void(*SettingsMenuSaveCallback)();
 typedef void(*SettingsMenuCancelCallback)();
 
-
 typedef struct {
   MenuType_t type;
   uint16_t xPos;
@@ -35,7 +35,7 @@ typedef struct {
 } SlotBasedMenu_t;
 
 // general menu functions
-void menuInit(SlotBasedMenu_t* pSbm, StackBasedFsm_t* pFsm, int16_t xPos, int16_t yPos);
+void userMenuInit(SlotBasedMenu_t* pSbm, StackBasedFsm_t* pFsm, int16_t xPos, int16_t yPos);
 void menuTick(SlotBasedMenu_t* sbm);
 void menuAddSlot(SlotBasedMenu_t* pSbm, const char* label, TransitionFunc pFunc);
 void menuDraw(SlotBasedMenu_t* sbm);

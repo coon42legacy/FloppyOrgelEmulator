@@ -7,14 +7,21 @@
 #include "../hal/hal_misc.h"
 #include "canvas/canvas.h"
 
-void menuInit(SlotBasedMenu_t* pSbm, StackBasedFsm_t* pFsm, int16_t xPos, int16_t yPos) {
+static void menuInit(SlotBasedMenu_t* pSbm, StackBasedFsm_t* pFsm, int16_t xPos, int16_t yPos) {
+  pSbm->type = INVALID_MENU;
   pSbm->xPos = xPos;
   pSbm->yPos = yPos;
   pSbm->cursorPos = 0;
   pSbm->numSlots = 0;
   pSbm->pFsm = pFsm;
-
+  
   memset(pSbm->slot, 0, sizeof(pSbm->slot));
+}
+
+void userMenuInit(SlotBasedMenu_t* pSbm, StackBasedFsm_t* pFsm, int16_t xPos, int16_t yPos) {
+  menuInit(pSbm, pFsm, xPos, yPos);
+
+  pSbm->type = USER_MENU;
 }
 
 void userMenuTransitToSelectedSlot(SlotBasedMenu_t* pMenu, void* pArgs) {
@@ -31,13 +38,13 @@ static void menuDrawCursor(SlotBasedMenu_t* pSbm) {
       canvas_drawImage(pSbm->xPos, pSbm->yPos + 18 * pSbm->cursorPos, cursorImg);
       break;
 
-    case BROWSE_MENU:
-      canvas_drawImage(pSbm->xPos, pSbm->yPos + 18 * (pSbm->cursorPos % MENU_FILES_PER_PAGE), cursorImg);
-      break;
+    // case BROWSE_MENU:
+    //   canvas_drawImage(pSbm->xPos, pSbm->yPos + 18 * (pSbm->cursorPos % MENU_FILES_PER_PAGE), cursorImg);
+    //   break;
 
-    case SETTINGS_MENU:    
-      canvas_drawImage(pSbm->xPos, pSbm->yPos + 18 * pSbm->cursorPos, cursorImg);
-      break;
+    // case SETTINGS_MENU:    
+    //   canvas_drawImage(pSbm->xPos, pSbm->yPos + 18 * pSbm->cursorPos, cursorImg);
+    //   break;
   }
 }
 
@@ -48,10 +55,6 @@ void menuAddSlot(SlotBasedMenu_t* pSbm, const char* label, TransitionFunc pFunc)
   hal_strcpy_s(pSbm->slot[pSbm->numSlots].pLabel, MAX_MENU_ITEM_CHARS, label);
   pSbm->slot[pSbm->numSlots].pNextStateTransitionFunc = pFunc;
   pSbm->numSlots++;
-}
-
-void menuAddSettingsSlot(SlotBasedMenu_t* sbm, char* label) {
-
 }
 
 void menuDraw(SlotBasedMenu_t* sbm) {
