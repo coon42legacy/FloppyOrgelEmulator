@@ -109,14 +109,16 @@ static void draw() {
   int numPages = getNumPages(numFilesTotal, MENU_FILES_PER_PAGE);  
   int numFilesOfCurrentPage = context.curPage * MENU_FILES_PER_PAGE < numFilesTotal ? MENU_FILES_PER_PAGE : MENU_FILES_PER_PAGE - (context.curPage * MENU_FILES_PER_PAGE - numFilesTotal); // TODO: simplify
 
-  if (numFilesTotal > 0)
+  if (numFilesTotal > 0) {
     onBrowseNewPage(context.curPage, numPages); // FIXME: implement correctly!
+    menuDraw(&context.menu);
+  }
   else {
     canvas_drawText(CENTER, context.menu.yPos - 5 + 3 * 18, "No tracks available!", 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00);
     canvas_drawText(CENTER, context.menu.yPos - 5 + 4 * 18, "SD-Card missing?", 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00);
   }
 
-  menuDraw(&context.menu);
+  
   display_redraw();
 }
 
