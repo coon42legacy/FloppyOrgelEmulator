@@ -15,7 +15,7 @@ endif
 
 ###################################################
 
-vpath %.c cmsis cmsis/boot
+vpath %.c cmsis cmsis/boot obj
 
 CFLAGS  = -g -O2 -Wall
 CFLAGS += -mlittle-endian -mthumb -mthumb-interwork -mcpu=cortex-m4
@@ -33,18 +33,22 @@ CFLAGS += -Icmsis
 
 SRCS = startup_stm32f4xx.c system_stm32f4xx.c
 
-OBJS = $(SRCS:.c=.o)
+OBJDIR=obj
+OBJS=$(patsubst %.c,$(OBJDIR)/%.o,$(SRCS))
 
-.PHONY: libcmsis.a
+.PHONY: $(OBJDIR)/libcmsis.a
 
-all: libcmsis.a
+all:  $(OBJDIR)/libcmsis.a
 
-%.o : %.c
-	$(CC) $(CFLAGS) -c -o $@ $^
+$(OBJDIR):
+	mkdir -p $(OBJDIR)
 
-libcmsis.a: $(OBJS)
+$(OBJDIR)/%.o: %.c | $(OBJDIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJDIR)/libcmsis.a: $(OBJS)
 	$(AR) -r $@ $(OBJS)
 
 clean:
-	rm -f $(OBJS) libcmsis.a
+	rm -rf $(OBJDIR)
 
