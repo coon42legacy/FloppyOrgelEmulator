@@ -18,9 +18,9 @@
   *            priority is Privileged, and the Stack is set to Main.
   ******************************************************************************
   */
-    
-#include "../hal/hal_misc.h"
-#include "../hal/hal_display.h"
+
+// #include "../hal/hal_misc.h"
+// #include "../hal/hal_display.h"
 
 /*----------Stack Configuration-----------------------------------------------*/
 #define STACK_SIZE       0x00002000      /*!< Stack size (in Words)           */
@@ -411,17 +411,21 @@ void Default_Reset_Handler(void)
   */
 
 static void hardfault(void) {
-  hal_printf("**************** CRASH: hardfault! ****************\n\r");
-  canvas_clear(0x00, 0x00, 0xFF);
-  canvas_drawText(60, 120, "*** CRASH: HARD FAULT! ***", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0xFF);
-  Default_Handler();
+//  hal_printf("**************** CRASH: hardfault! ****************\n\r");
+//  canvas_clear(0x00, 0x00, 0xFF);
+//  canvas_drawText(60, 120, "*** CRASH: HARD FAULT! ***", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0xFF);
+//  Default_Handler();
+
+    while(1);
 }
 
 static void memmanage(void) {
-  hal_printf("**************** CRASH: memmanage! ****************\n\r");
-  canvas_clear(0x00, 0x00, 0xFF);
-  canvas_drawText(0, 120, "*** CRASH: MEMORY MAMANGEMENT! ***", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0xFF);
-  Default_Handler();
+//  hal_printf("**************** CRASH: memmanage! ****************\n\r");
+//  canvas_clear(0x00, 0x00, 0xFF);
+//  canvas_drawText(0, 120, "*** CRASH: MEMORY MAMANGEMENT! ***", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0xFF);
+//  Default_Handler();
+
+    while(1);
 }
 
 
