@@ -4,7 +4,7 @@
 #include "../../hal/hal_display.h"
 #include "../../hal/hal_inputdevice.h"
 #include "../../hal/hal_mididevice.h"
-#include "../LockFreeFIFO.h"
+#include "../LockFreeFifo.h"
 #include "liveMode.h"
 
 void liveReceiving(StackBasedFsm_t* pFsm, FsmState* state, void* pArgs) {
