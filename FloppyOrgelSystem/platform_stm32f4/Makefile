@@ -15,7 +15,7 @@ endif
 
 ###################################################
 
-vpath %.c cmsis cmsis/boot
+vpath %.c cmsis cmsis/boot lib/misc lib/random lib/std_periph/source lib/stdio lib/syscalls
 
 CFLAGS  = -g -O2 -Wall
 CFLAGS += -mlittle-endian -mthumb -mthumb-interwork -mcpu=cortex-m4
@@ -29,13 +29,22 @@ CFLAGS += -msoft-float
 endif
 
 CFLAGS += -ffreestanding -nostdlib
-CFLAGS += -Icmsis
+CFLAGS += -Icmsis -Icmsis/boot 
+CFLAGS += -Ilib/misc
+CFLAGS += -Ilib/std_periph/include
 
 OBJDIR=obj
 CMSIS_SRCS = startup_stm32f4xx.c system_stm32f4xx.c
-CMSIS_OBJS=$(patsubst %.c,$(OBJDIR)/%.o,$(CMSIS_SRCS))
+STDPERIPH_SRCS = delay.c stm32_ub_rng.c \
+		misc.c stm32f4xx_exti.c stm32f4xx_gpio.c stm32f4xx_rng.c \
+		stm32f4xx_spi.c stm32f4xx_tim.c stm32f4xx_dma.c \
+		stm32f4xx_fsmc.c stm32f4xx_rcc.c stm32f4xx_sdio.c \
+		stm32f4xx_syscfg.c stm32f4xx_usart.c
 
-all: $(OBJDIR)/libcmsis.a
+CMSIS_OBJS=$(patsubst %.c,$(OBJDIR)/%.o,$(CMSIS_SRCS))
+STDPERIPH_OBJS=$(patsubst %.c,$(OBJDIR)/%.o,$(STDPERIPH_SRCS))
+
+all: $(OBJDIR)/libcmsis.a $(OBJDIR)/stdperiph.a
 
 $(OBJDIR):
 	mkdir -p $(OBJDIR)
@@ -45,6 +54,10 @@ $(OBJDIR)/%.o: %.c | $(OBJDIR)
 
 $(OBJDIR)/libcmsis.a: $(CMSIS_OBJS)
 	$(AR) -r $@ $(CMSIS_OBJS)
+
+$(OBJDIR)/stdperiph.a: $(STDPERIPH_OBJS)
+	$(AR) -r $@ $(STDPERIPH_OBJS)
+
 
 .PHONY: clean
 clean:
