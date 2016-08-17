@@ -1,5 +1,5 @@
 #include "../hal/hal_misc.h" // TODO: remove after debug!
-#include "LockFreeFIFO.h"
+#include "LockFreeFifo.h"
 
 int getRingBufferDistance(LockFreeFIFO_t* lff) {
   return lff->rptr > lff->wptr ? lff->rptr - lff->wptr : lff->rptr - lff->wptr + RING_BUFFER_SIZE;

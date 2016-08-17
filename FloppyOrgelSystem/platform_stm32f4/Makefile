@@ -54,7 +54,7 @@ DRIVERS_SRCS = SSD1289.c NesGamePad.c \
                tm_stm32f4_delay.c tm_stm32f4_fatfs.c tm_stm32f4_gpio.c tm_stm32f4_timer_properties.c \
                diskio.c ff.c fatfs_sd_sdio.c ccsbcs.c syscall.c
 
-COMMON_SRCS = common_main.c InputDevice.c LockFreeFIFO.c SlotBasedMenu.c StackBasedFsm.c \
+COMMON_SRCS = common_main.c InputDevice.c LockFreeFifo.c SlotBasedMenu.c StackBasedFsm.c \
               AsciiLib.c canvas.c \
               about.c buttonTest.c floppyTest.c liveMode.c mainMenu.c player.c playlist.c \
               
