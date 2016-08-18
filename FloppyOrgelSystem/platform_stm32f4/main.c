@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "stm32f4xx.h"
-#include "LCD/SSD1289.h"
-#include "NesGamePad/NesGamePad.h"
+#include "drivers/LCD/SSD1289.h"
+#include "drivers/NesGamePad/NesGamePad.h"
 #include "common_main.h"
 #include "../hal/hal_filesystem.h"
 
