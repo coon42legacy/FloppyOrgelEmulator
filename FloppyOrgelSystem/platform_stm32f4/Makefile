@@ -54,10 +54,13 @@ OBJS = $(SRCS:.c=.o)
 
 ###################################################
 
-.PHONY: lib proj
+.PHONY: lib proj flash
 
 all: lib proj
 	$(SIZE) $(OUTPATH)/$(PROJ_NAME).elf
+
+flash: all
+	st-flash write build/stm32f4_sample.bin 0x8000000
 
 lib:
 	$(MAKE) -C lib FLOAT_TYPE=$(FLOAT_TYPE)
