@@ -12,6 +12,8 @@ desktop.ini
 *.comarker
 *.opensdf
 *.suo
+*.o
+*.a
 /FloppyOrgelSystem/platform_win32/*.opendb
 /FloppyOrgelSystem/platform_win32/*.user
 /FloppyOrgelSystem/platform_win32/advapi32.pdb/ED44722B2EF24C32B5421725CD13F4FA2/*.pd_
