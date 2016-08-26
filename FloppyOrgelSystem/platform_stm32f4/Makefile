@@ -66,7 +66,7 @@ LIB_OBJS=$(patsubst %.c,$(OBJDIR)/%.o,$(LIB_SRCS))
 
 ###################################################
 
-.PHONY: proj flash
+.PHONY: proj flash clean
 
 all: $(OUTPATH)/$(PROJ_NAME).elf
 
