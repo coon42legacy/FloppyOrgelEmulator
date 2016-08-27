@@ -22,4 +22,7 @@ int32_t hal_fseek(FILE* pFile, int startPos);
 size_t hal_fread(FILE* pFile, void* dst, size_t numBytes);
 int32_t hal_ftell(FILE* pFile);
 
+// common functions
+void hal_fileSystemInit();
+
 #endif // __HAL_FILESYSTEM_H

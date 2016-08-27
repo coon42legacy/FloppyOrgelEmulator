@@ -1,109 +1,182 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include <math.h>
 #include "stm32f4xx_conf.h"
-#include "utils.h"
+#include "SSD1289.h"
+#include "NesGamePad.h"
+#include "common_main.h"
+#include "../../hal/hal_filesystem.h"
 
-// Private variables
-volatile uint32_t time_var1, time_var2;
+void enableDelayTimer() {
+  RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
 
-// Private function prototypes
-void Delay(volatile uint32_t nCount);
-void init();
-void calculation_test();
-void dac_test();
-
-int main(void) {
-  init();
-
-  for(;;) {
-    GPIO_SetBits(GPIOD, GPIO_Pin_12);
-    Delay(50);
-    GPIO_ResetBits(GPIOD, GPIO_Pin_12);
-    Delay(50);
-  }
-
-  return 0;
+  TIM_TimeBaseInitTypeDef timerInitStructure;
+  timerInitStructure.TIM_Prescaler = 84 - 1; // 1 Mhz
+  timerInitStructure.TIM_CounterMode = TIM_CounterMode_Up;
+  timerInitStructure.TIM_Period = -1; // no period, use maximum of uint32_t
+  timerInitStructure.TIM_ClockDivision = TIM_CKD_DIV1;
+  timerInitStructure.TIM_RepetitionCounter = 0;
+  TIM_TimeBaseInit(TIM2, &timerInitStructure);
+  TIM_Cmd(TIM2, ENABLE);
 }
 
-void init() {
-  GPIO_InitTypeDef  GPIO_InitStructure;
-  USART_InitTypeDef USART_InitStructure;
-  DAC_InitTypeDef  DAC_InitStructure;
+void enableMidiTimer() {
+  RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM5, ENABLE);
 
-  // ---------- SysTick timer -------- //
-  if (SysTick_Config(SystemCoreClock / 1000)) {
-    // Capture error
-	while (1){};
-  }
+  TIM_TimeBaseInitTypeDef timerInitStructure;
+  timerInitStructure.TIM_Prescaler = 84 - 1; // 1 Mhz
+  timerInitStructure.TIM_CounterMode = TIM_CounterMode_Up;
+  timerInitStructure.TIM_Period = -1; // no period, use maximum of uint32_t
+  timerInitStructure.TIM_ClockDivision = TIM_CKD_DIV1;
+  timerInitStructure.TIM_RepetitionCounter = 0;
+  TIM_TimeBaseInit(TIM5, &timerInitStructure);
+  TIM_Cmd(TIM5, ENABLE);
+}
 
-  // GPIOD Periph clock enable
-  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOD, ENABLE);
+// UART
+void initializeDebugUart(uint32_t baudrate) {
+	/* This is a concept that has to do with the libraries provided by ST
+	 * to make development easier the have made up something similar to
+	 * classes, called TypeDefs, which actually just define the common
+	 * parameters that every peripheral needs to work correctly
+	 *
+	 * They make our life easier because we don't have to mess around with
+	 * the low level stuff of setting bits in the correct registers
+	 */
+	GPIO_InitTypeDef GPIO_InitStruct; // this is for the GPIO pins used as TX and RX
+	USART_InitTypeDef USART_InitStruct; // this is for the USART1 initilization
+	NVIC_InitTypeDef NVIC_InitStructure;
 
-  // Configure PD12, PD13, PD14 and PD15 in output pushpull mode
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12 | GPIO_Pin_13| GPIO_Pin_14| GPIO_Pin_15;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
-  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
-  GPIO_Init(GPIOD, &GPIO_InitStructure);
+	/* enable APB2 peripheral clock for USART1
+	 * note that only USART1 and USART6 are connected to APB2
+	 * the other USARTs are connected to APB1
+	 */
+	 RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1, ENABLE);
 
-  // ------ UART ------ //
+	/* enable the peripheral clock for the pins used by
+	 * USART1, PB6 for TX and PB7 for RX
+	 */
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOB, ENABLE);
 
-  // Clock
-  RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
-  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
+	/* This sequence sets up the TX and RX pins
+	 * so they work correctly with the USART1 peripheral
+	 */
+	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_6 | GPIO_Pin_7; // Pins 6 (TX) and 7 (RX) are used
+	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF; 			// the pins are configured as alternate function so the USART peripheral has access to them
+	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_100MHz;		// this defines the IO speed and has nothing to do with the baudrate!
+	GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;			// this defines the output type as push pull mode (as opposed to open drain)
+	GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_UP;			// this activates the pullup resistors on the IO pins
+	GPIO_Init(GPIOB, &GPIO_InitStruct);					// now all the values are passed to the GPIO_Init() function which sets the GPIO registers
 
-  // IO
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2 | GPIO_Pin_3;
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
-  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
-  GPIO_Init(GPIOA, &GPIO_InitStructure);
+	/* The RX and TX pins are now connected to their AF
+	 * so that the USART1 can take over control of the
+	 * pins
+	 */
+	GPIO_PinAFConfig(GPIOB, GPIO_PinSource6, GPIO_AF_USART1); //
+	GPIO_PinAFConfig(GPIOB, GPIO_PinSource7, GPIO_AF_USART1);
 
-  GPIO_PinAFConfig(GPIOA, GPIO_PinSource2, GPIO_AF_USART2);
-  GPIO_PinAFConfig(GPIOA, GPIO_PinSource3, GPIO_AF_USART2);
+	/* Now the USART_InitStruct is used to define the
+	 * properties of USART1
+	 */
+	USART_InitStruct.USART_BaudRate = baudrate;				// the baudrate is set to the value we passed into this init function
+	USART_InitStruct.USART_WordLength = USART_WordLength_8b;// we want the data frame size to be 8 bits (standard)
+	USART_InitStruct.USART_StopBits = USART_StopBits_1;		// we want 1 stop bit (standard)
+	USART_InitStruct.USART_Parity = USART_Parity_No;		// we don't want a parity bit (standard)
+	USART_InitStruct.USART_HardwareFlowControl = USART_HardwareFlowControl_None; // we don't want flow control (standard)
+	USART_InitStruct.USART_Mode = USART_Mode_Tx | USART_Mode_Rx; // we want to enable the transmitter and the receiver
+	USART_Init(USART1, &USART_InitStruct);					// again all the properties are passed to the USART_Init function which takes care of all the bit setting
 
-  // Conf
-  USART_InitStructure.USART_BaudRate = 115200;
-  USART_InitStructure.USART_WordLength = USART_WordLength_8b;
-  USART_InitStructure.USART_StopBits = USART_StopBits_1;
-  USART_InitStructure.USART_Parity = USART_Parity_No;
-  USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
-  USART_InitStructure.USART_Mode = USART_Mode_Tx | USART_Mode_Rx;
-  USART_Init(USART2, &USART_InitStructure);
 
-  // Enable
-  USART_Cmd(USART2, ENABLE);
+	/* Here the USART1 receive interrupt is enabled
+	 * and the interrupt controller is configured
+	 * to jump to the USART1_IRQHandler() function
+	 * if the USART1 receive interrupt occurs
+	 */
 
-  // ---------- DAC ---------- //
+	USART_ITConfig(USART1, USART_IT_RXNE, ENABLE); // enable the USART1 receive interrupt
+	NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;		 // we want to configure the USART1 interrupts
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;// this sets the priority group of the USART1 interrupts
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;		 // this sets the subpriority inside the group
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;			 // the USART1 interrupts are globally enabled
+	NVIC_Init(&NVIC_InitStructure);							 // the properties are passed to the NVIC_Init function which takes care of the low level stuff
 
-  // Clock
-  RCC_APB1PeriphClockCmd(RCC_APB1Periph_DAC, ENABLE);
-  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOA, ENABLE);
+	// finally this enables the complete USART1 peripheral
+	USART_Cmd(USART1, ENABLE);
+}
 
-  // Configuration
-  DAC_InitStructure.DAC_Trigger = DAC_Trigger_None;
-  DAC_InitStructure.DAC_WaveGeneration = DAC_WaveGeneration_None;
-  DAC_InitStructure.DAC_OutputBuffer = DAC_OutputBuffer_Disable;
-  DAC_Init(DAC_Channel_1, &DAC_InitStructure);
+void initializeBusUart(uint32_t baudrate) {
+  GPIO_InitTypeDef GPIO_InitStruct; // this is for the GPIO pins used as TX and RX
+  USART_InitTypeDef USART_InitStruct; // this is for the USART1 initilization
 
-  // IO
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4 | GPIO_Pin_5;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AN;
-  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
-  GPIO_Init(GPIOA, &GPIO_InitStructure);
+  /* enable APB2 peripheral clock for USART1
+   * note that only USART1 and USART6 are connected to APB2
+   * the other USARTs are connected to APB1
+   */
+  RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART6, ENABLE);
 
-  // Enable DAC Channel1
-  DAC_Cmd(DAC_Channel_1, ENABLE);
+  /* enable the peripheral clock for the pins used by
+   * USART6, PC6 for TX and PC7 for RX
+   */
+  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOC, ENABLE);
 
-  // Set DAC Channel1 DHR12L register
-  DAC_SetChannel1Data(DAC_Align_12b_R, 0);
+  /* This sequence sets up the TX and RX pins
+   * so they work correctly with the USART1 peripheral
+   */
+  GPIO_InitStruct.GPIO_Pin = GPIO_Pin_6 | GPIO_Pin_7; // Pins 6 (TX) and 7 (RX) are used
+  GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF;       // the pins are configured as alternate function so the USART peripheral has access to them
+  GPIO_InitStruct.GPIO_Speed = GPIO_Speed_100MHz;   // this defines the IO speed and has nothing to do with the baudrate!
+  GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;     // this defines the output type as push pull mode (as opposed to open drain)
+  GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_UP;     // this activates the pullup resistors on the IO pins
+  GPIO_Init(GPIOC, &GPIO_InitStruct);         // now all the values are passed to the GPIO_Init() function which sets the GPIO registers
+
+  /* The RX and TX pins are now connected to their AF
+   * so that the USART6 can take over control of the
+   * pins
+   */
+  GPIO_PinAFConfig(GPIOC, GPIO_PinSource6, GPIO_AF_USART6); //
+  GPIO_PinAFConfig(GPIOC, GPIO_PinSource7, GPIO_AF_USART6);
+
+  /* Now the USAR6_InitStruct is used to define the
+   * properties of USART1
+   */
+  USART_InitStruct.USART_BaudRate = baudrate;       // the baudrate is set to the value we passed into this init function
+  USART_InitStruct.USART_WordLength = USART_WordLength_8b;// we want the data frame size to be 8 bits (standard)
+  USART_InitStruct.USART_StopBits = USART_StopBits_1;   // we want 1 stop bit (standard)
+  USART_InitStruct.USART_Parity = USART_Parity_No;    // we don't want a parity bit (standard)
+  USART_InitStruct.USART_HardwareFlowControl = USART_HardwareFlowControl_None; // we don't want flow control (standard)
+  USART_InitStruct.USART_Mode = USART_Mode_Tx | USART_Mode_Rx; // we want to enable the transmitter and the receiver
+  USART_Init(USART6, &USART_InitStruct);          // again all the properties are passed to the USART_Init function which takes care of all the bit setting
+
+  // finally this enables the complete USART6 peripheral
+  USART_Cmd(USART6, ENABLE);
+}
+
+// This will print on usart 1 (the original function has been commented out in printf.c !!!
+signed int fputc(signed int c, FILE *pStream) {
+  // Wait until transmit finishes
+  while (USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET);
+
+  // Transmit the character using USART1
+  USART_SendData(USART1, (u8) c);
+  return c;
+}
+
+int main(void) {
+    enableDelayTimer();
+    enableMidiTimer();
+    initializeDebugUart(115200);
+    initializeBusUart(9600);
+    setupNesGamePad();
+    SSD1289_Init();
+    SSD1289_Clear(Black);
+    hal_fileSystemInit();
+    common_main();
+
+    return 0;
 }
 
 // Called from systick handler
+// CHECKME: what is this for?
+volatile uint32_t time_var1, time_var2;
+
 void timing_handler() {
   if (time_var1) {
     time_var1--;
@@ -112,15 +185,8 @@ void timing_handler() {
   time_var2++;
 }
 
-// Delay a number of systick cycles (1ms)
-void Delay(volatile uint32_t nCount) {
-  time_var1 = nCount;
-
-  while(time_var1){};
-}
-
 // Dummy function to avoid compiler error
 void _init() {
-
+  // CHECKME: This looks wrong. Check what this function means!
 }
 

@@ -1,5 +1,5 @@
 #include <stdint.h>
-#include "stm32f4xx.h"
+#include "stm32f4xx_conf.h"
 #include "hal_mididevice.h"
 
 static LockFreeFIFO_t* pFifoDebugPort = 0;

@@ -24,7 +24,8 @@ endif
 vpath %.c . src lib/src/stdperiph \
 	drivers/LCD drivers/NesGamePad drivers/Filesystem drivers/Filesystem/fatfs \
 	drivers/Filesystem/fatfs/drivers drivers/Filesystem/fatfs/option \
-	../common ../common/AsciiLib ../common/canvas ../common/states ../common/states/playback
+	../common ../common/AsciiLib ../common/canvas ../common/states ../common/states/playback \
+    ../hal
 
 vpath %.a lib
 
@@ -33,8 +34,10 @@ CFLAGS += -mlittle-endian -mthumb -mthumb-interwork -nostartfiles -mcpu=cortex-m
 CFLAGS += -Iinc -Ilib -Ilib/inc
 CFLAGS += -Ilib/inc/core -Ilib/inc/stdperiph
 CFLAGS += -Idrivers/LCD -Idrivers/NesGamePad
+CFLAGS += -Idrivers
 CFLAGS += -Idrivers/Filesystem -Idrivers/Filesystem/fatfs -Idrivers/Filesystem/fatfs/drivers
 CFLAGS += -I../common -I../common/AsciiLib -I../common/canvas -I../common/states -I../common/states/playback
+CFLAGS += -I../hal
 CFLAGS += -ffreestanding # -nostdlib # nostdlib parameter should be set!?
 
 ifeq ($(FLOAT_TYPE), hard)
@@ -71,6 +74,9 @@ COMMON_SRCS = main.c common_main.c InputDevice.c LockFreeFifo.c SlotBasedMenu.c 
 	AsciiLib.c canvas.c \
 	about.c buttonTest.c floppyTest.c liveMode.c mainMenu.c player.c playlist.c \
 
+HAL_SRCS = hal_display_stm32f4.c hal_filesystem_stm32f4.c hal_inputdevice_stm32f4.c hal_mididevice_stm32f4.c \
+	hal_misc_stm32f4.c
+
 PROJ_NAME=orgel
 OUTPATH=bin
 
@@ -80,6 +86,7 @@ MAIN_OBJS=$(patsubst %.c,$(OBJDIR)/%.o,$(MAIN_SRCS))
 LIB_OBJS=$(patsubst %.c,$(OBJDIR)/%.o,$(LIB_SRCS))
 DRIVERS_OBJS=$(patsubst %.c,$(OBJDIR)/%.o,$(DRIVERS_SRCS))
 COMMON_OBJS=$(patsubst %.c,$(OBJDIR)/%.o,$(COMMON_SRCS))
+HAL_OBJS=$(patsubst %.c,$(OBJDIR)/%.o,$(HAL_SRCS))
 
 ###################################################
 
@@ -103,11 +110,18 @@ $(OBJDIR)/libdrivers.a: $(DRIVERS_OBJS)
 $(OBJDIR)/libcommon.a: $(COMMON_OBJS)
 	$(AR) -r $@ $(COMMON_OBJS)
 
-$(OUTPATH)/$(PROJ_NAME).elf: $(OBJDIR)/libstm32f4.a $(MAIN_OBJS)
-	$(CC) $(CFLAGS) $^ -o $@ -L. -Lobj -lstm32f4 -lm
+$(OBJDIR)/libhalfo.a: $(HAL_OBJS)
+	$(AR) -r $@ $(HAL_OBJS)
+
+$(OUTPATH)/$(PROJ_NAME).elf: $(OBJDIR)/libstm32f4.a $(OBJDIR)/libdrivers.a $(OBJDIR)/libcommon.a $(OBJDIR)/libhalfo.a $(MAIN_SRCS)
+	$(CC) $(CFLAGS) $^ -o $@ -L. -Lobj -lstm32f4 -ldrivers -lcommon -lhalfo -lm
 	$(OBJCOPY) -O ihex $(OUTPATH)/$(PROJ_NAME).elf $(OUTPATH)/$(PROJ_NAME).hex
 	$(OBJCOPY) -O binary $(OUTPATH)/$(PROJ_NAME).elf $(OUTPATH)/$(PROJ_NAME).bin
 	$(SIZE) $@
+
+submodules:
+	git submodule init 
+	git submodule update
 
 flash: all
 	st-flash write $(BINDIR)/$(PROJ_NAME).bin 0x8000000
