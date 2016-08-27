@@ -21,13 +21,20 @@ endif
 
 ###################################################
 
-vpath %.c . src lib/src/stdperiph
+vpath %.c . src lib/src/stdperiph \
+	drivers/LCD drivers/NesGamePad drivers/Filesystem drivers/Filesystem/fatfs \
+	drivers/Filesystem/fatfs/drivers drivers/Filesystem/fatfs/option \
+	../common ../common/AsciiLib ../common/canvas ../common/states ../common/states/playback
+
 vpath %.a lib
 
 CFLAGS  = -std=gnu99 -g -O2 -Wall -Tstm32_flash.ld
 CFLAGS += -mlittle-endian -mthumb -mthumb-interwork -nostartfiles -mcpu=cortex-m4
 CFLAGS += -Iinc -Ilib -Ilib/inc
 CFLAGS += -Ilib/inc/core -Ilib/inc/stdperiph
+CFLAGS += -Idrivers/LCD -Idrivers/NesGamePad
+CFLAGS += -Idrivers/Filesystem -Idrivers/Filesystem/fatfs -Idrivers/Filesystem/fatfs/drivers
+CFLAGS += -I../common -I../common/AsciiLib -I../common/canvas -I../common/states -I../common/states/playback
 CFLAGS += -ffreestanding # -nostdlib # nostdlib parameter should be set!?
 
 ifeq ($(FLOAT_TYPE), hard)
@@ -56,6 +63,14 @@ LIB_SRCS = misc.c stm32f4xx_dma.c stm32f4xx_rcc.c stm32f4xx_adc.c \
 	stm32f4xx_dbgmcu.c stm32f4xx_iwdg.c \
 	stm32f4xx_dcmi.c stm32f4xx_pwr.c
 
+DRIVERS_SRCS = SSD1289.c NesGamePad.c \
+	tm_stm32f4_delay.c tm_stm32f4_fatfs.c tm_stm32f4_gpio.c tm_stm32f4_timer_properties.c \
+	diskio.c ff.c fatfs_sd_sdio.c ccsbcs.c syscall.c
+
+COMMON_SRCS = main.c common_main.c InputDevice.c LockFreeFifo.c SlotBasedMenu.c StackBasedFsm.c \
+	AsciiLib.c canvas.c \
+	about.c buttonTest.c floppyTest.c liveMode.c mainMenu.c player.c playlist.c \
+
 PROJ_NAME=orgel
 OUTPATH=bin
 
@@ -63,6 +78,8 @@ OUTPATH=bin
 
 MAIN_OBJS=$(patsubst %.c,$(OBJDIR)/%.o,$(MAIN_SRCS))
 LIB_OBJS=$(patsubst %.c,$(OBJDIR)/%.o,$(LIB_SRCS))
+DRIVERS_OBJS=$(patsubst %.c,$(OBJDIR)/%.o,$(DRIVERS_SRCS))
+COMMON_OBJS=$(patsubst %.c,$(OBJDIR)/%.o,$(COMMON_SRCS))
 
 ###################################################
 
@@ -79,6 +96,12 @@ $(OBJDIR)/%.o: %.c | $(OBJDIR)
 
 $(OBJDIR)/libstm32f4.a: $(LIB_OBJS)
 	$(AR) -r $@ $(LIB_OBJS)
+
+$(OBJDIR)/libdrivers.a: $(DRIVERS_OBJS)
+	$(AR) -r $@ $(DRIVERS_OBJS)
+
+$(OBJDIR)/libcommon.a: $(COMMON_OBJS)
+	$(AR) -r $@ $(COMMON_OBJS)
 
 $(OUTPATH)/$(PROJ_NAME).elf: $(OBJDIR)/libstm32f4.a $(MAIN_OBJS)
 	$(CC) $(CFLAGS) $^ -o $@ -L. -Lobj -lstm32f4 -lm
