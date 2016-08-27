@@ -61,3 +61,7 @@ void hal_printfInfo(char* format, ...) {
   _print(formattedText);
   va_end(args);
 }
+
+void hal_strcpy_s(char* dst, int maxSize, const char* src) {
+  strcpy(dst, src);
+}
