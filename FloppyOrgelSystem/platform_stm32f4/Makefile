@@ -54,10 +54,10 @@ endif
 
 OBJDIR=obj
 BINDIR=bin
-MAIN_SRCS  = main.c stm32f4xx_it.c system_stm32f4xx.c syscalls.c utils.c delay.c \
+MAIN_SRCS := main.c stm32f4xx_it.c system_stm32f4xx.c syscalls.c utils.c delay.c \
 	lib/startup_stm32f4xx.s # add startup file to build
 
-LIB_SRCS = misc.c stm32f4xx_dma.c stm32f4xx_rcc.c stm32f4xx_adc.c \
+LIB_SRCS := misc.c stm32f4xx_dma.c stm32f4xx_rcc.c stm32f4xx_adc.c \
 	stm32f4xx_exti.c stm32f4xx_rng.c stm32f4xx_can.c stm32f4xx_flash.c \
 	stm32f4xx_rtc.c stm32f4xx_crc.c stm32f4xx_fsmc.c stm32f4xx_sdio.c \
 	stm32f4xx_cryp_aes.c stm32f4xx_gpio.c stm32f4xx_spi.c \
@@ -68,18 +68,18 @@ LIB_SRCS = misc.c stm32f4xx_dma.c stm32f4xx_rcc.c stm32f4xx_adc.c \
 	stm32f4xx_dbgmcu.c stm32f4xx_iwdg.c \
 	stm32f4xx_dcmi.c stm32f4xx_pwr.c
 
-DRIVERS_SRCS = SSD1289.c NesGamePad.c \
+DRIVERS_SRCS := SSD1289.c NesGamePad.c \
 	tm_stm32f4_delay.c tm_stm32f4_fatfs.c tm_stm32f4_gpio.c tm_stm32f4_timer_properties.c \
 	diskio.c ff.c fatfs_sd_sdio.c ccsbcs.c syscall.c
 
-COMMON_SRCS = main.c common_main.c InputDevice.c LockFreeFifo.c SlotBasedMenu.c StackBasedFsm.c \
+COMMON_SRCS := main.c common_main.c InputDevice.c LockFreeFifo.c SlotBasedMenu.c StackBasedFsm.c \
 	AsciiLib.c canvas.c \
 	about.c buttonTest.c floppyTest.c liveMode.c mainMenu.c player.c playlist.c settings.c \
 
-HAL_SRCS = hal_display_stm32f4.c hal_filesystem_stm32f4.c hal_inputdevice_stm32f4.c hal_mididevice_stm32f4.c \
+HAL_SRCS := hal_display_stm32f4.c hal_filesystem_stm32f4.c hal_inputdevice_stm32f4.c hal_mididevice_stm32f4.c \
 	hal_misc_stm32f4.c
 
-MIDI_SRCS = midifile.c midiplayer.c midiutil.c hal_mididevice_stm32f4.c
+MIDI_SRCS := midifile.c midiplayer.c midiutil.c hal_mididevice_stm32f4.c
 
 PROJ_NAME=orgel
 OUTPATH=bin
@@ -100,11 +100,13 @@ MIDI_OBJS=$(patsubst %.c,$(OBJDIR)/%.o,$(MIDI_SRCS))
 all: $(OUTPATH)/$(PROJ_NAME).elf
 
 $(OBJDIR):
-	mkdir -p $(OBJDIR)
-	mkdir -p $(BINDIR)
+	mkdir $(OBJDIR)
 
-$(OBJDIR)/%.o: %.c | $(OBJDIR)
-	$(CC) $(CFLAGS) -c $< -o $@ -L$(OBJDIR) -lstm32f4 -lm
+$(BINDIR):
+	mkdir $(BINDIR)
+
+$(OBJDIR)/%.o: %.c | $(OBJDIR) $(BINDIR)
+	$(CC) $(CFLAGS) -c $< -o $@ -lm
 
 $(OBJDIR)/libstm32f4.a: $(LIB_OBJS)
 	$(AR) -r $@ $(LIB_OBJS)
@@ -118,7 +120,7 @@ $(OBJDIR)/libcommon.a: $(COMMON_OBJS)
 $(OBJDIR)/libhalfo.a: $(HAL_OBJS)
 	$(AR) -r $@ $(HAL_OBJS)
 
-$(OUTPATH)/$(PROJ_NAME).elf: $(LIB_SRCS) $(DRIVERS_SRCS) $(COMMON_SRCS) $(HAL_SRCS) $(MIDI_SRCS) $(MAIN_SRCS)
+$(OUTPATH)/$(PROJ_NAME).elf: $(LIB_OBJS) $(DRIVERS_OBJS) $(COMMON_OBJS) $(HAL_OBJS) $(MIDI_OBJS) $(MAIN_OBJS)
 	$(CC) $(CFLAGS) $^ -o $@ -lm
 	$(OBJCOPY) -O ihex $(OUTPATH)/$(PROJ_NAME).elf $(OUTPATH)/$(PROJ_NAME).hex
 	$(OBJCOPY) -O binary $(OUTPATH)/$(PROJ_NAME).elf $(OUTPATH)/$(PROJ_NAME).bin
