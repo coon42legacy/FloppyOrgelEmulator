@@ -52,7 +52,7 @@ endif
 
 OBJDIR=obj
 BINDIR=bin
-MAIN_SRCS  = main.c stm32f4xx_it.c system_stm32f4xx.c syscalls.c utils.c \
+MAIN_SRCS  = main.c stm32f4xx_it.c system_stm32f4xx.c syscalls.c utils.c delay.c \
 	lib/startup_stm32f4xx.s # add startup file to build
 
 LIB_SRCS = misc.c stm32f4xx_dma.c stm32f4xx_rcc.c stm32f4xx_adc.c \
@@ -113,8 +113,8 @@ $(OBJDIR)/libcommon.a: $(COMMON_OBJS)
 $(OBJDIR)/libhalfo.a: $(HAL_OBJS)
 	$(AR) -r $@ $(HAL_OBJS)
 
-$(OUTPATH)/$(PROJ_NAME).elf: $(OBJDIR)/libstm32f4.a $(OBJDIR)/libdrivers.a $(OBJDIR)/libcommon.a $(OBJDIR)/libhalfo.a $(MAIN_SRCS)
-	$(CC) $(CFLAGS) $^ -o $@ -L. -Lobj -lstm32f4 -ldrivers -lcommon -lhalfo -lm
+$(OUTPATH)/$(PROJ_NAME).elf: $(LIB_SRCS) $(DRIVERS_SRCS) $(COMMON_SRCS) $(HAL_SRCS) $(MAIN_SRCS)
+	$(CC) $(CFLAGS) $^ -o $@ -lm
 	$(OBJCOPY) -O ihex $(OUTPATH)/$(PROJ_NAME).elf $(OUTPATH)/$(PROJ_NAME).hex
 	$(OBJCOPY) -O binary $(OUTPATH)/$(PROJ_NAME).elf $(OUTPATH)/$(PROJ_NAME).bin
 	$(SIZE) $@
