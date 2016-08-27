@@ -94,10 +94,13 @@ void PendSV_Handler(void)
   * @param  None
   * @retval None
   */
-void SysTick_Handler(void)
-{
-	timing_handler();
-}
+
+// Is already used in tm_stm32f4_delay.c
+
+//void SysTick_Handler(void)
+//{
+//	timing_handler();
+//}
 
 /******************************************************************************/
 /*                 STM32F4xx Peripherals Interrupt Handlers                   */

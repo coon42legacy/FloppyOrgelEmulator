@@ -25,7 +25,8 @@ vpath %.c . src lib/src/stdperiph \
 	drivers/LCD drivers/NesGamePad drivers/Filesystem drivers/Filesystem/fatfs \
 	drivers/Filesystem/fatfs/drivers drivers/Filesystem/fatfs/option \
 	../common ../common/AsciiLib ../common/canvas ../common/states ../common/states/playback \
-    ../hal
+    ../hal \
+    ../common/embedded-midilib
 
 vpath %.a lib
 
@@ -38,6 +39,7 @@ CFLAGS += -Idrivers
 CFLAGS += -Idrivers/Filesystem -Idrivers/Filesystem/fatfs -Idrivers/Filesystem/fatfs/drivers
 CFLAGS += -I../common -I../common/AsciiLib -I../common/canvas -I../common/states -I../common/states/playback
 CFLAGS += -I../hal
+CFLAGS += -I../../../hal/hal_mididevice.h -I../../embedded-midilib/midiplayer.h -I../../embedded-midilib/midiutil.h
 CFLAGS += -ffreestanding # -nostdlib # nostdlib parameter should be set!?
 
 ifeq ($(FLOAT_TYPE), hard)
@@ -72,10 +74,12 @@ DRIVERS_SRCS = SSD1289.c NesGamePad.c \
 
 COMMON_SRCS = main.c common_main.c InputDevice.c LockFreeFifo.c SlotBasedMenu.c StackBasedFsm.c \
 	AsciiLib.c canvas.c \
-	about.c buttonTest.c floppyTest.c liveMode.c mainMenu.c player.c playlist.c \
+	about.c buttonTest.c floppyTest.c liveMode.c mainMenu.c player.c playlist.c settings.c \
 
 HAL_SRCS = hal_display_stm32f4.c hal_filesystem_stm32f4.c hal_inputdevice_stm32f4.c hal_mididevice_stm32f4.c \
 	hal_misc_stm32f4.c
+
+MIDI_SRCS = midifile.c midiplayer.c midiutil.c hal_mididevice_stm32f4.c
 
 PROJ_NAME=orgel
 OUTPATH=bin
@@ -87,6 +91,7 @@ LIB_OBJS=$(patsubst %.c,$(OBJDIR)/%.o,$(LIB_SRCS))
 DRIVERS_OBJS=$(patsubst %.c,$(OBJDIR)/%.o,$(DRIVERS_SRCS))
 COMMON_OBJS=$(patsubst %.c,$(OBJDIR)/%.o,$(COMMON_SRCS))
 HAL_OBJS=$(patsubst %.c,$(OBJDIR)/%.o,$(HAL_SRCS))
+MIDI_OBJS=$(patsubst %.c,$(OBJDIR)/%.o,$(MIDI_SRCS))
 
 ###################################################
 
@@ -113,7 +118,7 @@ $(OBJDIR)/libcommon.a: $(COMMON_OBJS)
 $(OBJDIR)/libhalfo.a: $(HAL_OBJS)
 	$(AR) -r $@ $(HAL_OBJS)
 
-$(OUTPATH)/$(PROJ_NAME).elf: $(LIB_SRCS) $(DRIVERS_SRCS) $(COMMON_SRCS) $(HAL_SRCS) $(MAIN_SRCS)
+$(OUTPATH)/$(PROJ_NAME).elf: $(LIB_SRCS) $(DRIVERS_SRCS) $(COMMON_SRCS) $(HAL_SRCS) $(MIDI_SRCS) $(MAIN_SRCS)
 	$(CC) $(CFLAGS) $^ -o $@ -lm
 	$(OBJCOPY) -O ihex $(OUTPATH)/$(PROJ_NAME).elf $(OUTPATH)/$(PROJ_NAME).hex
 	$(OBJCOPY) -O binary $(OUTPATH)/$(PROJ_NAME).elf $(OUTPATH)/$(PROJ_NAME).bin
