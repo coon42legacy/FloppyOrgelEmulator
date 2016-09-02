@@ -1,10 +1,16 @@
-BINPATH=/usr/bin
+ifeq ($(OS),Windows_NT)
+ 	RM = del /S /Q
+ 	BINPATH =
+else
+	RM = rm -rf
+	BINPATH=/usr/bin/
+endif
 
-CC=$(BINPATH)/arm-none-eabi-gcc
-AR=$(BINPATH)/arm-none-eabi-ar
-LD=$(BINPATH)/arm-none-eabi-ld
-OBJCOPY=$(BINPATH)/arm-none-eabi-objcopy
-SIZE=$(BINPATH)/arm-none-eabi-size
+CC=$(BINPATH)arm-none-eabi-gcc
+AR=$(BINPATH)arm-none-eabi-ar
+LD=$(BINPATH)arm-none-eabi-ld
+OBJCOPY=$(BINPATH)arm-none-eabi-objcopy
+SIZE=$(BINPATH)arm-none-eabi-size
 
 ###################################################
 
@@ -136,6 +142,6 @@ flash: all
 proj: $(OUTPATH)/$(PROJ_NAME).elf
 
 clean:
-	rm -rf $(OBJDIR)
-	rm -rf $(BINDIR)
+	$(RM) $(OBJDIR)
+	$(RM) $(BINDIR)
 	
