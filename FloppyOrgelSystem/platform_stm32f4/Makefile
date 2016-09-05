@@ -27,7 +27,7 @@ endif
 
 ###################################################
 
-vpath %.c . src lib/src/stdperiph \
+vpath %.c . src lib/src/stdperiph lib/stdio \
 	drivers/LCD drivers/NesGamePad drivers/Filesystem drivers/Filesystem/fatfs \
 	drivers/Filesystem/fatfs/drivers drivers/Filesystem/fatfs/option \
 	../common ../common/AsciiLib ../common/canvas ../common/states ../common/states/playback \
@@ -63,7 +63,7 @@ BINDIR=bin
 MAIN_SRCS := main.c stm32f4xx_it.c system_stm32f4xx.c syscalls.c utils.c delay.c \
 	lib/startup_stm32f4xx.s # add startup file to build
 
-LIB_SRCS := misc.c stm32f4xx_dma.c stm32f4xx_rcc.c stm32f4xx_adc.c \
+LIB_SRCS := misc.c printf.c stm32f4xx_dma.c stm32f4xx_rcc.c stm32f4xx_adc.c \
 	stm32f4xx_exti.c stm32f4xx_rng.c stm32f4xx_can.c stm32f4xx_flash.c \
 	stm32f4xx_rtc.c stm32f4xx_crc.c stm32f4xx_fsmc.c stm32f4xx_sdio.c \
 	stm32f4xx_cryp_aes.c stm32f4xx_gpio.c stm32f4xx_spi.c \
