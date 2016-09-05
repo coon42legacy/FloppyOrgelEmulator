@@ -2,7 +2,7 @@
 #include "stm32f4xx_conf.h"
 #include "SSD1289.h"
 #include "NesGamePad.h"
-#include "common_main.h"
+#include "../../common/common_main.h"
 #include "../../hal/hal_filesystem.h"
 
 void enableDelayTimer() {
@@ -166,7 +166,7 @@ int main(void) {
     initializeBusUart(9600);
     setupNesGamePad();
     SSD1289_Init();
-    SSD1289_Clear(Black);
+    SSD1289_Clear(Blue);
     hal_fileSystemInit();
     common_main();
 

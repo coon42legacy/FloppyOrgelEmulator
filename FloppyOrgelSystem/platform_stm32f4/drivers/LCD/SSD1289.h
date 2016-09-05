@@ -21,7 +21,7 @@ Part of this code is an adaptation from souce code provided by
 /* Includes ------------------------------------------------------------------*/
 #include <math.h>
 #include "stm32f4xx_conf.h"
-#include "AsciiLib.h"
+#include "../../../common/AsciiLib/AsciiLib.h"
 
 // SSD1289 registers
 enum {
