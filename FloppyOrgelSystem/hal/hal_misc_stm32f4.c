@@ -63,5 +63,15 @@ void hal_printfInfo(char* format, ...) {
 }
 
 void hal_strcpy_s(char* dst, int maxSize, const char* src) {
-  strcpy(dst, src);
+  int srcLen = strlen(src);
+  int len = srcLen > maxSize - 1 ? maxSize - 1 : srcLen;
+
+  memcpy(dst, src, len);
+  dst[len + 1] = '\0';
 }
+
+
+
+
+
+
