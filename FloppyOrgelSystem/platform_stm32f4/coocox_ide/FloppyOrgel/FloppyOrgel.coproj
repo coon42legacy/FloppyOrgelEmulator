@@ -106,6 +106,7 @@
     <File name="common/embedded-midilib/hal/hal_filesystem.h" path="../../../common/embedded-midilib/hal/hal_filesystem.h" type="1"/>
     <File name="inc/stm32f4xx_it.h" path="../../inc/stm32f4xx_it.h" type="1"/>
     <File name="drivers/Filesystem/fatfs/ffconf.h" path="../../drivers/Filesystem/fatfs/ffconf.h" type="1"/>
+    <File name="drivers/Filesystem/tm_stm32f4_spi.c" path="../../drivers/Filesystem/tm_stm32f4_spi.c" type="1"/>
     <File name="drivers/Filesystem" path="" type="2"/>
     <File name="lib/src/stdperiph/stm32f4xx_dma.c" path="../../lib/src/stdperiph/stm32f4xx_dma.c" type="1"/>
     <File name="drivers/Filesystem/tm_stm32f4_gpio.c" path="../../drivers/Filesystem/tm_stm32f4_gpio.c" type="1"/>
@@ -152,6 +153,7 @@
     <File name="drivers/Filesystem/fatfs/option/syscall.c" path="../../drivers/Filesystem/fatfs/option/syscall.c" type="1"/>
     <File name="common/states/floppyTest.h" path="../../../common/states/floppyTest.h" type="1"/>
     <File name="drivers/Filesystem/attributes.h" path="../../drivers/Filesystem/attributes.h" type="1"/>
+    <File name="drivers/Filesystem/tm_stm32f4_spi.h" path="../../drivers/Filesystem/tm_stm32f4_spi.h" type="1"/>
     <File name="common/states/settings.c" path="../../../common/states/settings.c" type="1"/>
     <File name="common/SlotBasedMenu.c" path="../../../common/SlotBasedMenu.c" type="1"/>
     <File name="drivers/Filesystem/fatfs/diskio.c" path="../../drivers/Filesystem/fatfs/diskio.c" type="1"/>
@@ -172,8 +174,8 @@
     <File name="common/states/_example.h" path="../../../common/states/_example.h" type="1"/>
     <File name="lib/inc/core" path="" type="2"/>
     <File name="common/states/about.h" path="../../../common/states/about.h" type="1"/>
-    <File name="lib/inc/stm32f4xx.h" path="../../lib/inc/stm32f4xx.h" type="1"/>
     <File name="drivers/Filesystem/fatfs/integer.h" path="../../drivers/Filesystem/fatfs/integer.h" type="1"/>
+    <File name="lib/inc/stm32f4xx.h" path="../../lib/inc/stm32f4xx.h" type="1"/>
     <File name="hal/hal_filesystem.h" path="../../../hal/hal_filesystem.h" type="1"/>
     <File name="drivers/Filesystem/fatfs/drivers" path="" type="2"/>
     <File name="hal/hal_filesystem_stm32f4.c" path="../../../hal/hal_filesystem_stm32f4.c" type="1"/>
@@ -223,6 +225,7 @@
     <File name="lib/src/stdperiph/stm32f4xx_i2c.c" path="../../lib/src/stdperiph/stm32f4xx_i2c.c" type="1"/>
     <File name="lib/inc/core/core_cmFunc.h" path="../../lib/inc/core/core_cmFunc.h" type="1"/>
     <File name="lib/inc/stdperiph/stm32f4xx_can.h" path="../../lib/inc/stdperiph/stm32f4xx_can.h" type="1"/>
+    <File name="drivers/Filesystem/fatfs/drivers/fatfs_sd.c" path="../../drivers/Filesystem/fatfs/drivers/fatfs_sd.c" type="1"/>
     <File name="common/embedded-midilib/midiutil.h" path="../../../common/embedded-midilib/midiutil.h" type="1"/>
     <File name="common/embedded-midilib/.git" path="../../../common/embedded-midilib/.git" type="1"/>
     <File name="drivers/Filesystem/tm_stm32f4_timer_properties.c" path="../../drivers/Filesystem/tm_stm32f4_timer_properties.c" type="1"/>
@@ -251,6 +254,7 @@
     <File name="drivers/Filesystem/tm_stm32f4_fatfs.h" path="../../drivers/Filesystem/tm_stm32f4_fatfs.h" type="1"/>
     <File name="cmsis_boot/stm32f4xx_conf.h" path="../../cmsis_boot/stm32f4xx_conf.h" type="1"/>
     <File name="lib/inc/stdperiph/stm32f4xx_iwdg.h" path="../../lib/inc/stdperiph/stm32f4xx_iwdg.h" type="1"/>
+    <File name="drivers/Filesystem/fatfs/drivers/fatfs_sd.h" path="../../drivers/Filesystem/fatfs/drivers/fatfs_sd.h" type="1"/>
     <File name="src/main.c" path="../../src/main.c" type="1"/>
     <File name="drivers/Filesystem/tm_stm32f4_fatfs.c" path="../../drivers/Filesystem/tm_stm32f4_fatfs.c" type="1"/>
     <File name="lib/inc/stdperiph/stm32f4xx_spi.h" path="../../lib/inc/stdperiph/stm32f4xx_spi.h" type="1"/>
