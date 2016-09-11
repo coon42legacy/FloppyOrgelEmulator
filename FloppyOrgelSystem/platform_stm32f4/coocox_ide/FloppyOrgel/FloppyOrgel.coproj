@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<Project version="2G - 2.0.5" name="FloppyOrgel">
+<Project version="2G - 1.7.6" name="FloppyOrgel">
   <Target name="FloppyOrgel" isCurrent="1">
-    <Device manufacturerId="9" manufacturerName="ST" chipId="281" chipName="STM32F429VG" boardId="" boardName=""/>
+    <Device manufacturerId="9" manufacturerName="ST" chipId="344" chipName="STM32F407VG" boardId="" boardName=""/>
     <BuildOption>
       <Compile>
         <Option name="OptimizationLevel" value="0"/>
         <Option name="UseFPU" value="0"/>
-        <Option name="UserEditCompiler" value=";"/>
+        <Option name="UserEditCompiler" value=""/>
         <Option name="SupportCPlusplus" value="0"/>
-        <Option name="DEBUG" value="2"/>
-        <Option name="WARNING" value="1"/>
         <Option name="FPU" value="2"/>
-        <Option name="STANDARD" value="4"/>
         <Includepaths>
           <Includepath path="."/>
         </Includepaths>
         <DefinedSymbols>
-          <Define name="STM32F429VG"/>
+          <Define name="STM32F407VG"/>
+          <Define name="STM32F4XX"/>
+          <Define name="USE_STDPERIPH_DRIVER"/>
+          <Define name="__ASSEMBLY__"/>
           <Define name="__FPU_USED"/>
         </DefinedSymbols>
       </Compile>
@@ -28,13 +28,12 @@
         <Option name="LTO" value="0"/>
         <Option name="IsNewStartupCode" value="1"/>
         <Option name="Library" value="Not use C Library"/>
-        <Option name="UserEditLinker" value=" ;"/>
         <LinkedLibraries/>
         <MemoryAreas debugInFlashNotRAM="1">
           <Memory name="IROM1" type="ReadOnly" size="0x00100000" startValue="0x08000000"/>
-          <Memory name="IRAM1" type="ReadWrite" size="0x00030000" startValue="0x20000000"/>
+          <Memory name="IRAM1" type="ReadWrite" size="0x00020000" startValue="0x20000000"/>
           <Memory name="IROM2" type="ReadOnly" size="" startValue=""/>
-          <Memory name="IRAM2" type="ReadWrite" size="" startValue=""/>
+          <Memory name="IRAM2" type="ReadWrite" size="0x00010000" startValue="0x10000000"/>
         </MemoryAreas>
         <LocateLinkFile path="d:/coocox/coide/configuration/programdata/floppyorgel/arm-gcc-link.ld" type="0"/>
       </Link>
@@ -55,11 +54,11 @@
       <Option name="org.coocox.codebugger.gdbjtag.core.debugMode" value="SWD"/>
       <Option name="org.coocox.codebugger.gdbjtag.core.clockDiv" value="1M"/>
       <Option name="org.coocox.codebugger.gdbjtag.corerunToMain" value="1"/>
-      <Option name="org.coocox.codebugger.gdbjtag.core.jlinkgdbserver" value="D:\Program Files (x86)\SEGGER\JLink_V490e\JLinkGDBServerCL.exe"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.jlinkgdbserver" value=""/>
       <Option name="org.coocox.codebugger.gdbjtag.core.userDefineGDBScript" value=""/>
       <Option name="org.coocox.codebugger.gdbjtag.core.targetEndianess" value="0"/>
       <Option name="org.coocox.codebugger.gdbjtag.core.jlinkResetMode" value="Type 0: Normal"/>
-      <Option name="org.coocox.codebugger.gdbjtag.core.resetMode" value="HW RESET"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.resetMode" value="SYSRESETREQ"/>
       <Option name="org.coocox.codebugger.gdbjtag.core.ifSemihost" value="0"/>
       <Option name="org.coocox.codebugger.gdbjtag.core.ifCacheRom" value="1"/>
       <Option name="org.coocox.codebugger.gdbjtag.core.ipAddress" value="127.0.0.1"/>
@@ -67,193 +66,213 @@
       <Option name="org.coocox.codebugger.gdbjtag.core.autoDownload" value="1"/>
       <Option name="org.coocox.codebugger.gdbjtag.core.verify" value="1"/>
       <Option name="org.coocox.codebugger.gdbjtag.core.downloadFuction" value="Erase Effected"/>
-      <Option name="org.coocox.codebugger.gdbjtag.core.defaultAlgorithm" value="./stm32f4xx_1024.elf"/>
+      <Option name="org.coocox.codebugger.gdbjtag.core.defaultAlgorithm" value="STM32F4xx_1024.elf"/>
     </DebugOption>
     <ExcludeFile/>
   </Target>
-  <Components path="./"/>
+  <Components path="./">
+    <Component id="54" name="M4 CMSIS Core" path="" type="2"/>
+    <Component id="500" name="CMSIS BOOT" path="" type="2"/>
+    <Component id="501" name="RCC" path="" type="2"/>
+    <Component id="504" name="GPIO" path="" type="2"/>
+  </Components>
   <Files>
     <File name="common/embedded-midilib/midifile.c" path="../../../common/embedded-midilib/midifile.c" type="1"/>
-    <File name="common/InputDevice.h" path="../../../common/InputDevice.h" type="1"/>
-    <File name="src/utils.c" path="../../src/utils.c" type="1"/>
-    <File name="lib/src/stdperiph/stm32f4xx_rng.c" path="../../lib/src/stdperiph/stm32f4xx_rng.c" type="1"/>
-    <File name="lib/inc/stdperiph/stm32f4xx_dcmi.h" path="../../lib/inc/stdperiph/stm32f4xx_dcmi.h" type="1"/>
     <File name="drivers/NesGamePad" path="" type="2"/>
     <File name="drivers/LCD" path="" type="2"/>
-    <File name="common/states/playback/playlist.c" path="../../../common/states/playback/playlist.c" type="1"/>
-    <File name="lib/src/stdperiph/stm32f4xx_gpio.c" path="../../lib/src/stdperiph/stm32f4xx_gpio.c" type="1"/>
     <File name="lib/inc/stdperiph/stm32f4xx_cryp.h" path="../../lib/inc/stdperiph/stm32f4xx_cryp.h" type="1"/>
     <File name="common/states/about.c" path="../../../common/states/about.c" type="1"/>
-    <File name="common/states/mainMenu.c" path="../../../common/states/mainMenu.c" type="1"/>
     <File name="common/states" path="" type="2"/>
     <File name="common/StackBasedFsm.c" path="../../../common/StackBasedFsm.c" type="1"/>
     <File name="drivers/Filesystem/fatfs/ff.c" path="../../drivers/Filesystem/fatfs/ff.c" type="1"/>
-    <File name="drivers/NesGamePad/NesGamePad.c" path="../../drivers/NesGamePad/NesGamePad.c" type="1"/>
     <File name="src" path="" type="2"/>
-    <File name="drivers/Filesystem/tm_stm32f4_timer_properties.h" path="../../drivers/Filesystem/tm_stm32f4_timer_properties.h" type="1"/>
-    <File name="drivers/Filesystem/fatfs/option" path="" type="2"/>
-    <File name="lib/inc/stm32f4_discovery.h" path="../../lib/inc/stm32f4_discovery.h" type="1"/>
-    <File name="lib/src/stdperiph/stm32f4xx_cryp_aes.c" path="../../lib/src/stdperiph/stm32f4xx_cryp_aes.c" type="1"/>
     <File name="drivers/Filesystem/tm_stm32f4_gpio.h" path="../../drivers/Filesystem/tm_stm32f4_gpio.h" type="1"/>
+    <File name="cmsis/core_cm4_simd.h" path="../../cmsis/core_cm4_simd.h" type="1"/>
+    <File name="cmsis/core_cmFunc.h" path="../../cmsis/core_cmFunc.h" type="1"/>
     <File name="lib/inc/stdperiph/stm32f4xx_dma.h" path="../../lib/inc/stdperiph/stm32f4xx_dma.h" type="1"/>
     <File name="common/states/playback" path="" type="2"/>
     <File name="common/canvas/images.h" path="../../../common/canvas/images.h" type="1"/>
-    <File name="drivers/Filesystem/tm_stm32f4_delay.h" path="../../drivers/Filesystem/tm_stm32f4_delay.h" type="1"/>
     <File name="lib/src/stdperiph/stm32f4xx_can.c" path="../../lib/src/stdperiph/stm32f4xx_can.c" type="1"/>
-    <File name="common/AsciiLib/AsciiLib.h" path="../../../common/AsciiLib/AsciiLib.h" type="1"/>
     <File name="lib/stdio" path="" type="2"/>
-    <File name="lib/inc/stm32f4xx_conf.h" path="../../lib/inc/stm32f4xx_conf.h" type="1"/>
     <File name="common/states/liveMode.h" path="../../../common/states/liveMode.h" type="1"/>
-    <File name="lib/src/stdperiph/stm32f4xx_dcmi.c" path="../../lib/src/stdperiph/stm32f4xx_dcmi.c" type="1"/>
-    <File name="common/AsciiLib" path="" type="2"/>
     <File name="lib/inc/stdperiph/stm32f4xx_dac.h" path="../../lib/inc/stdperiph/stm32f4xx_dac.h" type="1"/>
+    <File name="common/AsciiLib" path="" type="2"/>
     <File name="common/StackBasedFsm.h" path="../../../common/StackBasedFsm.h" type="1"/>
-    <File name="common/canvas/canvas.h" path="../../../common/canvas/canvas.h" type="1"/>
     <File name="lib/inc/core/core_cmInstr.h" path="../../lib/inc/core/core_cmInstr.h" type="1"/>
     <File name="common/config.h" path="../../../common/config.h" type="1"/>
-    <File name="common/states/playback/playlist.h" path="../../../common/states/playback/playlist.h" type="1"/>
     <File name="common/embedded-midilib/midiinfo.h" path="../../../common/embedded-midilib/midiinfo.h" type="1"/>
-    <File name="common/states/playback/player.h" path="../../../common/states/playback/player.h" type="1"/>
     <File name="lib/src/stdperiph/stm32f4xx_cryp.c" path="../../lib/src/stdperiph/stm32f4xx_cryp.c" type="1"/>
-    <File name="lib/inc/stdperiph/stm32f4xx_gpio.h" path="../../lib/inc/stdperiph/stm32f4xx_gpio.h" type="1"/>
-    <File name="lib/src/stdperiph/stm32f4xx_cryp_des.c" path="../../lib/src/stdperiph/stm32f4xx_cryp_des.c" type="1"/>
-    <File name="lib" path="" type="2"/>
-    <File name="hal/hal_misc_stm32f4.c" path="../../../hal/hal_misc_stm32f4.c" type="1"/>
     <File name="hal/hal_display.h" path="../../../hal/hal_display.h" type="1"/>
-    <File name="lib/src/stdperiph/stm32f4xx_sdio.c" path="../../lib/src/stdperiph/stm32f4xx_sdio.c" type="1"/>
-    <File name="drivers/Filesystem/tm_stm32f4_delay.c" path="../../drivers/Filesystem/tm_stm32f4_delay.c" type="1"/>
+    <File name="common/embedded-midilib/hal/hal_filesystem.h" path="../../../common/embedded-midilib/hal/hal_filesystem.h" type="1"/>
     <File name="inc/stm32f4xx_it.h" path="../../inc/stm32f4xx_it.h" type="1"/>
     <File name="drivers/Filesystem/fatfs/ffconf.h" path="../../drivers/Filesystem/fatfs/ffconf.h" type="1"/>
     <File name="drivers/Filesystem" path="" type="2"/>
     <File name="lib/src/stdperiph/stm32f4xx_dma.c" path="../../lib/src/stdperiph/stm32f4xx_dma.c" type="1"/>
-    <File name="common" path="" type="2"/>
     <File name="drivers/Filesystem/tm_stm32f4_gpio.c" path="../../drivers/Filesystem/tm_stm32f4_gpio.c" type="1"/>
-    <File name="lib/src/stdperiph/stm32f4xx_tim.c" path="../../lib/src/stdperiph/stm32f4xx_tim.c" type="1"/>
-    <File name="lib/inc/stdperiph/stm32f4xx_wwdg.h" path="../../lib/inc/stdperiph/stm32f4xx_wwdg.h" type="1"/>
-    <File name="drivers/NesGamePad/NesGamePad.h" path="../../drivers/NesGamePad/NesGamePad.h" type="1"/>
-    <File name="hal" path="" type="2"/>
-    <File name="drivers" path="" type="2"/>
     <File name="drivers/Filesystem/defines.h" path="../../drivers/Filesystem/defines.h" type="1"/>
+    <File name="drivers" path="" type="2"/>
     <File name="lib/inc/core/arm_math.h" path="../../lib/inc/core/arm_math.h" type="1"/>
-    <File name="common/states/mainMenu.h" path="../../../common/states/mainMenu.h" type="1"/>
     <File name="hal/hal_misc.h" path="../../../hal/hal_misc.h" type="1"/>
-    <File name="common/canvas/canvas.c" path="../../../common/canvas/canvas.c" type="1"/>
+    <File name="common/embedded-midilib/.gitattributes" path="../../../common/embedded-midilib/.gitattributes" type="1"/>
     <File name="lib/inc/stdperiph/stm32f4xx_rcc.h" path="../../lib/inc/stdperiph/stm32f4xx_rcc.h" type="1"/>
     <File name="common/embedded-midilib/midifile.h" path="../../../common/embedded-midilib/midifile.h" type="1"/>
     <File name="common/embedded-midilib/midiplayer.c" path="../../../common/embedded-midilib/midiplayer.c" type="1"/>
-    <File name="common/canvas" path="" type="2"/>
     <File name="lib/src/stdperiph/stm32f4xx_spi.c" path="../../lib/src/stdperiph/stm32f4xx_spi.c" type="1"/>
-    <File name="lib/inc/core/core_cm0.h" path="../../lib/inc/core/core_cm0.h" type="1"/>
     <File name="drivers/Filesystem/fatfs/ff.h" path="../../drivers/Filesystem/fatfs/ff.h" type="1"/>
-    <File name="lib/inc/stdperiph/stm32f4xx_pwr.h" path="../../lib/inc/stdperiph/stm32f4xx_pwr.h" type="1"/>
     <File name="drivers/Filesystem/fatfs/drivers/fatfs_sd_sdio.h" path="../../drivers/Filesystem/fatfs/drivers/fatfs_sd_sdio.h" type="1"/>
-    <File name="lib/src/stdperiph/stm32f4xx_fsmc.c" path="../../lib/src/stdperiph/stm32f4xx_fsmc.c" type="1"/>
-    <File name="lib/inc/stdperiph/stm32f4xx_dbgmcu.h" path="../../lib/inc/stdperiph/stm32f4xx_dbgmcu.h" type="1"/>
+    <File name="lib/inc/stdperiph/stm32f4xx_pwr.h" path="../../lib/inc/stdperiph/stm32f4xx_pwr.h" type="1"/>
     <File name="lib/inc/core/core_cm4_simd.h" path="../../lib/inc/core/core_cm4_simd.h" type="1"/>
-    <File name="lib/src/stdperiph/stm32f4xx_i2c.c" path="../../lib/src/stdperiph/stm32f4xx_i2c.c" type="1"/>
-    <File name="lib/inc/core/core_cmFunc.h" path="../../lib/inc/core/core_cmFunc.h" type="1"/>
-    <File name="lib/inc/stdperiph/stm32f4xx_can.h" path="../../lib/inc/stdperiph/stm32f4xx_can.h" type="1"/>
     <File name="lib/inc/core/core_cm3.h" path="../../lib/inc/core/core_cm3.h" type="1"/>
     <File name="lib/src/stdperiph/stm32f4xx_exti.c" path="../../lib/src/stdperiph/stm32f4xx_exti.c" type="1"/>
     <File name="lib/inc/stdperiph/stm32f4xx_tim.h" path="../../lib/inc/stdperiph/stm32f4xx_tim.h" type="1"/>
-    <File name="common/embedded-midilib/midiutil.h" path="../../../common/embedded-midilib/midiutil.h" type="1"/>
-    <File name="drivers/Filesystem/tm_stm32f4_timer_properties.c" path="../../drivers/Filesystem/tm_stm32f4_timer_properties.c" type="1"/>
     <File name="hal/hal_inputdevice.h" path="../../../hal/hal_inputdevice.h" type="1"/>
-    <File name="hal/hal_mididevice_stm32f4.c" path="../../../hal/hal_mididevice_stm32f4.c" type="1"/>
     <File name="lib/inc/stdperiph/stm32f4xx_adc.h" path="../../lib/inc/stdperiph/stm32f4xx_adc.h" type="1"/>
     <File name="lib/inc/stdperiph/stm32f4xx_syscfg.h" path="../../lib/inc/stdperiph/stm32f4xx_syscfg.h" type="1"/>
-    <File name="hal/hal_display_stm32f4.c" path="../../../hal/hal_display_stm32f4.c" type="1"/>
-    <File name="lib/src/stdperiph" path="" type="2"/>
     <File name="lib/src/stdperiph/stm32f4xx_dbgmcu.c" path="../../lib/src/stdperiph/stm32f4xx_dbgmcu.c" type="1"/>
-    <File name="common/InputDevice.c" path="../../../common/InputDevice.c" type="1"/>
-    <File name="lib/inc/stdperiph/misc.h" path="../../lib/inc/stdperiph/misc.h" type="1"/>
+    <File name="hal/hal_display_stm32f4.c" path="../../../hal/hal_display_stm32f4.c" type="1"/>
     <File name="inc/stm32f4xx_conf.h" path="../../inc/stm32f4xx_conf.h" type="1"/>
     <File name="lib/inc/stdperiph" path="" type="2"/>
     <File name="drivers/Filesystem/fatfs" path="" type="2"/>
-    <File name="lib/inc/stdperiph/stm32f4xx_flash.h" path="../../lib/inc/stdperiph/stm32f4xx_flash.h" type="1"/>
     <File name="lib/src/stdperiph/stm32f4xx_iwdg.c" path="../../lib/src/stdperiph/stm32f4xx_iwdg.c" type="1"/>
-    <File name="lib/src/stdperiph/stm32f4xx_syscfg.c" path="../../lib/src/stdperiph/stm32f4xx_syscfg.c" type="1"/>
-    <File name="coocox_startup/startup_stm32f4xx.c" path="startup/startup_stm32f4xx.c" type="1"/>
-    <File name="common/LockFreeFifo.c" path="../../../common/LockFreeFifo.c" type="1"/>
-    <File name="lib/inc/stdperiph/stm32f4xx_i2c.h" path="../../lib/inc/stdperiph/stm32f4xx_i2c.h" type="1"/>
-    <File name="lib/inc/stdperiph/stm32f4xx_fsmc.h" path="../../lib/inc/stdperiph/stm32f4xx_fsmc.h" type="1"/>
-    <File name="lib/src/stdperiph/stm32f4xx_usart.c" path="../../lib/src/stdperiph/stm32f4xx_usart.c" type="1"/>
     <File name="drivers/Filesystem/fatfs/diskio.h" path="../../drivers/Filesystem/fatfs/diskio.h" type="1"/>
+    <File name="lib/inc/stdperiph/stm32f4xx_fsmc.h" path="../../lib/inc/stdperiph/stm32f4xx_fsmc.h" type="1"/>
     <File name="drivers/Filesystem/fatfs/option/ccsbcs.c" path="../../drivers/Filesystem/fatfs/option/ccsbcs.c" type="1"/>
     <File name="common/embedded-midilib/midiutil.c" path="../../../common/embedded-midilib/midiutil.c" type="1"/>
     <File name="common/SlotBasedMenu.h" path="../../../common/SlotBasedMenu.h" type="1"/>
-    <File name="lib/src/stdperiph/stm32f4xx_adc.c" path="../../lib/src/stdperiph/stm32f4xx_adc.c" type="1"/>
+    <File name="cmsis_boot" path="" type="2"/>
     <File name="lib/inc/core/arm_common_tables.h" path="../../lib/inc/core/arm_common_tables.h" type="1"/>
-    <File name="common/embedded-midilib/midiplayer.h" path="../../../common/embedded-midilib/midiplayer.h" type="1"/>
     <File name="lib/src/stdperiph/stm32f4xx_wwdg.c" path="../../lib/src/stdperiph/stm32f4xx_wwdg.c" type="1"/>
-    <File name="lib/src/stdperiph/misc.c" path="../../lib/src/stdperiph/misc.c" type="1"/>
-    <File name="lib/src/stdperiph/stm32f4xx_rtc.c" path="../../lib/src/stdperiph/stm32f4xx_rtc.c" type="1"/>
     <File name="drivers/Filesystem/fatfs/drivers/fatfs_sd_sdio.c" path="../../drivers/Filesystem/fatfs/drivers/fatfs_sd_sdio.c" type="1"/>
+    <File name="lib/src/stdperiph/stm32f4xx_rtc.c" path="../../lib/src/stdperiph/stm32f4xx_rtc.c" type="1"/>
     <File name="common/states/floppyTest.c" path="../../../common/states/floppyTest.c" type="1"/>
     <File name="lib/inc/pdm_filter.h" path="../../lib/inc/pdm_filter.h" type="1"/>
-    <File name="lib/inc/stdperiph/stm32f4xx_hash.h" path="../../lib/inc/stdperiph/stm32f4xx_hash.h" type="1"/>
-    <File name="lib/src/stdperiph/stm32f4xx_pwr.c" path="../../lib/src/stdperiph/stm32f4xx_pwr.c" type="1"/>
+    <File name="common/embedded-midilib/hal/hal_misc.h" path="../../../common/embedded-midilib/hal/hal_misc.h" type="1"/>
     <File name="common/states/settings.h" path="../../../common/states/settings.h" type="1"/>
-    <File name="hal/hal_mididevice.h" path="../../../hal/hal_mididevice.h" type="1"/>
-    <File name="lib/src/stdperiph/stm32f4xx_crc.c" path="../../lib/src/stdperiph/stm32f4xx_crc.c" type="1"/>
     <File name="lib/inc/stdperiph/stm32f4xx_exti.h" path="../../lib/inc/stdperiph/stm32f4xx_exti.h" type="1"/>
-    <File name="lib/inc/stdperiph/stm32f4xx_rng.h" path="../../lib/inc/stdperiph/stm32f4xx_rng.h" type="1"/>
     <File name="drivers/Filesystem/fatfs/option/syscall.c" path="../../drivers/Filesystem/fatfs/option/syscall.c" type="1"/>
-    <File name="common/states/buttonTest.c" path="../../../common/states/buttonTest.c" type="1"/>
     <File name="common/states/floppyTest.h" path="../../../common/states/floppyTest.h" type="1"/>
-    <File name="lib/src/stdperiph/stm32f4xx_hash.c" path="../../lib/src/stdperiph/stm32f4xx_hash.c" type="1"/>
     <File name="drivers/Filesystem/attributes.h" path="../../drivers/Filesystem/attributes.h" type="1"/>
-    <File name="common/LockFreeFifo.h" path="../../../common/LockFreeFifo.h" type="1"/>
-    <File name="drivers/Filesystem/tm_stm32f4_fatfs.h" path="../../drivers/Filesystem/tm_stm32f4_fatfs.h" type="1"/>
-    <File name="common/SlotBasedMenu.c" path="../../../common/SlotBasedMenu.c" type="1"/>
     <File name="common/states/settings.c" path="../../../common/states/settings.c" type="1"/>
-    <File name="src/stm32f4xx_it.c" path="../../src/stm32f4xx_it.c" type="1"/>
+    <File name="common/SlotBasedMenu.c" path="../../../common/SlotBasedMenu.c" type="1"/>
     <File name="drivers/Filesystem/fatfs/diskio.c" path="../../drivers/Filesystem/fatfs/diskio.c" type="1"/>
-    <File name="lib/inc/stdperiph/stm32f4xx_iwdg.h" path="../../lib/inc/stdperiph/stm32f4xx_iwdg.h" type="1"/>
-    <File name="src/main.c" path="../../src/main.c" type="1"/>
+    <File name="cmsis_boot/system_stm32f4xx.h" path="../../cmsis_boot/system_stm32f4xx.h" type="1"/>
     <File name="lib/stdio/printf.c" path="../../lib/stdio/printf.c" type="1"/>
-    <File name="lib/inc/stdperiph/stm32f4xx_spi.h" path="../../lib/inc/stdperiph/stm32f4xx_spi.h" type="1"/>
-    <File name="drivers/Filesystem/tm_stm32f4_fatfs.c" path="../../drivers/Filesystem/tm_stm32f4_fatfs.c" type="1"/>
-    <File name="common/states/liveMode.c" path="../../../common/states/liveMode.c" type="1"/>
     <File name="lib/inc/stdperiph/stm32f4xx_rtc.h" path="../../lib/inc/stdperiph/stm32f4xx_rtc.h" type="1"/>
-    <File name="common/states/_example.c" path="../../../common/states/_example.c" type="1"/>
-    <File name="common/embedded-midilib" path="" type="2"/>
+    <File name="common/states/liveMode.c" path="../../../common/states/liveMode.c" type="1"/>
+    <File name="common/embedded-midilib/hal" path="" type="2"/>
     <File name="lib/src" path="" type="2"/>
-    <File name="src/delay.c" path="../../src/delay.c" type="1"/>
-    <File name="lib/inc/system_stm32f4xx.h" path="../../lib/inc/system_stm32f4xx.h" type="1"/>
+    <File name="common/states/_example.c" path="../../../common/states/_example.c" type="1"/>
     <File name="src/syscalls.c" path="../../src/syscalls.c" type="1"/>
-    <File name="lib/src/stdperiph/stm32f4xx_cryp_tdes.c" path="../../lib/src/stdperiph/stm32f4xx_cryp_tdes.c" type="1"/>
     <File name="inc" path="" type="2"/>
-    <File name="coocox_startup" path="" type="2"/>
-    <File name="lib/src/stdperiph/stm32f4xx_hash_md5.c" path="../../lib/src/stdperiph/stm32f4xx_hash_md5.c" type="1"/>
-    <File name="hal/hal_inputdevice_stm32f4.c" path="../../../hal/hal_inputdevice_stm32f4.c" type="1"/>
-    <File name="common/common_main.c" path="../../../common/common_main.c" type="1"/>
     <File name="inc/utils.h" path="../../inc/utils.h" type="1"/>
     <File name="lib/src/stdperiph/stm32f4xx_hash_sha1.c" path="../../lib/src/stdperiph/stm32f4xx_hash_sha1.c" type="1"/>
     <File name="lib/src/stdperiph/stm32f4xx_dac.c" path="../../lib/src/stdperiph/stm32f4xx_dac.c" type="1"/>
-    <File name="common/states/playback/player.c" path="../../../common/states/playback/player.c" type="1"/>
-    <File name="inc/main.h" path="../../inc/main.h" type="1"/>
     <File name="drivers/LCD/SSD1289.h" path="../../drivers/LCD/SSD1289.h" type="1"/>
-    <File name="lib/src/stdperiph/stm32f4xx_rcc.c" path="../../lib/src/stdperiph/stm32f4xx_rcc.c" type="1"/>
     <File name="lib/inc/stdperiph/stm32f4xx_usart.h" path="../../lib/inc/stdperiph/stm32f4xx_usart.h" type="1"/>
     <File name="common/states/_example.h" path="../../../common/states/_example.h" type="1"/>
     <File name="lib/inc/core" path="" type="2"/>
-    <File name="common/AsciiLib/AsciiLib.c" path="../../../common/AsciiLib/AsciiLib.c" type="1"/>
-    <File name="lib/inc" path="" type="2"/>
-    <File name="drivers/LCD/SSD1289.c" path="../../drivers/LCD/SSD1289.c" type="1"/>
     <File name="common/states/about.h" path="../../../common/states/about.h" type="1"/>
-    <File name="drivers/Filesystem/fatfs/integer.h" path="../../drivers/Filesystem/fatfs/integer.h" type="1"/>
     <File name="lib/inc/stm32f4xx.h" path="../../lib/inc/stm32f4xx.h" type="1"/>
+    <File name="drivers/Filesystem/fatfs/integer.h" path="../../drivers/Filesystem/fatfs/integer.h" type="1"/>
     <File name="hal/hal_filesystem.h" path="../../../hal/hal_filesystem.h" type="1"/>
-    <File name="lib/inc/stdperiph/stm32f4xx_crc.h" path="../../lib/inc/stdperiph/stm32f4xx_crc.h" type="1"/>
-    <File name="lib/src/stdperiph/stm32f4xx_flash.c" path="../../lib/src/stdperiph/stm32f4xx_flash.c" type="1"/>
-    <File name="src/system_stm32f4xx.c" path="../../src/system_stm32f4xx.c" type="1"/>
     <File name="drivers/Filesystem/fatfs/drivers" path="" type="2"/>
     <File name="hal/hal_filesystem_stm32f4.c" path="../../../hal/hal_filesystem_stm32f4.c" type="1"/>
+    <File name="inc/delay.h" path="../../inc/delay.h" type="1"/>
+    <File name="src/utils.c" path="../../src/utils.c" type="1"/>
+    <File name="lib/src/stdperiph/stm32f4xx_rng.c" path="../../lib/src/stdperiph/stm32f4xx_rng.c" type="1"/>
+    <File name="common/InputDevice.h" path="../../../common/InputDevice.h" type="1"/>
+    <File name="lib/inc/stdperiph/stm32f4xx_dcmi.h" path="../../lib/inc/stdperiph/stm32f4xx_dcmi.h" type="1"/>
+    <File name="common/states/playback/playlist.c" path="../../../common/states/playback/playlist.c" type="1"/>
+    <File name="lib/src/stdperiph/stm32f4xx_gpio.c" path="../../lib/src/stdperiph/stm32f4xx_gpio.c" type="1"/>
+    <File name="common/states/mainMenu.c" path="../../../common/states/mainMenu.c" type="1"/>
+    <File name="drivers/NesGamePad/NesGamePad.c" path="../../drivers/NesGamePad/NesGamePad.c" type="1"/>
+    <File name="drivers/Filesystem/tm_stm32f4_timer_properties.h" path="../../drivers/Filesystem/tm_stm32f4_timer_properties.h" type="1"/>
+    <File name="lib/src/stdperiph/stm32f4xx_cryp_aes.c" path="../../lib/src/stdperiph/stm32f4xx_cryp_aes.c" type="1"/>
+    <File name="drivers/Filesystem/fatfs/option" path="" type="2"/>
+    <File name="lib/inc/stm32f4_discovery.h" path="../../lib/inc/stm32f4_discovery.h" type="1"/>
+    <File name="cmsis_boot/stm32f4xx.h" path="../../cmsis_boot/stm32f4xx.h" type="1"/>
+    <File name="drivers/Filesystem/tm_stm32f4_delay.h" path="../../drivers/Filesystem/tm_stm32f4_delay.h" type="1"/>
+    <File name="common/AsciiLib/AsciiLib.h" path="../../../common/AsciiLib/AsciiLib.h" type="1"/>
+    <File name="lib/inc/stm32f4xx_conf.h" path="../../lib/inc/stm32f4xx_conf.h" type="1"/>
+    <File name="lib/src/stdperiph/stm32f4xx_dcmi.c" path="../../lib/src/stdperiph/stm32f4xx_dcmi.c" type="1"/>
+    <File name="common/canvas/canvas.h" path="../../../common/canvas/canvas.h" type="1"/>
+    <File name="common/states/playback/playlist.h" path="../../../common/states/playback/playlist.h" type="1"/>
+    <File name="common/states/playback/player.h" path="../../../common/states/playback/player.h" type="1"/>
+    <File name="lib/inc/stdperiph/stm32f4xx_gpio.h" path="../../lib/inc/stdperiph/stm32f4xx_gpio.h" type="1"/>
+    <File name="lib/src/stdperiph/stm32f4xx_cryp_des.c" path="../../lib/src/stdperiph/stm32f4xx_cryp_des.c" type="1"/>
+    <File name="lib" path="" type="2"/>
+    <File name="hal/hal_misc_stm32f4.c" path="../../../hal/hal_misc_stm32f4.c" type="1"/>
+    <File name="cmsis_boot/startup/startup_stm32f4xx.c" path="../../cmsis_boot/startup/startup_stm32f4xx.c" type="1"/>
+    <File name="lib/src/stdperiph/stm32f4xx_sdio.c" path="../../lib/src/stdperiph/stm32f4xx_sdio.c" type="1"/>
+    <File name="common/embedded-midilib/hal/hal_stm32f4_chan.h" path="../../../common/embedded-midilib/hal/hal_stm32f4_chan.h" type="1"/>
+    <File name="cmsis/core_cmInstr.h" path="../../cmsis/core_cmInstr.h" type="1"/>
+    <File name="drivers/Filesystem/tm_stm32f4_delay.c" path="../../drivers/Filesystem/tm_stm32f4_delay.c" type="1"/>
+    <File name="common" path="" type="2"/>
+    <File name="lib/inc/stdperiph/stm32f4xx_wwdg.h" path="../../lib/inc/stdperiph/stm32f4xx_wwdg.h" type="1"/>
+    <File name="lib/src/stdperiph/stm32f4xx_tim.c" path="../../lib/src/stdperiph/stm32f4xx_tim.c" type="1"/>
+    <File name="hal" path="" type="2"/>
+    <File name="drivers/NesGamePad/NesGamePad.h" path="../../drivers/NesGamePad/NesGamePad.h" type="1"/>
+    <File name="common/states/mainMenu.h" path="../../../common/states/mainMenu.h" type="1"/>
+    <File name="cmsis_boot/system_stm32f4xx.c" path="../../cmsis_boot/system_stm32f4xx.c" type="1"/>
+    <File name="common/canvas/canvas.c" path="../../../common/canvas/canvas.c" type="1"/>
+    <File name="common/canvas" path="" type="2"/>
+    <File name="lib/inc/core/core_cm0.h" path="../../lib/inc/core/core_cm0.h" type="1"/>
+    <File name="cmsis" path="" type="2"/>
+    <File name="lib/src/stdperiph/stm32f4xx_fsmc.c" path="../../lib/src/stdperiph/stm32f4xx_fsmc.c" type="1"/>
+    <File name="lib/inc/stdperiph/stm32f4xx_dbgmcu.h" path="../../lib/inc/stdperiph/stm32f4xx_dbgmcu.h" type="1"/>
+    <File name="lib/src/stdperiph/stm32f4xx_i2c.c" path="../../lib/src/stdperiph/stm32f4xx_i2c.c" type="1"/>
+    <File name="lib/inc/core/core_cmFunc.h" path="../../lib/inc/core/core_cmFunc.h" type="1"/>
+    <File name="lib/inc/stdperiph/stm32f4xx_can.h" path="../../lib/inc/stdperiph/stm32f4xx_can.h" type="1"/>
+    <File name="common/embedded-midilib/midiutil.h" path="../../../common/embedded-midilib/midiutil.h" type="1"/>
+    <File name="common/embedded-midilib/.git" path="../../../common/embedded-midilib/.git" type="1"/>
+    <File name="drivers/Filesystem/tm_stm32f4_timer_properties.c" path="../../drivers/Filesystem/tm_stm32f4_timer_properties.c" type="1"/>
+    <File name="hal/hal_mididevice_stm32f4.c" path="../../../hal/hal_mididevice_stm32f4.c" type="1"/>
+    <File name="lib/src/stdperiph" path="" type="2"/>
+    <File name="common/InputDevice.c" path="../../../common/InputDevice.c" type="1"/>
+    <File name="lib/inc/stdperiph/misc.h" path="../../lib/inc/stdperiph/misc.h" type="1"/>
+    <File name="lib/inc/stdperiph/stm32f4xx_flash.h" path="../../lib/inc/stdperiph/stm32f4xx_flash.h" type="1"/>
+    <File name="lib/src/stdperiph/stm32f4xx_syscfg.c" path="../../lib/src/stdperiph/stm32f4xx_syscfg.c" type="1"/>
+    <File name="common/LockFreeFifo.c" path="../../../common/LockFreeFifo.c" type="1"/>
+    <File name="lib/inc/stdperiph/stm32f4xx_i2c.h" path="../../lib/inc/stdperiph/stm32f4xx_i2c.h" type="1"/>
+    <File name="lib/src/stdperiph/stm32f4xx_usart.c" path="../../lib/src/stdperiph/stm32f4xx_usart.c" type="1"/>
+    <File name="lib/src/stdperiph/stm32f4xx_adc.c" path="../../lib/src/stdperiph/stm32f4xx_adc.c" type="1"/>
+    <File name="common/embedded-midilib/midiplayer.h" path="../../../common/embedded-midilib/midiplayer.h" type="1"/>
+    <File name="lib/src/stdperiph/misc.c" path="../../lib/src/stdperiph/misc.c" type="1"/>
+    <File name="cmsis_boot/startup" path="" type="2"/>
+    <File name="lib/inc/stdperiph/stm32f4xx_hash.h" path="../../lib/inc/stdperiph/stm32f4xx_hash.h" type="1"/>
+    <File name="cmsis/core_cm4.h" path="../../cmsis/core_cm4.h" type="1"/>
+    <File name="lib/src/stdperiph/stm32f4xx_pwr.c" path="../../lib/src/stdperiph/stm32f4xx_pwr.c" type="1"/>
+    <File name="lib/src/stdperiph/stm32f4xx_crc.c" path="../../lib/src/stdperiph/stm32f4xx_crc.c" type="1"/>
+    <File name="hal/hal_mididevice.h" path="../../../hal/hal_mididevice.h" type="1"/>
+    <File name="lib/inc/stdperiph/stm32f4xx_rng.h" path="../../lib/inc/stdperiph/stm32f4xx_rng.h" type="1"/>
+    <File name="common/states/buttonTest.c" path="../../../common/states/buttonTest.c" type="1"/>
+    <File name="lib/src/stdperiph/stm32f4xx_hash.c" path="../../lib/src/stdperiph/stm32f4xx_hash.c" type="1"/>
+    <File name="common/LockFreeFifo.h" path="../../../common/LockFreeFifo.h" type="1"/>
+    <File name="drivers/Filesystem/tm_stm32f4_fatfs.h" path="../../drivers/Filesystem/tm_stm32f4_fatfs.h" type="1"/>
+    <File name="cmsis_boot/stm32f4xx_conf.h" path="../../cmsis_boot/stm32f4xx_conf.h" type="1"/>
+    <File name="lib/inc/stdperiph/stm32f4xx_iwdg.h" path="../../lib/inc/stdperiph/stm32f4xx_iwdg.h" type="1"/>
+    <File name="src/main.c" path="../../src/main.c" type="1"/>
+    <File name="drivers/Filesystem/tm_stm32f4_fatfs.c" path="../../drivers/Filesystem/tm_stm32f4_fatfs.c" type="1"/>
+    <File name="lib/inc/stdperiph/stm32f4xx_spi.h" path="../../lib/inc/stdperiph/stm32f4xx_spi.h" type="1"/>
+    <File name="common/embedded-midilib" path="" type="2"/>
+    <File name="src/delay.c" path="../../src/delay.c" type="1"/>
+    <File name="lib/inc/system_stm32f4xx.h" path="../../lib/inc/system_stm32f4xx.h" type="1"/>
+    <File name="lib/src/stdperiph/stm32f4xx_cryp_tdes.c" path="../../lib/src/stdperiph/stm32f4xx_cryp_tdes.c" type="1"/>
+    <File name="lib/src/stdperiph/stm32f4xx_hash_md5.c" path="../../lib/src/stdperiph/stm32f4xx_hash_md5.c" type="1"/>
+    <File name="hal/hal_inputdevice_stm32f4.c" path="../../../hal/hal_inputdevice_stm32f4.c" type="1"/>
+    <File name="common/common_main.c" path="../../../common/common_main.c" type="1"/>
+    <File name="common/states/playback/player.c" path="../../../common/states/playback/player.c" type="1"/>
+    <File name="inc/main.h" path="../../inc/main.h" type="1"/>
+    <File name="lib/src/stdperiph/stm32f4xx_rcc.c" path="../../lib/src/stdperiph/stm32f4xx_rcc.c" type="1"/>
+    <File name="common/AsciiLib/AsciiLib.c" path="../../../common/AsciiLib/AsciiLib.c" type="1"/>
+    <File name="lib/inc" path="" type="2"/>
+    <File name="common/embedded-midilib/.gitignore" path="../../../common/embedded-midilib/.gitignore" type="1"/>
+    <File name="drivers/LCD/SSD1289.c" path="../../drivers/LCD/SSD1289.c" type="1"/>
+    <File name="lib/inc/stdperiph/stm32f4xx_crc.h" path="../../lib/inc/stdperiph/stm32f4xx_crc.h" type="1"/>
+    <File name="lib/src/stdperiph/stm32f4xx_flash.c" path="../../lib/src/stdperiph/stm32f4xx_flash.c" type="1"/>
     <File name="common/states/buttonTest.h" path="../../../common/states/buttonTest.h" type="1"/>
     <File name="lib/inc/core/core_cm4.h" path="../../lib/inc/core/core_cm4.h" type="1"/>
     <File name="common/common_main.h" path="../../../common/common_main.h" type="1"/>
     <File name="lib/inc/stdperiph/stm32f4xx_sdio.h" path="../../lib/inc/stdperiph/stm32f4xx_sdio.h" type="1"/>
-    <File name="inc/delay.h" path="../../inc/delay.h" type="1"/>
   </Files>
 </Project>
