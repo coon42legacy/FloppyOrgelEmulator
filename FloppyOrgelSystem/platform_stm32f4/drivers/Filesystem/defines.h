@@ -30,4 +30,7 @@
 
 /* Put your global defines for all libraries here used in your project */
 
+/* Use SPI communication with SDCard */
+#define    FATFS_USE_SDIO 	0
+
 #endif
