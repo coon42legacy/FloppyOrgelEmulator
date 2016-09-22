@@ -23,13 +23,13 @@
 #include "tm_stm32f4_fatfs.h"
 
 #ifndef FATFS_SPI
-#define FATFS_SPI							SPI1
-#define FATFS_SPI_PINSPACK					TM_SPI_PinsPack_1
+#define FATFS_SPI							SPI3
+#define FATFS_SPI_PINSPACK					TM_SPI_PinsPack_2
 #endif
 
 #ifndef FATFS_CS_PIN		
-#define FATFS_CS_PORT						GPIOB
-#define FATFS_CS_PIN						GPIO_PIN_6
+#define FATFS_CS_PORT						GPIOC
+#define FATFS_CS_PIN						GPIO_PIN_13
 #endif
 
 #ifndef FATFS_USE_DETECT_PIN
