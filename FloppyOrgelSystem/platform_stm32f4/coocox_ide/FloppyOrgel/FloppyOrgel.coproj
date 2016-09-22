@@ -110,8 +110,8 @@
     <File name="drivers/Filesystem" path="" type="2"/>
     <File name="lib/src/stdperiph/stm32f4xx_dma.c" path="../../lib/src/stdperiph/stm32f4xx_dma.c" type="1"/>
     <File name="drivers/Filesystem/tm_stm32f4_gpio.c" path="../../drivers/Filesystem/tm_stm32f4_gpio.c" type="1"/>
-    <File name="drivers/Filesystem/defines.h" path="../../drivers/Filesystem/defines.h" type="1"/>
     <File name="drivers" path="" type="2"/>
+    <File name="drivers/Filesystem/defines.h" path="../../drivers/Filesystem/defines.h" type="1"/>
     <File name="lib/inc/core/arm_math.h" path="../../lib/inc/core/arm_math.h" type="1"/>
     <File name="hal/hal_misc.h" path="../../../hal/hal_misc.h" type="1"/>
     <File name="common/embedded-midilib/.gitattributes" path="../../../common/embedded-midilib/.gitattributes" type="1"/>
@@ -162,8 +162,8 @@
     <File name="lib/inc/stdperiph/stm32f4xx_rtc.h" path="../../lib/inc/stdperiph/stm32f4xx_rtc.h" type="1"/>
     <File name="common/states/liveMode.c" path="../../../common/states/liveMode.c" type="1"/>
     <File name="common/embedded-midilib/hal" path="" type="2"/>
-    <File name="lib/src" path="" type="2"/>
     <File name="common/states/_example.c" path="../../../common/states/_example.c" type="1"/>
+    <File name="lib/src" path="" type="2"/>
     <File name="src/syscalls.c" path="../../src/syscalls.c" type="1"/>
     <File name="inc" path="" type="2"/>
     <File name="inc/utils.h" path="../../inc/utils.h" type="1"/>
