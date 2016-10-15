@@ -14,7 +14,7 @@ static void menuInit(SlotBasedMenu_t* pSbm, StackBasedFsm_t* pFsm, int16_t xPos,
   pSbm->cursorPos = 0;
   pSbm->numSlots = 0;
   pSbm->pFsm = pFsm;
-  
+
   memset(pSbm->slot, 0, sizeof(pSbm->slot));
 }
 
@@ -42,7 +42,7 @@ static void menuDrawCursor(SlotBasedMenu_t* pSbm) {
     //   canvas_drawImage(pSbm->xPos, pSbm->yPos + 18 * (pSbm->cursorPos % MENU_FILES_PER_PAGE), cursorImg);
     //   break;
 
-    // case SETTINGS_MENU:    
+    // case SETTINGS_MENU:
     //   canvas_drawImage(pSbm->xPos, pSbm->yPos + 18 * pSbm->cursorPos, cursorImg);
     //   break;
   }

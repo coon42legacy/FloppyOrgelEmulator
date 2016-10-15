@@ -10,7 +10,6 @@
 #include "../states/liveMode.h"
 #include "../states/settings.h"
 #include "../states/about.h"
-
 #include "mainMenu.h"
 
 static struct {
@@ -30,7 +29,9 @@ static void draw() {
 static void onAction(StackBasedFsm_t* pFsm) {
   hal_printf("mainMenu::onAction()");
 
-  userMenuTransitToSelectedSlot(&context.menu, context.menu.pFsm);
+  // TODO: parameter depends on selected slot!
+
+  userMenuTransitToSelectedSlot(&context.menu, &context.fifoDebugPort);
 }
 
 static void onBackPress(StackBasedFsm_t* pFsm) {

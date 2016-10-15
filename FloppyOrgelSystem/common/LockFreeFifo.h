@@ -1,7 +1,9 @@
 #ifndef __LOCK_FREE_FIFO_H
 #define __LOCK_FREE_FIFO_H
 
+#include <stdbool.h>
 #include "config.h"
+
 
 typedef struct {
   char ringBuffer[RING_BUFFER_SIZE];
@@ -9,7 +11,7 @@ typedef struct {
   int rptr;
 } LockFreeFIFO_t;
 
-int getRingBufferDistance(LockFreeFIFO_t* lff);
+bool ringBufferDataAvailable(LockFreeFIFO_t* lff);
 void writeToRingBuffer(LockFreeFIFO_t* lff, char b);
 char readFromRingBuffer(LockFreeFIFO_t* lff);
 

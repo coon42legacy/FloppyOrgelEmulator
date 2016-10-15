@@ -22,7 +22,8 @@
 static struct {
   // put your local state data here!
 
-  int some_local_variable;
+  int someLocalVariable;
+  int* pReturnValue;
 
 } context;
 
@@ -31,6 +32,12 @@ static void onEnter(StackBasedFsm_t* pFsm, void* pParams) {
 
   // This function is called, when the state is entered for the first time.
   // It must be defined in every state and is used for initialization.
+  // This can also be used for passing a return value to the previous state.
+
+  ExampleParams* pExampleParams = (ExampleParams*)pParams;
+
+  context.someLocalVariable = pExampleParams->someInt;
+  context.pReturnValue = pExampleParams->pReturnValue;
 }
 
 static void onActionPress(StackBasedFsm_t* pFsm) {
@@ -97,14 +104,16 @@ static void onSelectRelease(StackBasedFsm_t* pFsm) {
 static void onReenter(StackBasedFsm_t* pFsm) {
   hal_printf("example::onReenter()");
 
-  // This function is called, when the user pressed the back button on a higher state and lands back in this 
+  // This function is called, when the user pressed the back button on a higher state and lands back in this
   // state again.
 }
 
 static void onLeaveState(StackBasedFsm_t* pFsm) {
   hal_printf("example::onLeaveState()");
 
-  // This function is called, when the user leaves the current state. Either by going to a next state or by 
+  *context.pReturnValue = 42;
+
+  // This function is called, when the user leaves the current state. Either by going to a next state or by
   // going back to the previous state.
 }
 
@@ -117,7 +126,7 @@ static void onTick(StackBasedFsm_t* pFsm) {
 
 // Always implement this as last function of your state file:
 
-void example(StackBasedFsm_t* pFsm, FsmState* pState, void* pArgs) {
+void example(StackBasedFsm_t* pFsm, FsmState* pState) {
   // This callback MUST be set:
   pState->onEnterState    = onEnter;
 

@@ -1,8 +1,12 @@
 #include "../hal/hal_misc.h" // TODO: remove after debug!
 #include "LockFreeFifo.h"
 
-int getRingBufferDistance(LockFreeFIFO_t* lff) {
+static int getRingBufferDistance(LockFreeFIFO_t* lff) {
   return lff->rptr > lff->wptr ? lff->rptr - lff->wptr : lff->rptr - lff->wptr + RING_BUFFER_SIZE;
+}
+
+bool ringBufferDataAvailable(LockFreeFIFO_t* lff) {
+  return getRingBufferDistance(lff) < RING_BUFFER_SIZE;
 }
 
 void writeToRingBuffer(LockFreeFIFO_t* lff, char b) {

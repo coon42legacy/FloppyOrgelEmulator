@@ -103,7 +103,7 @@ static void onSelectPress(StackBasedFsm_t* pFsm) {
   draw();
 
   if (context.startIsPressed && context.selectIsPressed)
-    leaveState(pFsm); 
+    leaveState(pFsm);
 }
 
 static void onSelectRelease(StackBasedFsm_t* pFsm) {
@@ -122,7 +122,7 @@ static void onEnter(StackBasedFsm_t* pFsm, void* pParams) {
 }
 
 static void onTick(StackBasedFsm_t* pFsm) {
-  
+
 }
 
 static void onDirectionPress(StackBasedFsm_t* pFsm, bool south, bool north, bool west, bool east) {

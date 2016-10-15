@@ -67,7 +67,7 @@ static void onLeaveState(StackBasedFsm_t* pFsm) {
 }
 
 static void onTick(StackBasedFsm_t* pFsm) {
-  
+
 }
 
 static void onDirectionPress(StackBasedFsm_t* pFsm, bool south, bool north, bool west, bool east) {
@@ -79,16 +79,16 @@ static void onDirectionPress(StackBasedFsm_t* pFsm, bool south, bool north, bool
 }
 
 void about(StackBasedFsm_t* pFsm, FsmState* state) {
-  state->onActionPress   = onActionPress;
-  state->onActionRelease = onActionRelease;
-  state->onBackPress     = onBackPress;
-  state->onStartPress    = onStartPress;
-  state->onStartRelease  = onStartRelease;
-  state->onSelectPress   = onSelectPress;
-  state->onSelectRelease = onSelectRelease;
-  state->onDirectionPress     = onDirectionPress;
-  state->onEnterState    = onEnter;
-  state->onReenterState  = onReenter;
-  state->onLeaveState    = onLeaveState;
-  state->onTick          = onTick;
+  state->onActionPress    = onActionPress;
+  state->onActionRelease  = onActionRelease;
+  state->onBackPress      = onBackPress;
+  state->onStartPress     = onStartPress;
+  state->onStartRelease   = onStartRelease;
+  state->onSelectPress    = onSelectPress;
+  state->onSelectRelease  = onSelectRelease;
+  state->onDirectionPress = onDirectionPress;
+  state->onEnterState     = onEnter;
+  state->onReenterState   = onReenter;
+  state->onLeaveState     = onLeaveState;
+  state->onTick           = onTick;
 }
