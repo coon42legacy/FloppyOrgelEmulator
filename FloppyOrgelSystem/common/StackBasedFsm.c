@@ -66,7 +66,7 @@ bool fsmPush(StackBasedFsm_t* pFsm, TransitionFunc pStateFunc, void* pParams) {
 
     if (pCurrentState)
       pCurrentState->onLeaveState(pFsm);
-    
+
     initStateCallBacks(pNextState);
     pStateFunc(pFsm, pNextState);
 
@@ -92,7 +92,7 @@ bool fsmPop(StackBasedFsm_t* pFsm) {
     pState = fsmGetCurrentState(pFsm);
     if (pState && pState->onLeaveState)
       pState->onLeaveState(pFsm);
-    
+
     pFsm->stackSize_--;
 
     pState = fsmGetCurrentState(pFsm);
@@ -120,7 +120,7 @@ void fsmTick(StackBasedFsm_t* pFsm) {
   FsmState* pState = fsmGetCurrentState(pFsm);
 
   processInputDevice(pFsm);
-  
+
   if (pState)
     if (pState->onTick)
       pState->onTick(pFsm);

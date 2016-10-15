@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdarg.h>
+#include <string.h>
 #include "stm32f4xx.h"
 #include "hal_misc.h"
 

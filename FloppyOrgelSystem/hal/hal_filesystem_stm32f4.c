@@ -4,6 +4,7 @@
 #include <string.h>
 #include "Filesystem/fatfs/ff.h"
 #include "hal_filesystem.h"
+#include "hal_misc.h"
 #include "tm_stm32f4_gpio.h"
 
 static FATFS SD_Fs;

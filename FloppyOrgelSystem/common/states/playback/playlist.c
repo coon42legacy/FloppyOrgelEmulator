@@ -18,7 +18,7 @@
 // playlist
 // ------------------------------------------------------------------------------------------------------------
 
-static struct {  
+static struct {
   SlotBasedMenu_t menu;
   char filePath[256];
   FO_FIND_DATA findData;
@@ -31,15 +31,15 @@ static void onBrowseNewPage(int currentPage, int totalPages) {
   // Set tracks of current page
   bool endOfDirectory = !hal_findInit(context.filePath, &context.findData);
   int curFileIndex = 0;
-  
+
   context.menu.numSlots = 0; // Clear all slots.
 
   while (!endOfDirectory) {
-    if (context.findData.fileName[0] != '.' && context.findData.fileName[1] != '.') {      
+    if (context.findData.fileName[0] != '.' && context.findData.fileName[1] != '.') {
       if (curFileIndex >= (currentPage - 1) * MENU_FILES_PER_PAGE)
         menuAddSlot(&context.menu, context.findData.fileName, player);
 
-      curFileIndex++;      
+      curFileIndex++;
     }
 
     endOfDirectory = !hal_findNext(&context.findData) || curFileIndex >= (currentPage - 1) * MENU_FILES_PER_PAGE + MENU_FILES_PER_PAGE;
@@ -106,9 +106,8 @@ static void draw() {
   canvas_drawText(CENTER, 18, "Press A button to start", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
 
   int numFilesTotal = getNumFiles(context.filePath);
-  int numPages = getNumPages(numFilesTotal, MENU_FILES_PER_PAGE);  
-  int numFilesOfCurrentPage = context.curPage * MENU_FILES_PER_PAGE < numFilesTotal ? MENU_FILES_PER_PAGE : MENU_FILES_PER_PAGE - (context.curPage * MENU_FILES_PER_PAGE - numFilesTotal); // TODO: simplify
-
+  int numPages = getNumPages(numFilesTotal, MENU_FILES_PER_PAGE);
+  
   if (numFilesTotal > 0) {
     onBrowseNewPage(context.curPage, numPages); // FIXME: implement correctly!
     menuDraw(&context.menu);
@@ -118,7 +117,7 @@ static void draw() {
     canvas_drawText(CENTER, context.menu.yPos - 5 + 4 * 18, "SD-Card missing?", 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00);
   }
 
-  
+
   display_redraw();
 }
 
@@ -137,7 +136,7 @@ static void onBack(StackBasedFsm_t* pFsm) {
 }
 
 static void onEnter(StackBasedFsm_t* pFsm, void* pParams) {
-  hal_printf("playlist::onEnter()");  
+  hal_printf("playlist::onEnter()");
 
   context.curPage = 1;
 
@@ -169,7 +168,7 @@ static void onDirectionPress(StackBasedFsm_t* pFsm, bool south, bool north, bool
       context.curPage++;
       context.menu.cursorPos = 0;
     }
-    else 
+    else
       menuMoveCursorDown(&context.menu);
   }
 
@@ -178,7 +177,7 @@ static void onDirectionPress(StackBasedFsm_t* pFsm, bool south, bool north, bool
       context.curPage--;
       context.menu.cursorPos = MENU_FILES_PER_PAGE - 1;
     }
-    else 
+    else
       menuMoveCursorUp(&context.menu);
   }
 

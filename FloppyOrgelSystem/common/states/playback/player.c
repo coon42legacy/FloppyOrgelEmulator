@@ -15,7 +15,7 @@ static void HexList(uint8_t* pData, int32_t iNumBytes) {
 }
 
 static void printTrackPrefix(uint32_t track, uint32_t tick, char* pEventName)  {
-  printf("[Track: %d] %06d %s ", track, tick, pEventName);
+  printf("[Track: %u] %06u %s ", track, tick, pEventName);
 }
 
 // MIDI callbacks
@@ -129,7 +129,7 @@ static void onMetaSetTempo(int32_t track, int32_t tick, int32_t bpm) {
 
 static void onMetaSMPTEOffset(int32_t track, int32_t tick, uint32_t hours, uint32_t minutes, uint32_t seconds, uint32_t frames, uint32_t subframes) {
   printTrackPrefix(track, tick, "Meta event ----");
-  printf("SMPTE offset = %d:%d:%d.%d %d", hours, minutes, seconds, frames, subframes);
+  printf("SMPTE offset = %u:%u:%u.%u %u", hours, minutes, seconds, frames, subframes);
   printf("\r\n");
 }
 
