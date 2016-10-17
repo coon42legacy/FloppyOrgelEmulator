@@ -138,6 +138,9 @@
     <ClCompile Include="..\common\states\playback\player.c">
       <Filter>Quelldateien\common\states\playback</Filter>
     </ClCompile>
+    <ClCompile Include="..\common\canvas\images.c">
+      <Filter>Quelldateien\common\canvas</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\common\AsciiLib\AsciiLib.h">

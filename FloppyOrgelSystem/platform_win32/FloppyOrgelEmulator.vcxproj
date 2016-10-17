@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClCompile Include="..\common\AsciiLib\AsciiLib.c" />
     <ClCompile Include="..\common\canvas\canvas.c" />
+    <ClCompile Include="..\common\canvas\images.c" />
     <ClCompile Include="..\common\embedded-midilib\midifile.c" />
     <ClCompile Include="..\common\embedded-midilib\midiplayer.c" />
     <ClCompile Include="..\common\embedded-midilib\midiutil.c" />

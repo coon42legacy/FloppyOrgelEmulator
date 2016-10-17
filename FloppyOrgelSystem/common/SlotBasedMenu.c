@@ -35,7 +35,7 @@ void userMenuTransitBack(SlotBasedMenu_t* pMenu) {
 static void menuDrawCursor(SlotBasedMenu_t* pSbm) {
   switch (pSbm->type) {
     case USER_MENU:
-      canvas_drawImage(pSbm->xPos, pSbm->yPos + 18 * pSbm->cursorPos, cursorImg);
+      canvas_drawImage(pSbm->xPos, pSbm->yPos + 18 * pSbm->cursorPos, _pCursorImg);
       break;
 
     // case BROWSE_MENU:

@@ -16,5 +16,5 @@ void canvas_drawText(uint16_t x, uint16_t y, const char* str, uint8_t txtRed, ui
   uint8_t bgRed, uint8_t bgGreen, uint8_t bgBlue);
 
 void canvas_drawRect(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint8_t red, uint8_t green, uint8_t blue);
-void canvas_drawImage(uint16_t xPos, uint16_t yPos, uint8_t* img);
+void canvas_drawImage(uint16_t xPos, uint16_t yPos, const uint8_t* pImg);
 #endif  // __CANVAS_H

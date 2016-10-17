@@ -5,7 +5,7 @@
 
 // TODO: optimize performance of canvas_drawImage()
 
-void canvas_putCharFont(uint16_t x, uint16_t y, uint8_t ASCII, uint8_t txtRed, uint8_t txtGreen, 
+void canvas_putCharFont(uint16_t x, uint16_t y, uint8_t ASCII, uint8_t txtRed, uint8_t txtGreen,
     uint8_t txtBlue, uint8_t bkRed, uint8_t bkGreen, uint8_t bkBlue, uint16_t FONTx) {
 
   uint16_t i, j;
@@ -64,7 +64,7 @@ void canvas_textFont(uint16_t x, uint16_t y, const char* str, uint8_t txtRed, ui
     break;
   }
 
-  x = x == CENTER ? (DISPLAY_RESOLUTION_X - delta_x * strlen(str)) / 2 : x;
+  x = x == CENTER ? (DISPLAY_RESOLUTION_X - delta_x * (uint16_t)strlen(str)) / 2 : x;
   y = y == CENTER ? (DISPLAY_RESOLUTION_Y - 2 * delta_y) / 2 : y;
 
   do {
@@ -96,7 +96,7 @@ void canvas_clear(uint8_t red, uint8_t green, uint8_t blue) {
   display_clear(red, green, blue);
 }
 
-void canvas_drawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t red, uint8_t green, 
+void canvas_drawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t red, uint8_t green,
     uint8_t blue) {
 
   int delta_x = x2 - x1;
@@ -145,7 +145,7 @@ void canvas_drawLine(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2, uint8_t
   }
 }
 
-void canvas_drawRect(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint8_t red, uint8_t green, 
+void canvas_drawRect(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint8_t red, uint8_t green,
     uint8_t blue) {
 
   if (x > DISPLAY_RESOLUTION_X)
@@ -167,19 +167,19 @@ void canvas_drawRect(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint8_t red
 
 // TODO: increase performance here!
 // The img array contains consecutive R,G,B pixel values, one byte per color (8:8:8).
-// But the SSD1289 needs 5:6:5, so this color gets converted afterwards. To increase the performance, the image 
+// But the SSD1289 needs 5:6:5, so this color gets converted afterwards. To increase the performance, the image
 // should already be in 5:6:5 format here, so it just can be uploaded directly to the SSD1289.
 
-void canvas_drawImage(uint16_t xPos, uint16_t yPos, uint8_t* img) {
-  uint8_t width = img[0];
-  uint8_t height = img[1];
-  img += 2;
+void canvas_drawImage(uint16_t xPos, uint16_t yPos, const uint8_t* pImg) {
+  uint8_t width = pImg[0];
+  uint8_t height = pImg[1];
+  pImg += 2;
 
   for (int y = 0; y < height; y++)
     for (int x = 0; x < width; x++) {
-      uint8_t red   = img[3 * (x + y * width) + 0];
-      uint8_t green = img[3 * (x + y * width) + 1];
-      uint8_t blue  = img[3 * (x + y * width) + 2];
+      uint8_t red   = pImg[3 * (x + y * width) + 0];
+      uint8_t green = pImg[3 * (x + y * width) + 1];
+      uint8_t blue  = pImg[3 * (x + y * width) + 2];
 
       if (!(red == 255 && green == 0 && blue == 255)) // Is the pixel transparent?
         display_setPixel(xPos + x, yPos + y, red, green, blue);
