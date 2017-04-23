@@ -27,7 +27,7 @@ endif
 
 ###################################################
 
-vpath %.c . src lib/src/stdperiph lib/stdio \
+vpath %.c . src lib/src/stdperiph lib/stdio cmsis_boot/startup \
 	drivers/LCD drivers/NesGamePad drivers/Filesystem drivers/Filesystem/fatfs \
 	drivers/Filesystem/fatfs/drivers drivers/Filesystem/fatfs/option \
 	../common ../common/AsciiLib ../common/canvas ../common/states ../common/states/playback \
@@ -61,7 +61,7 @@ endif
 OBJDIR=obj
 BINDIR=bin
 MAIN_SRCS := main.c stm32f4xx_it.c system_stm32f4xx.c syscalls.c utils.c delay.c \
-	lib/startup_stm32f4xx.s # add startup file to build
+	startup_stm32f4xx.c # add startup file to build
 
 LIB_SRCS := misc.c printf.c stm32f4xx_dma.c stm32f4xx_rcc.c stm32f4xx_adc.c \
 	stm32f4xx_exti.c stm32f4xx_rng.c stm32f4xx_can.c stm32f4xx_flash.c \
@@ -79,7 +79,7 @@ DRIVERS_SRCS := SSD1289.c NesGamePad.c \
 	diskio.c ff.c fatfs_sd_sdio.c ccsbcs.c syscall.c
 
 COMMON_SRCS := main.c common_main.c InputDevice.c LockFreeFifo.c SlotBasedMenu.c StackBasedFsm.c \
-	AsciiLib.c canvas.c \
+	AsciiLib.c canvas.c images.c \
 	about.c buttonTest.c floppyTest.c liveMode.c mainMenu.c player.c playlist.c settings.c \
 
 HAL_SRCS := hal_display_stm32f4.c hal_filesystem_stm32f4.c hal_inputdevice_stm32f4.c hal_mididevice_stm32f4.c \

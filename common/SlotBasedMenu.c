@@ -5,6 +5,7 @@
 #include "../hal/hal_inputdevice.h"
 #include "../hal/hal_filesystem.h"
 #include "../hal/hal_misc.h"
+#include "canvas/images.h"
 #include "canvas/canvas.h"
 
 static void menuInit(SlotBasedMenu_t* pSbm, StackBasedFsm_t* pFsm, int16_t xPos, int16_t yPos) {
