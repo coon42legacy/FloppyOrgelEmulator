@@ -61,7 +61,7 @@ endif
 OBJDIR=obj
 BINDIR=bin
 MAIN_SRCS := main.c stm32f4xx_it.c system_stm32f4xx.c syscalls.c utils.c delay.c \
-	startup_stm32f4xx.c # add startup file to build
+	startup_stm32f4xx.c
 
 LIB_SRCS := misc.c printf.c stm32f4xx_dma.c stm32f4xx_rcc.c stm32f4xx_adc.c \
 	stm32f4xx_exti.c stm32f4xx_rng.c stm32f4xx_can.c stm32f4xx_flash.c \
@@ -69,14 +69,14 @@ LIB_SRCS := misc.c printf.c stm32f4xx_dma.c stm32f4xx_rcc.c stm32f4xx_adc.c \
 	stm32f4xx_cryp_aes.c stm32f4xx_gpio.c stm32f4xx_spi.c \
 	stm32f4xx_cryp.c stm32f4xx_hash.c stm32f4xx_syscfg.c \
 	stm32f4xx_cryp_des.c stm32f4xx_hash_md5.c stm32f4xx_tim.c \
-	stm32f4xx_cryp_tdes.c stm32f4xx_hash_sha1.c  stm32f4xx_usart.c \
+	stm32f4xx_cryp_tdes.c stm32f4xx_hash_sha1.c stm32f4xx_usart.c \
 	stm32f4xx_dac.c stm32f4xx_i2c.c stm32f4xx_wwdg.c \
 	stm32f4xx_dbgmcu.c stm32f4xx_iwdg.c \
 	stm32f4xx_dcmi.c stm32f4xx_pwr.c
 
 DRIVERS_SRCS := SSD1289.c NesGamePad.c \
 	tm_stm32f4_delay.c tm_stm32f4_fatfs.c tm_stm32f4_gpio.c tm_stm32f4_timer_properties.c \
-	diskio.c ff.c fatfs_sd_sdio.c ccsbcs.c syscall.c
+	tm_stm32f4_spi.c diskio.c ff.c fatfs_sd.c fatfs_sd_sdio.c ccsbcs.c syscall.c
 
 COMMON_SRCS := main.c common_main.c InputDevice.c LockFreeFifo.c SlotBasedMenu.c StackBasedFsm.c \
 	AsciiLib.c canvas.c images.c \

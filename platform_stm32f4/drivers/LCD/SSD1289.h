@@ -399,13 +399,13 @@ typedef struct {
 
 /* Private define ------------------------------------------------------------*/
 
-//#define DISP_HOR_RESOLUTION				320
-//#define DISP_VER_RESOLUTION				240
+//#define DISP_HOR_RESOLUTION 320
+//#define DISP_VER_RESOLUTION 240
 
-//#define DISP_ORIENTATION					0
-#define DISP_ORIENTATION					90
-//#define DISP_ORIENTATION					180
-//#define DISP_ORIENTATION					270
+//#define DISP_ORIENTATION 0
+#define DISP_ORIENTATION   90
+//#define DISP_ORIENTATION 180
+//#define DISP_ORIENTATION 270
 
 /* Private define ------------------------------------------------------------*/
 
