@@ -24,3 +24,4 @@ desktop.ini
 /platform_stm32f4/bin/*.hex
 /platform_win32/*.db
 /platform_stm32f4/coocox_ide/FloppyOrgel/FloppyOrgel
+/platform_win32/.vs/FloppyOrgelEmulator/v15
