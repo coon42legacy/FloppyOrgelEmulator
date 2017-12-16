@@ -185,18 +185,41 @@ static void onEnter(StackBasedFsm_t* pFsm, void* pParams) {
   hal_printfInfo("Start playback of file: %s", pPath);
 
   hal_midiDeviceInit();
-  midiplayer_init(&context.mpl, onNoteOff, onNoteOn, onNoteKeyPressure, onSetParameter, onSetProgram, onChangePressure,
-    onSetPitchWheel, onMetaMIDIPort, onMetaSequenceNumber, onMetaTextEvent, onMetaCopyright, onMetaTrackName,
-    onMetaInstrument, onMetaLyric, onMetaMarker, onMetaCuePoint, onMetaEndSequence, onMetaSetTempo,
-    onMetaSMPTEOffset, onMetaTimeSig, onMetaKeySig, onMetaSequencerSpecific, onMetaSysEx);
-  
+
+  MidiPlayerCallbacks_t cb;
+  cb.pOnChangePressureCb        = onChangePressure;
+  cb.pOnMetaCopyrightCb         = onMetaCopyright;
+  cb.pOnMetaCuePointCb          = onMetaCuePoint;
+  cb.pOnMetaEndSequenceCb       = onMetaEndSequence;
+  cb.pOnMetaInstrumentCb        = onMetaInstrument;
+  cb.pOnMetaKeySigCb            = onMetaKeySig;
+  cb.pOnMetaLyricCb             = onMetaLyric;
+  cb.pOnMetaMarkerCb            = onMetaMarker;
+  cb.pOnMetaMIDIPortCb          = onMetaMIDIPort;
+  cb.pOnMetaSequenceNumberCb    = onMetaSequenceNumber;
+  cb.pOnMetaSequencerSpecificCb = onMetaSequencerSpecific;
+  cb.pOnMetaSetTempoCb          = onMetaSetTempo;
+  cb.pOnMetaSMPTEOffsetCb       = onMetaSMPTEOffset;
+  cb.pOnMetaSysExCb             = onMetaSysEx;
+  cb.pOnMetaTextEventCb         = onMetaTextEvent;
+  cb.pOnMetaTimeSigCb           = onMetaTimeSig;
+  cb.pOnMetaTrackNameCb         = onMetaTrackName;
+  cb.pOnNoteKeyPressureCb       = onNoteKeyPressure;
+  cb.pOnNoteOffCb               = onNoteOff;
+  cb.pOnNoteOnCb                = onNoteOn;
+  cb.pOnSetParameterCb          = onSetParameter;
+  cb.pOnSetPitchWheelCb         = onSetPitchWheel;
+  cb.pOnSetProgramCb            = onSetProgram;
+
+  midiplayer_init(&context.mpl, cb);
+
   playMidiFile(&context.mpl, pPath);
-    
+
   canvas_clear(0x00, 0x00, 0x00);
   canvas_drawText(CENTER, 0 * 18, "Now Playing:", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
   canvas_drawText(CENTER, 1 * 18, pPath, 0xFF, 0xFF, 0x00, 0x00, 0x00, 0x00);
   canvas_drawText(CENTER, 3 * 18, "Press B to stop playback.", 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00);
-  display_redraw();  
+  display_redraw();
 }
 
 static void onBackPress(StackBasedFsm_t* pFsm) {
@@ -204,17 +227,17 @@ static void onBackPress(StackBasedFsm_t* pFsm) {
   hal_printfSuccess("Playback aborted by user.");
   stopAllDrives();
   hal_midiDeviceFree();
-  
+
   leaveState(pFsm);
 }
 
 static void onTick(StackBasedFsm_t* pFsm) {
-  if (!midiPlayerTick(&context.mpl)) {    
+  if (!midiPlayerTick(&context.mpl)) {
     hal_printfSuccess("Playback finished!");
     stopAllDrives();
     hal_midiDeviceFree();
-    
-    leaveState(pFsm);    
+
+    leaveState(pFsm);
   }
 }
 
